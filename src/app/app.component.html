@@ -1,3 +1,7 @@
-<h1>
-  {{title}}
-</h1>
+<div class="half">
+  <app-program-editor [program]="program" ></app-program-editor>
+</div>
+
+<div class="half">
+  <app-pipeline-diagram [getProgram]="getProgram()" ></app-pipeline-diagram>
+</div>

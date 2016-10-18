@@ -4,10 +4,15 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
+import { ProgramEditorComponent } from './program-editor/program-editor.component';
+import { PipelineDiagramComponent } from './pipeline-diagram/pipeline-diagram.component';
+
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ProgramEditorComponent,
+    PipelineDiagramComponent
   ],
   imports: [
     BrowserModule,

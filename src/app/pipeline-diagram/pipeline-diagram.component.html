@@ -1,0 +1,17 @@
+<table>
+  <thead>
+    <tr>
+      <td>Code</td>
+      <td *ngFor="let stage of getStages(); let i=index"> 
+        {{i + 1}}
+      </td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let line of lines">
+      <td>{{line.id}}</td>
+      <td *ngFor="let stage of line.stages">{{stage}}</td>
+    </tr>
+  </tbody>
+</table>
+<button (click)="recompile()">Recompile</button>
