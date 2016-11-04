@@ -8,6 +8,9 @@ class DiagramLine {
     this.stages = [];
     this.dependencies = [];
   }
+  dependencyString():string {
+    return this.dependencies.map(d => d.instruction).join(", ");
+  }
   id: string;
   stages: Array<string>;
   dependencies: Array<MipsInstruction>;
@@ -51,13 +54,6 @@ class Pipeline {
     }
     this.stages[inst.executionPhase] = undefined;
 
-    // Mark register dependencies
-    if (nextStage == 'execute') {
-      this.registers[inst.returnRegister] = inst;
-    } else if (nextStage == 'done') {
-      this.registers[inst.returnRegister] = undefined;
-    }
-
     inst.executionPhase = nextStage;
     return nextStage;
   }
@@ -67,26 +63,27 @@ class Pipeline {
   }
   forwarding: false;
   private hasDataHazard(nextStage: string, line: DiagramLine, config: InstrucitonConfig): boolean {
+    // check if we are at the stage where we need our soure registers to be avalible
+    if (!config.needsData(line.instr))
+      return true; 
+
     for (let i = 0; i < line.dependencies.length; i++) {
-      // There is no forwarding and the instruciton has not written back
-      if (!this.forwarding && !config.isDone(line.dependencies[i])) {
-        return false;
+      if (config.isDone(line.dependencies[i])) {
+        continue;  
+      } else if (this.forwarding && config.resultIsReady(line.dependencies[i])) {
+        continue;
       }
-      // There is forwarding, but the result is not ready
-      else if (!config.resultIsReady(line.dependencies[i])) {
-        return false;
-      }
+      console.log(line.instr.instruction, 'waiting on', line.dependencies[i].instruction )
+      return false;
     }
     return true;
   }
-
-
   cannotExecute(line: DiagramLine, config: InstrucitonConfig):string {
     let nextStage = this.getNextPhase(line.instr.executionPhase, config.resolve());
     if (!this.hasStructuralHazard(nextStage, line.instr, config))
-      return 'stl-S';
-    if (this.hasDataHazard(nextStage, line, config))
-      return 'stl-D';
+      return `stall-SH (${ line.instr.executionPhase })`; // Stall for structural hazard
+    if (!this.hasDataHazard(nextStage, line, config))
+      return `stall-DH (${ line.instr.executionPhase })`; // Stall for data hazard
     return undefined;
   }
 }
@@ -105,13 +102,22 @@ const MEM_INSTRUCITONS = {
   sw: true
 }
 
+const S_POC = {
+  sw: "memory",
+  bne: "decode"
+}
+
+const S_POP = {
+  lw: "memory"
+}
+
 
 class InstrucitonConfig {
   constructor(instr: string, hasMemory = false, executeLength = 1) {
     this.instruciton = instr;
     this.hasMemory = hasMemory;
     this.executeLength = executeLength;
-    this.pointOfConsumption = "execute0";
+    this.pointOfConsumption = "execute1";
     this.pointOfCompletion = "execute" + this.executeLength;
   }
   instruciton: string;
@@ -129,12 +135,22 @@ class InstrucitonConfig {
     return results;
   }
   isDone(instr:MipsInstruction ):boolean {
+    console.log('isdone', instr.instruction, instr.executionPhase, instr.executionPhase == 'done');
     return instr.executionPhase == 'done';
+  }
+  private stageIs(stage1:string, stage2:string, relation:(a:number, b:number) => boolean) {
+    let stages = this.resolve();
+    //console.log(stages);
+    //console.log(stage1, stage2, stages.indexOf(stage1), stages.indexOf(stage2), relation);
+    return relation(stages.indexOf(stage1), stages.indexOf(stage2));
   }
   // Returns true if the result can be forwarded
   resultIsReady(instr:MipsInstruction ):boolean {
-    let stages = this.resolve();
-    return stages.indexOf(instr.executionPhase) > stages.indexOf(this.pointOfCompletion);
+    return this.stageIs(instr.executionPhase, this.pointOfCompletion, (a, b) => a > b);
+  }
+  // Returns true if we need the operands to have completed
+  needsData(instr:MipsInstruction):boolean {
+    return this.stageIs(instr.executionPhase, this.pointOfConsumption, (a, b) => a + 1 >= b);
   }
 }
 
@@ -158,7 +174,7 @@ export class PipelineDiagramComponent implements OnInit {
     });
     this.configLookup = {};
     this.configs.forEach(c => {
-      this.configs[c.instruciton] = c;
+      this.configLookup[c.instruciton] = c;
     });
   }
   getProgram: () => string;
@@ -177,6 +193,7 @@ export class PipelineDiagramComponent implements OnInit {
     let source = this.getProgram();
     let mips = this.mipsService.parseProgram(source);
     this.lines = mips.map((inst, n) => new DiagramLine(inst, n));
+    this.findDependencies(this.lines);
     this.lines = this.executeCode(new Pipeline(), this.lines);
   }
 
@@ -232,8 +249,8 @@ export class PipelineDiagramComponent implements OnInit {
           lines[i].stages.push('')
           continue;
         }
-
-        let code = pipe.execute(lines[i].instr, this.configLookup[lines[i].instr.instruction]);
+        console.log(this.configLookup, this.configLookup[lines[i].instr.instruction]);
+        let code = pipe.execute(lines[i], this.configLookup[lines[i].instr.instruction]);
         if (lines[i].instr.executionPhase != undefined && code != 'done')
           lines[i].stages.push(code);
         else lines[i].stages.push('');
