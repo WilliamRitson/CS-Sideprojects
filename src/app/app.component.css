@@ -1,0 +1,16 @@
+.editor {
+    box-sizing: border-box;
+    float: left;
+    width: 25%;
+}
+
+.text-editor {
+    width:100%;
+}
+
+
+.diagrams {
+    box-sizing: border-box;
+    float: left;
+    width: 75%;
+}

@@ -1,14 +1,17 @@
 import { Component, OnInit } from '@angular/core';
+import {MipsService} from '../mips.service';
 
 @Component({
   selector: 'app-program-editor',
   templateUrl: './program-editor.component.html',
   styleUrls: ['./program-editor.component.css'],
-  inputs: ['program']
+  providers: [MipsService]
 })
 export class ProgramEditorComponent implements OnInit {
   program:string
-  constructor() { }
+  constructor(public mips:MipsService ) { 
+    this.program = mips.currentProgram;
+  }
 
   ngOnInit() {
   }

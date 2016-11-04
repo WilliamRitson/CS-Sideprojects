@@ -1,17 +1,66 @@
 <table>
-  <thead>
-    <tr>
-      <td>Code</td>
-      <td *ngFor="let stage of getStages(); let i=index"> 
-        {{i + 1}}
-      </td>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let line of lines">
-      <td>{{line.id}}</td>
-      <td *ngFor="let stage of line.stages">{{stage}}</td>
-    </tr>
-  </tbody>
+	<thead>
+		<tr>
+			<td>Code</td>
+			<td *ngFor="let stage of getStages(); let i=index">
+				{{i + 1}}
+			</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr *ngFor="let line of lines">
+			<td>{{line.id}}</td>
+			<td *ngFor="let stage of line.stages">{{stage}}</td>
+		</tr>
+	</tbody>
 </table>
 <button (click)="recompile()">Recompile</button>
+<button (click)="runCycle()">Run Cycle </button>
+<table>
+	<thead>
+		<tr>
+			<th>Register</th>
+			<th>Owner</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr *ngFor="let regOwner of iter(currentPipe.registers); let register=index">
+			<td>{{regOwner[0]}}</td>
+			<td>{{regOwner[1] ? regOwner[1].source : "unused"}}</td>
+		</tr>
+	</tbody>
+</table>
+<table>
+	<thead>
+		<tr>
+			<th>Register</th>
+			<th>Depender</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr *ngFor="let regOwner of iter(currentPipe.dependencies); let register=index">
+			<td>{{regOwner[0]}}</td>
+			<td>{{regOwner[1] ? regOwner[1].source : "unused"}}</td>
+		</tr>
+	</tbody>
+</table>
+
+
+<table>
+	<thead>
+		<tr>
+			<th>Instruciton</th>
+			<th>Uses Memory Stage</th>
+			<th>Execution Lenth</th>
+			<th>Stages</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr *ngFor="let config of configs">
+			<td>{{config.instruciton}}</td>
+			<td>{{config.hasMemory}}</td>
+			<td>{{config.executeLength}}</td>
+			<td>{{config.resolve()}}</td>
+		</tr>
+	</tbody>
+</table>

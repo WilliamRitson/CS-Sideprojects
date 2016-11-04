@@ -1,7 +1,7 @@
-<div class="half">
-  <app-program-editor [program]="program" ></app-program-editor>
+<div class="editor">
+  <textarea [(ngModel)]="program" cols="10" class="text-editor"></textarea>
 </div>
 
-<div class="half">
-  <app-pipeline-diagram [getProgram]="getProgram()" ></app-pipeline-diagram>
+<div class="diagrams">
+  <app-pipeline-diagram [getProgram]="getProgram"></app-pipeline-diagram>
 </div>

@@ -7,7 +7,7 @@ const R_TYPE = [
   'add', 'addu', 'and',
   'addu', 'and', 'div',
   'divu', 'jr', 'mfhi',
-  'mflo', 'mfc0', 'mult',
+  'mflo', 'mfco', 'mult',
   'multu', 'nor', 'xor',
   'or', 'slt', 'sltu',
   'sll', 'srl', 'sra',
@@ -17,10 +17,10 @@ const I_TYPE = [
   'addi', 'addiu', 'andi',
   'beq', 'bne', 'lbu',
   'lhu', 'lui', 'lw',
-  'ori', 'lw', 'ori',
+  'ori', 'ori',
   'sb', 'sh', 'slti',
   'sltiu', 'sw'
-];
+]; 
 const TYPE_LOOKUP = {};
 function addToLookup(type:string, names:Array<string>) {
   names.forEach(name => {
@@ -38,7 +38,13 @@ const registerOrImmediate = /\$?[0-9]+/g;
 @Injectable()
 export class MipsService {
 
-  constructor() { }
+  constructor() {
+    this.instrucitons = I_TYPE.concat(J_TYPE.concat(R_TYPE));
+   }
+
+  currentProgram: string;
+
+  instrucitons: Array<string>;
 
   private parseLine(line:string) {
 
@@ -61,7 +67,7 @@ export class MipsService {
 
 }
 
-// addi $s1, S4, 3
+
 export class MipsInstruction {
   type: string;
   instruction: string;
@@ -82,7 +88,6 @@ export class MipsInstruction {
     source = source.replace(comment, '');
     // Tokenize
     let tokens = source.trim().split(/\s*,\s*|\s+/);
-    console.log(source, 'tokens', tokens);
     // Get the instruction
     this.instruction = tokens[0];
     if (TYPE_LOOKUP[this.instruction] == undefined) {

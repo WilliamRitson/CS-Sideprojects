@@ -6,9 +6,17 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  program = 'addi $s0, $0, 10\naddi $s1, $0, 30\naddd $s2, $s0, 31';
-
-  getProgram():string {
-      return this.program;
-  }
+   program = `lw r3, r2
+mul r4, r3, r3
+mul r3, r3, r1
+addiu r0, r0, 1
+div r3, r4, r3
+sw r3, r2
+addiu r2, r2, 4
+bne r0, r1, -8`;
+   getProgram: () => string;
+   ngOnInit() {
+     this.getProgram = (() => this.program).bind(this);
+     console.log(this.getProgram);
+   }
 }
