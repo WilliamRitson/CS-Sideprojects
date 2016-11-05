@@ -3,17 +3,19 @@ import { MipsService, MipsInstruction } from '../mips.service';
 
 
 class DiagramLine {
-  constructor(public instr: MipsInstruction, public lineNumber: number) {
+  constructor(public instr: MipsInstruction, public lineNumber: number, public config: InstrucitonConfig) {
     this.id = instr.source;
     this.stages = [];
     this.dependencies = [];
+    this.forwards = {};
   }
-  dependencyString():string {
-    return this.dependencies.map(d => d.instruction).join(", ");
+  dependencyString(): string {
+    return this.dependencies.map(d => d.lineNumber).join(", ");
   }
   id: string;
+  forwards: {};
   stages: Array<string>;
-  dependencies: Array<MipsInstruction>;
+  dependencies: Array<DiagramLine>;
 }
 
 interface Set {
@@ -30,6 +32,7 @@ class Pipeline {
   constructor() {
     this.registers = {};
     this.stages = {};
+    this.forwarding = false;
   }
 
   getNextPhase(currentStage: string, stages: Array<string>): string {
@@ -61,29 +64,36 @@ class Pipeline {
   private hasStructuralHazard(nextStage: string, inst: MipsInstruction, config: InstrucitonConfig): boolean {
     return (this.stages[nextStage] == inst) || (this.stages[nextStage] == undefined);
   }
-  forwarding: false;
+  forwarding: boolean;
   private hasDataHazard(nextStage: string, line: DiagramLine, config: InstrucitonConfig): boolean {
     // check if we are at the stage where we need our soure registers to be avalible
     if (!config.needsData(line.instr))
-      return true; 
+      return true;
 
+    let potentialForwards = [];
     for (let i = 0; i < line.dependencies.length; i++) {
-      if (config.isDone(line.dependencies[i])) {
-        continue;  
-      } else if (this.forwarding && config.resultIsReady(line.dependencies[i])) {
+      let dep = line.dependencies[i];
+      if (dep.config.isDone(dep.instr)) {
+        continue;
+      } else if (this.forwarding && dep.config.resultIsReady(dep.instr)) {
+        potentialForwards.push([line.forwards, line.config.nextPhase(line.instr.executionPhase)]);
+        potentialForwards.push([dep.forwards, dep.instr.executionPhase]);
         continue;
       }
-      console.log(line.instr.instruction, 'waiting on', line.dependencies[i].instruction )
       return false;
     }
+    // Commit forwards
+    potentialForwards.forEach(f => {
+      f[0][f[1]] = true;
+    })
     return true;
   }
-  cannotExecute(line: DiagramLine, config: InstrucitonConfig):string {
+  cannotExecute(line: DiagramLine, config: InstrucitonConfig): string {
     let nextStage = this.getNextPhase(line.instr.executionPhase, config.resolve());
     if (!this.hasStructuralHazard(nextStage, line.instr, config))
-      return `stall-SH (${ line.instr.executionPhase })`; // Stall for structural hazard
+      return `stall-SH (${line.instr.executionPhase})`; // Stall for structural hazard
     if (!this.hasDataHazard(nextStage, line, config))
-      return `stall-DH (${ line.instr.executionPhase })`; // Stall for data hazard
+      return `stall-DH (${line.instr.executionPhase})`; // Stall for data hazard
     return undefined;
   }
 }
@@ -117,9 +127,15 @@ class InstrucitonConfig {
     this.instruciton = instr;
     this.hasMemory = hasMemory;
     this.executeLength = executeLength;
-    this.pointOfConsumption = "execute1";
-    this.pointOfCompletion = "execute" + this.executeLength;
+    this.functionalUnit = 'generic';
+    if (instr.indexOf('mult') != -1)
+      this.functionalUnit = 'mult';
+    if (instr.indexOf('add') != -1)
+      this.functionalUnit = 'add';
+    this.pointOfConsumption = S_POC[instr] || `execute-${this.functionalUnit}-${1}`;
+    this.pointOfCompletion = S_POP[instr] || `execute-${this.functionalUnit}-${this.executeLength}`;
   }
+  functionalUnit: string;
   instruciton: string;
   hasMemory: boolean;
   executeLength: number;
@@ -128,28 +144,29 @@ class InstrucitonConfig {
   resolve(): Array<string> {
     let results = ['fetch', 'decode'];
     for (let i = 1; i <= this.executeLength; i++) {
-      results.push('execute' + i);
+      results.push(`execute-${this.functionalUnit}-${i}`);
     }
     if (this.hasMemory) results.push('memory');
     results.push('write');
     return results;
   }
-  isDone(instr:MipsInstruction ):boolean {
-    console.log('isdone', instr.instruction, instr.executionPhase, instr.executionPhase == 'done');
+  nextPhase(current: string) {
+    let stages = this.resolve();
+    return stages[stages.indexOf(current) + 1];
+  }
+  isDone(instr: MipsInstruction): boolean {
     return instr.executionPhase == 'done';
   }
-  private stageIs(stage1:string, stage2:string, relation:(a:number, b:number) => boolean) {
+  private stageIs(stage1: string, stage2: string, relation: (a: number, b: number) => boolean) {
     let stages = this.resolve();
-    //console.log(stages);
-    //console.log(stage1, stage2, stages.indexOf(stage1), stages.indexOf(stage2), relation);
     return relation(stages.indexOf(stage1), stages.indexOf(stage2));
   }
   // Returns true if the result can be forwarded
-  resultIsReady(instr:MipsInstruction ):boolean {
+  resultIsReady(instr: MipsInstruction): boolean {
     return this.stageIs(instr.executionPhase, this.pointOfCompletion, (a, b) => a > b);
   }
   // Returns true if we need the operands to have completed
-  needsData(instr:MipsInstruction):boolean {
+  needsData(instr: MipsInstruction): boolean {
     return this.stageIs(instr.executionPhase, this.pointOfConsumption, (a, b) => a + 1 >= b);
   }
 }
@@ -166,8 +183,11 @@ export class PipelineDiagramComponent implements OnInit {
   configs: Array<InstrucitonConfig>
   configLookup: {};
 
+  functionalUnits: Array<string>;
+
   constructor(public mipsService: MipsService) {
     this.lines = [];
+    this.functionalUnits = ['generic', 'add', 'mult'];
     this.currentPipe = new Pipeline();
     this.configs = mipsService.instrucitons.map((instr) => {
       return new InstrucitonConfig(instr, MEM_INSTRUCITONS[instr] || false, LONG_INSTRUCITONS[instr] || 1);
@@ -192,16 +212,16 @@ export class PipelineDiagramComponent implements OnInit {
   recompile() {
     let source = this.getProgram();
     let mips = this.mipsService.parseProgram(source);
-    this.lines = mips.map((inst, n) => new DiagramLine(inst, n));
+    this.lines = mips.map((inst, n) => new DiagramLine(inst, n + 1, this.configLookup[inst.instruction]));
     this.findDependencies(this.lines);
-    this.lines = this.executeCode(new Pipeline(), this.lines);
+    this.lines = this.executeCode(this.currentPipe, this.lines);
   }
 
   findDependencies(lines: Array<DiagramLine>) {
     for (let i = 0; i < lines.length; i++) {
       for (let j = 0; j < i; j++) {
         if (lines[j].instr.returnRegister == lines[i].instr.register1 || lines[j].instr.returnRegister == lines[i].instr.register2) {
-          lines[i].dependencies.push(lines[j].instr);
+          lines[i].dependencies.push(lines[j]);
         }
       }
     }
@@ -214,7 +234,7 @@ export class PipelineDiagramComponent implements OnInit {
     if (this.lines.length == 0) {
       let source = this.getProgram();
       let mips = this.mipsService.parseProgram(source);
-      this.lines = mips.map((inst, n) => new DiagramLine(inst, n));
+      this.lines = mips.map((inst, n) => new DiagramLine(inst, n + 1, this.configLookup[inst.instruction]));
       this.findDependencies(this.lines);
     }
     this.executeCycle(this.currentPipe, this.lines);
@@ -242,14 +262,15 @@ export class PipelineDiagramComponent implements OnInit {
 
   executeCode(pipe: Pipeline, lines: Array<DiagramLine>): Array<DiagramLine> {
     let unfinshed: boolean = true;
-    while (unfinshed) {
+    let limit = 10000;
+    while (unfinshed && limit > 0) {
+      limit--;
       unfinshed = false;
       for (let i = 0; i < lines.length; i += 1) {
         if (lines[i].instr.executionPhase == 'done') {
           lines[i].stages.push('')
           continue;
         }
-        console.log(this.configLookup, this.configLookup[lines[i].instr.instruction]);
         let code = pipe.execute(lines[i], this.configLookup[lines[i].instr.instruction]);
         if (lines[i].instr.executionPhase != undefined && code != 'done')
           lines[i].stages.push(code);

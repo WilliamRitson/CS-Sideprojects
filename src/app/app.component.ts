@@ -7,8 +7,8 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
    program = `lw r3, r2
-mul r4, r3, r3
-mul r3, r3, r1
+mult r4, r3, r3
+mult r3, r3, r1
 addiu r0, r0, 1
 div r3, r4, r3
 sw r3, r2
