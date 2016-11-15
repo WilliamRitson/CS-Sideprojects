@@ -18,7 +18,7 @@ export class RadixPipe implements PipeTransform {
 
   transform(value: number, args?: number): any {
     let radix = args[0] || 16;
-    return getPrefix(radix) + (value).toString(radix);
+    return getPrefix(radix) + (value).toString(radix).toUpperCase();
   }
 
 }

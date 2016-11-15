@@ -11,7 +11,7 @@ export enum MemoryUnit {
 }
 
 export class MemoryAccess {
-    constructor(public address: number, public isWrite: boolean, public dataSize: number) { }
+    constructor(public address: number, public isWrite: boolean) { }
 }
 
 export class MemoryQuantity {
@@ -116,6 +116,7 @@ export class SimulationResult {
     modified: boolean;
     causedReplace: boolean;
     writeBack: boolean;
+    data: number;
 }
 
 class CacheBlock {
@@ -189,7 +190,10 @@ export class Cache {
             let res = new SimulationResult();
             res.access = access;
             res.cacheIndex = address.index;
-            res.tag = address.tag; 
+            res.tag = address.tag;
+
+            let blockSizeUnitless = config.blockSize.div(config.minimumAddressableUnit).amount;
+            res.data = blockSizeUnitless * Math.floor(address.decimal / blockSizeUnitless)
             time++;
 
             let set = sets[res.cacheIndex];

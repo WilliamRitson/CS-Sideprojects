@@ -26,7 +26,6 @@
 		<tr>
 			<th>Address</th>
       <th>Is a Write</th>
-      <th>Data</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -35,7 +34,6 @@
         <app-radixed-value-editor [(value)]="access.address"></app-radixed-value-editor>
       </td>
       <td><input [(ngModel)]="access.isWrite" type="checkbox"></td>
-      <td><input type="number" min="0" [(ngModel)]="access.dataSize"></td>
       <td><button (click)="deleteAccess(index)">Delete Access</button></td>
 		</tr>
 		<tr>
@@ -69,7 +67,7 @@
       <td>{{result.isHit ? 'hit' : 'miss'}}</td>
       <td>{{result.modified ? 1 : 0}}</td>
       <td>{{result.tag | radix : 16}}</td>
-      <td>{{result.access.data}}</td>
+      <td>{{result.access.isWrite ? 'D' : 'M' }} [{{result.data | radix : 16}}]</td>
       <td>{{result.causedReplace ? 'yes' : 'no'}}</td>
       <td>{{result.writeBack ? 'yes' : 'no'}}</td>
 		</tr>

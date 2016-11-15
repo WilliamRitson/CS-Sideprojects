@@ -22,11 +22,11 @@ export class MemorySimulatorComponent implements OnInit {
     this.config = new CacheConfiguraiton();
     this.results = [];
     this.accesses = [
-      new MemoryAccess(296, false, 0),
-      new MemoryAccess(3904, true, 0),
-      new MemoryAccess(10485841, false, 0),
-      new MemoryAccess(147, true, 0),
-      new MemoryAccess(67111748, false, 0)
+      new MemoryAccess(296, false),
+      new MemoryAccess(3904, true),
+      new MemoryAccess(10485841, false),
+      new MemoryAccess(147, true),
+      new MemoryAccess(67111748, false)
     ];
   }
 
@@ -35,7 +35,7 @@ export class MemorySimulatorComponent implements OnInit {
   }
 
   addAccess() {
-    this.accesses.push(new MemoryAccess(0, false, 0));
+    this.accesses.push(new MemoryAccess(0, false));
   }
 
   deleteAccess(index:number) {
