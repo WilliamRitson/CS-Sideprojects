@@ -1,0 +1,78 @@
+<h1>Cache Configuraiton</h1>
+<div>
+  
+  <label> Address Size:
+      <app-memory-unit-editor [(value)]="config.addressSize"></app-memory-unit-editor>
+  </label>
+  <label> Cache Size:
+      <app-memory-unit-editor [(value)]="config.cacheSize"></app-memory-unit-editor>
+  </label>
+  <label> Block Size:
+      <app-memory-unit-editor [(value)]="config.blockSize"></app-memory-unit-editor>
+  </label>
+  <label>Blocks per Set (1 for direct mapping):
+    <input type="number" [(ngModel)] = "config.setSize">
+  </label>
+  <label> Minimum Addressable Unit
+    <app-memory-unit-editor [(value)]="config.minimumAddressableUnit"></app-memory-unit-editor>
+  </label>
+  
+  offsetSize:{{config.getOffsetSize().toString()}}  indexSize:{{config.indexSize}} tagSize:{{config.tagSize}}
+</div>
+
+<h2>Memory Access Input</h2>
+<table>
+	<thead>
+		<tr>
+			<th>Address</th>
+      <th>Is a Write</th>
+      <th>Data</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr *ngFor="let access of accesses">
+			<td>
+        <app-radixed-value-editor [(value)]="access.address"></app-radixed-value-editor>
+      </td>
+      <td><input [(ngModel)]="access.isWrite" type="checkbox"></td>
+      <td><input type="number" min="0" [(ngModel)]="access.dataSize"></td>
+      <td><button (click)="deleteAccess(index)">Delete Access</button></td>
+		</tr>
+		<tr>
+			<td colspan="3"><button (click)="addAccess()">Add Memory Access</button> 
+          <button (click)="runSimulation()">Run Simulation</button>
+      </td>
+		</tr>
+	</tbody>
+</table>
+
+<h2> Results </h2>
+<table class="table">
+	<thead>
+		<tr>
+			<th>Address</th>
+      <th>Request Type</th>
+      <th>Cacheline Index</th>
+      <th>Hit or Miss?</th>
+      <th>Modified</th>
+      <th>Tag</th>
+      <th>Data</th>
+      <th>Caused Replace</th>
+      <th>Write Back to memory?</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr *ngFor="let result of results">
+			<td>{{result.access.address | radix : 16}}</td>
+      <td>{{result.access.isWrite ? 'write' : 'read' }}</td>
+      <td>{{result.cacheIndex | radix : 16}}</td>
+      <td>{{result.isHit ? 'hit' : 'miss'}}</td>
+      <td>{{result.modified ? 1 : 0}}</td>
+      <td>{{result.tag | radix : 16}}</td>
+      <td>{{result.access.data}}</td>
+      <td>{{result.causedReplace ? 'yes' : 'no'}}</td>
+      <td>{{result.writeBack ? 'yes' : 'no'}}</td>
+		</tr>
+	</tbody>
+</table>
+

@@ -1,0 +1,5 @@
+<input  [(ngModel)]="valueString" (ngModelChange)="updateValue()">
+<select [ngModel]="radix" (ngModelChange)="changeRadix($event)">
+  <option *ngFor="let r of radixes" [ngValue]="r.value">{{r.name}}</option>
+</select>
+{{value}}

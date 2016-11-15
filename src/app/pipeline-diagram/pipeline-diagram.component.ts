@@ -171,6 +171,20 @@ class InstrucitonConfig {
   }
 }
 
+class  FunctionalUnit {
+  constructor(name, length, units, piped) {
+    this.name = name;
+    this.executeLength = length;
+    this.units = units;
+    this.isPipelined = piped;
+  }
+  name:string;
+  isPipelined:boolean;
+  executeLength:number;
+  units:number;
+
+}
+
 @Component({
   selector: 'app-pipeline-diagram',
   templateUrl: './pipeline-diagram.component.html',
@@ -183,11 +197,15 @@ export class PipelineDiagramComponent implements OnInit {
   configs: Array<InstrucitonConfig>
   configLookup: {};
 
-  functionalUnits: Array<string>;
+  functionalUnits: Array<FunctionalUnit>;
 
   constructor(public mipsService: MipsService) {
     this.lines = [];
-    this.functionalUnits = ['generic', 'add', 'mult'];
+    this.functionalUnits = [
+      new FunctionalUnit('arithmetic', 1, 1, false),
+      new FunctionalUnit('add', 2, 1, true),
+      new FunctionalUnit('mult', 4, 1, false)
+    ];
     this.currentPipe = new Pipeline();
     this.configs = mipsService.instrucitons.map((instr) => {
       return new InstrucitonConfig(instr, MEM_INSTRUCITONS[instr] || false, LONG_INSTRUCITONS[instr] || 1);

@@ -18,7 +18,7 @@
 		</tr>
 	</tbody>
 </table>
-<button (click)="runCycle()">Run Cycle </button>
+<button (click)="runCycle()">Run Cycle</button>
 <button (click)="recompile()">Run All</button>
 <!--
 <table>
@@ -41,6 +41,31 @@
 <table>
 	<thead>
 		<tr>
+			<th>Functional Unit </th>
+			<th>Pipelined </th>
+			<th>Execute Time </th>
+			<th>Execution Units </th>
+			<th>Reservation Stations</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr *ngFor="let functionalUnit of functionalUnits">
+			<td><input type="text" [(ngModel)]="functionalUnit.name"></td>
+			<td><input type="checkbox" [(ngModel)]="functionalUnit.isPipelined"></td>
+			<td><input type="number" [(ngModel)]="functionalUnit.executeLength"></td>
+			<td><input type="number" [(ngModel)]="functionalUnit.units"></td>
+			<td><input type="number" [(ngModel)]="functionalUnit.reservationStations"></td>
+		</tr>
+		<tr>
+			<td colspan="5"><button (click)="addFU()">Add Funcitonal Unit</button> </td>
+		</tr>
+	</tbody>
+</table>
+
+
+<table>
+	<thead>
+		<tr>
 			<th>Instruciton</th>
 			<th>Uses Memory Stage</th>
 			<th>Execution Lenth</th>
@@ -57,7 +82,7 @@
 			<td><input type="number" [(ngModel)]="config.executeLength"></td>
 			<td>
 				<select [(ngModel)]="config.functionalUnit">
-    				<option *ngFor="let funcUnit of functionalUnits">{{funcUnit}}</option>
+    				<option *ngFor="let funcUnit of functionalUnits">{{funcUnit.name}}</option>
 				</select>
 			</td>
 			<td>
