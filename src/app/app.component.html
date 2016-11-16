@@ -1,5 +1,30 @@
-<!--<textarea [(ngModel)]="program" cols="10" class="text-editor"></textarea>-->
+<md-sidenav-layout>
+  <md-sidenav #start>
+    Navigation
+    <br>
+    <md-list>
+      <md-list-item> 
+        <button md-button routerLink="/cache" routerLinkActive="active">Cache Simulator</button>
+      </md-list-item>
+      <md-list-item> 
+        <button md-button routerLink="/pipe" routerLinkActive="active">Pipeline Simulator</button>
+      </md-list-item>
+      <!--
+      <md-list-item> 
+        <button md-button #closeStartButton (click)="start.close()">Close</button>
+      </md-list-item>
+      --> 
+    </md-list>
 
-<router-outlet></router-outlet>
+    
+  </md-sidenav>
+  <md-toolbar color="primary">
+    <button md-button (click)="start.open()">Menu</button>
+    <span>CMPE 110 Simulators and Demos</span>
+  </md-toolbar>
+  <div style="padding:20px">
+    <router-outlet></router-outlet>
+  </div>
 
-<!--<app-pipeline-diagram [getProgram]="getProgram"></app-pipeline-diagram>-->
+
+</md-sidenav-layout>

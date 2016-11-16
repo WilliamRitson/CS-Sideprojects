@@ -17,9 +17,9 @@
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/@angular/common/-/common-2.1.1.tgz#4b28de02c07f1395fbbdb403983c82a47490f39e"
 
-"@angular/common@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@angular/common/-/common-2.0.0.tgz#6d5b38cef8bec69726590f395da10c2d89146247"
+"@angular/common@~2.1.0":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@angular/common/-/common-2.1.2.tgz#5c5b37c21d6e573def1670f43962c262bc9be82e"
 
 "@angular/compiler-cli@^0.6.0":
   version "0.6.4"
@@ -34,37 +34,43 @@
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/@angular/compiler/-/compiler-2.1.1.tgz#41d04cdd121ab17d7e4d4e660512fe424949fbd6"
 
-"@angular/compiler@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@angular/compiler/-/compiler-2.0.0.tgz#724e7c68ac177aa933aa75a6b4cb11e5aa795d2c"
+"@angular/compiler@~2.1.0":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@angular/compiler/-/compiler-2.1.2.tgz#bd2a6c558de5350bdd43aa8e8de757943ac01d2a"
 
 "@angular/core@^2.0.0":
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/@angular/core/-/core-2.1.1.tgz#2100ba90023c8184bd1ea7a63f194b15e8c2dfe1"
 
-"@angular/core@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@angular/core/-/core-2.0.0.tgz#87b5ea4a7ae063d27bcf2332a4aa932d887abe2b"
+"@angular/core@~2.1.0":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@angular/core/-/core-2.1.2.tgz#ce39521643f3d97bc5923d5a7aa76604e973dac8"
 
-"@angular/forms@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@angular/forms/-/forms-2.0.0.tgz#4f472223f61aec49f27575ef49b0d6cac3be1e31"
+"@angular/forms@~2.1.0":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@angular/forms/-/forms-2.1.2.tgz#c55539ea5da6d60f64475f39392ae5dd76a7e990"
 
-"@angular/http@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@angular/http/-/http-2.0.0.tgz#ee3206cd1683581dd57dabba93c0e23af19b4732"
+"@angular/http@~2.1.0":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@angular/http/-/http-2.1.2.tgz#50aa96c3b68a44b98e3f837886c96e5930eb543a"
 
-"@angular/platform-browser-dynamic@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@angular/platform-browser-dynamic/-/platform-browser-dynamic-2.0.0.tgz#2ee3f2bb08b4864902c5b7c283f77863c89d8715"
+"@angular/material@^2.0.0-alpha.10":
+  version "2.0.0-alpha.9-experimental-pizza"
+  resolved "https://registry.yarnpkg.com/@angular/material/-/material-2.0.0-alpha.9-experimental-pizza.tgz#fff31d82899b7daac6bf3fbeca35bc8c948c2408"
+  dependencies:
+    "@types/hammerjs" "^2.0.30"
+
+"@angular/platform-browser-dynamic@~2.1.0":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@angular/platform-browser-dynamic/-/platform-browser-dynamic-2.1.2.tgz#3d51b494cfe0a29354c8c1f28369883679982af4"
 
 "@angular/platform-browser@^2.0.0":
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/@angular/platform-browser/-/platform-browser-2.1.1.tgz#03687a14bb914b113d1068aa0a44b5820109c0c0"
 
-"@angular/platform-browser@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@angular/platform-browser/-/platform-browser-2.0.0.tgz#7f8603be42511d3133e95888a1b5c5132fc89c46"
+"@angular/platform-browser@~2.1.0":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@angular/platform-browser/-/platform-browser-2.1.2.tgz#1f07c3a5668ac2381a7324f9001521deede159bc"
 
 "@angular/platform-server@^2.0.0":
   version "2.1.1"
@@ -72,15 +78,23 @@
   dependencies:
     parse5 "^2.2.1"
 
-"@angular/router@3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@angular/router/-/router-3.0.0.tgz#cdf91b3a5d85ad39aff4fd882455c9b8c3129cd9"
+"@angular/router@~3.1.0":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@angular/router/-/router-3.1.2.tgz#1046c943ace795027e2e5057df8c897da968fcd6"
 
 "@angular/tsc-wrapped@^0.3.0":
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/@angular/tsc-wrapped/-/tsc-wrapped-0.3.0.tgz#98cdeb5c38d145b187c0ad0397a8d98b217f33f2"
   dependencies:
     tsickle "^0.1.7"
+
+"@angular2-material/core@^2.0.0-alpha.8-2":
+  version "2.0.0-alpha.8-experimental3"
+  resolved "https://registry.yarnpkg.com/@angular2-material/core/-/core-2.0.0-alpha.8-experimental3.tgz#7bf7714dda49bcc678fd32ff26573617c101d892"
+
+"@types/hammerjs@^2.0.30":
+  version "2.0.33"
+  resolved "https://registry.yarnpkg.com/@types/hammerjs/-/hammerjs-2.0.33.tgz#45f57352474181425bb4b65f7313a60426d54bab"
 
 "@types/jasmine@^2.2.30", "@types/jasmine@^2.2.31":
   version "2.5.35"

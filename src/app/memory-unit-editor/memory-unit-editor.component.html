@@ -1,5 +1,5 @@
 <span>
-  <input [(ngModel)]="value.amount" type="number">
+  <md-input  [(ngModel)]="value.amount" type="number"></md-input>
   <select [(ngModel)]="value.unit">
     <option *ngFor="let unit of units" [ngValue]="parseInt(unit)">{{label(unit)}}</option>
   </select>

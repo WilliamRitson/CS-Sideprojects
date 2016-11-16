@@ -1,1 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
+@import '~@angular/material/core/theming/prebuilt/deeppurple-amber.css';
+
+.big-card {
+    margin: 15px;
+}
+
+.flex-stack-card {
+    max-width: 100%;
+    float:left;
+}
+
+.row {
+    width: 100%;
+    overflow: hidden;
+}

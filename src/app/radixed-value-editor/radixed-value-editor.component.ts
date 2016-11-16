@@ -1,4 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {MemoryAccess} from '../cache'
 
 @Component({
   selector: 'app-radixed-value-editor',
@@ -6,23 +7,24 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./radixed-value-editor.component.css']
 })
 export class RadixedValueEditorComponent implements OnInit {
-  @Input() value:number;
+  @Input() value: number; 
+  @Output() onValueChange = new EventEmitter<number>();
   valueString: string;
   radix: number;
+  
   radixes: Array<Object>;
   
   constructor() {
     this.radixes = [
-      { name: 'hex', value: 16 },
-      { name: 'decimal', value: 10 },
-      { name: 'octal', value: 8 }
+      { name: 'hex', value: 16},
+      { name: 'decimal', value: 10},
+      { name: 'octal', value: 8}
     ];
-    this.radix = 16;
-    
+    this.radix = 16; 
   }
 
-  updateValue() {
-    this.value = parseInt(this.valueString, this.radix);
+  updateValue(nv) {
+    this.onValueChange.emit(parseInt(this.valueString, this.radix));
   }
 
   changeRadix(event) {
@@ -32,6 +34,7 @@ export class RadixedValueEditorComponent implements OnInit {
 
   ngOnInit() {
     this.valueString = this.value.toString(this.radix);
+    this.value = null;
   }
 
 }

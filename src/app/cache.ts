@@ -184,17 +184,17 @@ export class Cache {
         }
 
         let time = 0;
-        return accesses.map(access => {
+        let result =  accesses.map(access => {
+            time++;
+            let res = new SimulationResult();
             let address = new SplitAddress(access.address, config);
 
-            let res = new SimulationResult();
             res.access = access;
             res.cacheIndex = address.index;
             res.tag = address.tag;
 
             let blockSizeUnitless = config.blockSize.div(config.minimumAddressableUnit).amount;
-            res.data = blockSizeUnitless * Math.floor(address.decimal / blockSizeUnitless)
-            time++;
+            res.data = blockSizeUnitless * Math.floor(address.decimal / blockSizeUnitless)           
 
             let set = sets[res.cacheIndex];
             let block = set.find(block => block.tag == address.tag);
@@ -222,6 +222,7 @@ export class Cache {
 
             return res;
         });
+        return result;
     }
 
 }

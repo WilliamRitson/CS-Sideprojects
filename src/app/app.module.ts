@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule }   from '@angular/router';
 
+import { MaterialModule } from '@angular/material';
+
 
 import { AppComponent } from './app.component';
 import { ProgramEditorComponent } from './program-editor/program-editor.component';
@@ -11,7 +13,7 @@ import { PipelineDiagramComponent } from './pipeline-diagram/pipeline-diagram.co
 import { MemorySimulatorComponent } from './memory-simulator/memory-simulator.component';
 import { MemoryUnitEditorComponent } from './memory-unit-editor/memory-unit-editor.component';
 import { RadixedValueEditorComponent } from './radixed-value-editor/radixed-value-editor.component';
-import { RadixPipe } from './radix.pipe';
+import { RadixPipe, AllRadixPipe } from './radix.pipe';
 
 
 @NgModule({
@@ -22,12 +24,13 @@ import { RadixPipe } from './radix.pipe';
     MemorySimulatorComponent,
     MemoryUnitEditorComponent,
     RadixedValueEditorComponent,
-    RadixPipe
+    RadixPipe, AllRadixPipe
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
+    MaterialModule.forRoot(),
      RouterModule.forRoot([
       { path: 'cache', component: MemorySimulatorComponent },
       {

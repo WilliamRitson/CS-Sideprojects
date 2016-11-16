@@ -1,76 +1,123 @@
-<h1>Cache Configuraiton</h1>
-<div>
-  
-  <label> Address Size:
-      <app-memory-unit-editor [(value)]="config.addressSize"></app-memory-unit-editor>
-  </label>
-  <label> Cache Size:
-      <app-memory-unit-editor [(value)]="config.cacheSize"></app-memory-unit-editor>
-  </label>
-  <label> Block Size:
-      <app-memory-unit-editor [(value)]="config.blockSize"></app-memory-unit-editor>
-  </label>
-  <label>Blocks per Set (1 for direct mapping):
-    <input type="number" [(ngModel)] = "config.setSize">
-  </label>
-  <label> Minimum Addressable Unit
-    <app-memory-unit-editor [(value)]="config.minimumAddressableUnit"></app-memory-unit-editor>
-  </label>
-  
-  offsetSize:{{config.getOffsetSize().toString()}}  indexSize:{{config.indexSize}} tagSize:{{config.tagSize}}
+<div class="row">
+<md-card class="big-card flex-stack-card">
+  <md-card-title>Cache Configuraiton</md-card-title>
+  <md-card-content>
+    <md-list> 
+    
+      <md-list-item>
+      <label> Address Size:
+        <app-memory-unit-editor [(value)]="config.addressSize"></app-memory-unit-editor>
+      </label>
+      </md-list-item>
+
+      <md-list-item>
+      <label> Minimum Addressable Unit
+        <app-memory-unit-editor [(value)]="config.minimumAddressableUnit"></app-memory-unit-editor>
+      </label>
+      </md-list-item>
+      
+      <md-list-item>
+      <label> Cache Size:
+          <app-memory-unit-editor [(value)]="config.cacheSize"></app-memory-unit-editor>
+      </label>
+      </md-list-item>
+      
+      <md-list-item>
+      <label> Block Size:
+          <app-memory-unit-editor [(value)]="config.blockSize"></app-memory-unit-editor>
+      </label>
+      </md-list-item>
+
+      <md-list-item>
+      <label>Blocks per Set (1 for direct mapping):
+        <md-input type="number" [(ngModel)] = "config.setSize"></md-input>
+      </label>
+      </md-list-item>
+
+    </md-list> 
+  </md-card-content>
+</md-card>
+
+<md-card class="big-card flex-stack-card">
+  <md-card-title>Memory Access Input</md-card-title>
+  <md-card-content>
+    <table>
+      <thead>
+        <tr>
+          <th>Address</th>
+          <th>Is a Write</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let access of accesses; let i = index">
+          <td>
+            <app-radixed-value-editor (onValueChange)="accesses[i].address = $event" [value]="getAddress(i)"></app-radixed-value-editor>
+          </td>
+          <td>
+            <md-checkbox [(checked)]="access.isWrite"></md-checkbox>
+          </td>
+          <td><button md-raised-button color="warn" (click)="deleteAccess(index)">Delete Access</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </md-card-content>
+  <md-card-actions>
+    <button md-raised-button color="primary" (click)="addAccess()">Add Memory Access</button>
+    <button md-raised-button color="primary" (click)="runSimulation()">Run Simulation</button>
+  </md-card-actions>
+</md-card>
+
+<md-card class="big-card flex-stack-card">
+  <md-card-title>Address Allocation</md-card-title>
+  <md-card-content>
+    <md-list> 
+      <md-list-item>Tag Size: {{config.getTagSize().toString()}}</md-list-item>
+      <md-list-item>Index Size: {{config.indexSize}}</md-list-item>
+      <md-list-item>Offset Size: {{config.offsetSize}}</md-list-item>
+      <!--<md-list-item>Format: <span>{{'T'.repeat(config.tagSize.toBits())}}</span><span>{{'I'.repeat(config.indexSize.toBits())}}</span><span>{{'O'.repeat(config.offsetSize.toBits())}}</span></md-list-item>-->
+    </md-list>
+  </md-card-content>
+</md-card>
 </div>
 
-<h2>Memory Access Input</h2>
-<table>
-	<thead>
-		<tr>
-			<th>Address</th>
-      <th>Is a Write</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr *ngFor="let access of accesses">
-			<td>
-        <app-radixed-value-editor [(value)]="access.address"></app-radixed-value-editor>
-      </td>
-      <td><input [(ngModel)]="access.isWrite" type="checkbox"></td>
-      <td><button (click)="deleteAccess(index)">Delete Access</button></td>
-		</tr>
-		<tr>
-			<td colspan="3"><button (click)="addAccess()">Add Memory Access</button> 
-          <button (click)="runSimulation()">Run Simulation</button>
-      </td>
-		</tr>
-	</tbody>
-</table>
-
-<h2> Results </h2>
-<table class="table">
-	<thead>
-		<tr>
-			<th>Address</th>
-      <th>Request Type</th>
-      <th>Cacheline Index</th>
-      <th>Hit or Miss?</th>
-      <th>Modified</th>
-      <th>Tag</th>
-      <th>Data</th>
-      <th>Caused Replace</th>
-      <th>Write Back to memory?</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr *ngFor="let result of results">
-			<td>{{result.access.address | radix : 16}}</td>
-      <td>{{result.access.isWrite ? 'write' : 'read' }}</td>
-      <td>{{result.cacheIndex | radix : 16}}</td>
-      <td>{{result.isHit ? 'hit' : 'miss'}}</td>
-      <td>{{result.modified ? 1 : 0}}</td>
-      <td>{{result.tag | radix : 16}}</td>
-      <td>{{result.access.isWrite ? 'D' : 'M' }} [{{result.data | radix : 16}}]</td>
-      <td>{{result.causedReplace ? 'yes' : 'no'}}</td>
-      <td>{{result.writeBack ? 'yes' : 'no'}}</td>
-		</tr>
-	</tbody>
-</table>
-
+<md-card class="big-card flex-stack-card">
+  <md-card-title>Results</md-card-title>
+  <md-card-content>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Address</th>
+          <th>Request Type</th>
+          <th>Cacheline Index</th>
+          <th>Hit or Miss?</th>
+          <th>Modified</th>
+          <th>Tag</th>
+          <th>Data</th>
+          <th>Caused Replace</th>
+          <th>Write Back to memory?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let result of results">
+          <td>
+            <span md-tooltip="{{result.access.address | allRadix}}">{{result.access.address | radix : 16}}</span>
+          </td>
+          <td>{{result.access.isWrite ? 'write' : 'read' }}</td>
+          <td>
+            <span md-tooltip="{{result.access.address | allRadix}}">{{result.cacheIndex | radix : 16}}</span>
+          </td>
+          <td>{{result.isHit ? 'hit' : 'miss'}}</td>
+          <td>{{result.modified ? 1 : 0}}</td>
+          <td>
+            <span md-tooltip="{{result.tag | allRadix}}">{{result.tag | radix : 16}}</span>
+          </td>
+          <td>
+            <span md-tooltip="{{result.data| allRadix}}">{{result.access.isWrite ? 'D' : 'M' }} [{{result.data | radix : 16}}]</span>
+          </td>
+          <td>{{result.causedReplace ? 'yes' : 'no'}}</td>
+          <td>{{result.writeBack ? 'yes' : 'no'}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </md-card-content>
+</md-card>

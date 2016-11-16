@@ -127,7 +127,7 @@ class InstrucitonConfig {
     this.instruciton = instr;
     this.hasMemory = hasMemory;
     this.executeLength = executeLength;
-    this.functionalUnit = 'generic';
+    this.functionalUnit = 'arithmetic';
     if (instr.indexOf('mult') != -1)
       this.functionalUnit = 'mult';
     if (instr.indexOf('add') != -1)
@@ -171,17 +171,17 @@ class InstrucitonConfig {
   }
 }
 
-class  FunctionalUnit {
+class FunctionalUnit {
   constructor(name, length, units, piped) {
     this.name = name;
     this.executeLength = length;
     this.units = units;
     this.isPipelined = piped;
   }
-  name:string;
-  isPipelined:boolean;
-  executeLength:number;
-  units:number;
+  name: string;
+  isPipelined: boolean;
+  executeLength: number;
+  units: number;
 
 }
 
@@ -200,6 +200,15 @@ export class PipelineDiagramComponent implements OnInit {
   functionalUnits: Array<FunctionalUnit>;
 
   constructor(public mipsService: MipsService) {
+    this.program = `
+      lw r3, r2
+      mult r4, r3, r3
+      mult r3, r3, r1
+      addiu r0, r0, 1
+      div r3, r4, r3
+      sw r3, r2
+      addiu r2, r2, 4
+      bne r0, r1, -8`;
     this.lines = [];
     this.functionalUnits = [
       new FunctionalUnit('arithmetic', 1, 1, false),
@@ -215,7 +224,7 @@ export class PipelineDiagramComponent implements OnInit {
       this.configLookup[c.instruciton] = c;
     });
   }
-  getProgram: () => string;
+  program: string;
 
   lines: Array<DiagramLine>;
 
@@ -227,11 +236,15 @@ export class PipelineDiagramComponent implements OnInit {
     return arr;
   }
 
+  mips: Array<MipsInstruction>;
+  init() {
+      this.mips = this.mipsService.parseProgram(this.program);
+      this.lines = this.mips.map((inst, n) => new DiagramLine(inst, n + 1, this.configLookup[inst.instruction]));
+      this.findDependencies(this.lines);
+  }
+
   recompile() {
-    let source = this.getProgram();
-    let mips = this.mipsService.parseProgram(source);
-    this.lines = mips.map((inst, n) => new DiagramLine(inst, n + 1, this.configLookup[inst.instruction]));
-    this.findDependencies(this.lines);
+    this.init();
     this.lines = this.executeCode(this.currentPipe, this.lines);
   }
 
@@ -250,10 +263,7 @@ export class PipelineDiagramComponent implements OnInit {
     if (this.currentPipe == undefined)
       this.currentPipe = new Pipeline();
     if (this.lines.length == 0) {
-      let source = this.getProgram();
-      let mips = this.mipsService.parseProgram(source);
-      this.lines = mips.map((inst, n) => new DiagramLine(inst, n + 1, this.configLookup[inst.instruction]));
-      this.findDependencies(this.lines);
+      this.init();
     }
     this.executeCycle(this.currentPipe, this.lines);
   }
@@ -280,7 +290,7 @@ export class PipelineDiagramComponent implements OnInit {
 
   executeCode(pipe: Pipeline, lines: Array<DiagramLine>): Array<DiagramLine> {
     let unfinshed: boolean = true;
-    let limit = 10000;
+    let limit = this.lines.length * 20;;
     while (unfinshed && limit > 0) {
       limit--;
       unfinshed = false;

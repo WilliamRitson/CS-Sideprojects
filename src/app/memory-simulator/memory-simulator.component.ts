@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Cache, CacheConfiguraiton, MemoryAccess, SimulationResult } from '../cache';
+import {clone} from 'lodash';
 
 enum AccessType {
   read,
@@ -28,10 +29,16 @@ export class MemorySimulatorComponent implements OnInit {
       new MemoryAccess(147, true),
       new MemoryAccess(67111748, false)
     ];
+    this.runSimulation();
+  }
+
+  getAddress(i) {
+    let n = this.accesses[i].address;
+    return n;
   }
 
   runSimulation () {
-    this.results = cache.runCacheSimulation(this.config, this.accesses);
+    this.results = cache.runCacheSimulation(this.config, this.accesses.map(ma=> new MemoryAccess(ma.address, ma.isWrite)));
   }
 
   addAccess() {
