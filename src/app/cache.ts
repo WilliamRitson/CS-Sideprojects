@@ -226,7 +226,6 @@ export class Cache {
     runMemoryAccess(access: MemoryAccess, config: CacheConfiguraiton, time: number): SimulationResult {
         let res = new SimulationResult();
         let address = new SplitAddress(access.address, config);
-        console.log(address);
 
         res.access = access;
         res.cacheIndex = address.index;

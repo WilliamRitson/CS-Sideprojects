@@ -30,7 +30,6 @@ function addToLookup(type:string, names:Array<string>) {
 addToLookup('J', J_TYPE);
 addToLookup('R', R_TYPE);
 addToLookup('I', I_TYPE);
-console.log(TYPE_LOOKUP);
 
 const comment = /#.+/g;
 const registerOrImmediate = /\$?[0-9]+/g;

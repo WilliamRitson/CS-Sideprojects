@@ -1,0 +1,82 @@
+<div class="row">
+  <md-card style="width: 30%; float:left;">
+    <md-card-title>Graph Input</md-card-title>
+    <md-card-subtitle>Edit links</md-card-subtitle>
+    <md-card-content>
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th></th>
+            <th>Directed</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let link of links">
+            <th>
+              <md-input placeholder="from" [(ngModel)]="link.from"></md-input>
+            </th>
+            <th>
+              <md-input placeholder="to" [(ngModel)]="link.to"></md-input>
+            </th>
+            <th>
+              <md-checkbox [(ngModel)]="link.directed"></md-checkbox>
+            </th>
+            <th><button md-raised-button color="warn" (click)="deleteLink(index)">Delete</button></th>
+          </tr>
+        </tbody>
+      </table>
+    </md-card-content>
+    <md-card-actions>
+      <button md-raised-button color="primary" (click)="addLink()">Add Link</button>
+      <button md-raised-button color="primary" (click)="rebuild()">Rebuild</button>
+    </md-card-actions>
+  </md-card>
+
+  <md-card style="width: 55%; float:left; margin-left:20px;">
+    <md-card-title>Graph</md-card-title>
+    <md-card-content>
+      <div id="graph-render-target"></div>
+    </md-card-content>
+    <md-card-actions>
+      <label> Source:
+    <select [(ngModel)]="source">
+      <option *ngFor="let node of getNodesSingle()" [value]="node.data">{{node.data}}</option>
+    </select>
+    </label>
+      <button md-raised-button color="primary" (click)="bfsStep()">Run BFS Step</button>
+      <button md-raised-button color="primary" (click)="bfs()">Run BFS</button>
+      <button md-raised-button color="primary" (click)="dfsStep()">Run DFS Step</button>
+      <button md-raised-button color="primary" (click)="dfs()">Run DFS</button>
+    </md-card-actions>
+  </md-card>
+</div>
+<div class="row">
+  <md-card style="float:left; margin-left:20px; margin-top:20px;">
+    <md-card-title>Tables</md-card-title>
+    <md-card-content>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Node</th>
+            <th>Parent</th>
+            <th>Distance</th>
+            <th>Color</th>
+            <th>Start Time</th>
+            <th>Finish Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let nodePair of getNodes()">
+            <td>{{nodePair[0]}}</td>
+            <td>{{nodePair[1].parent ? nodePair[1].parent.data : 'Nil'}} </td>
+            <td>{{nodePair[1].distance}}</td>
+            <td>{{nodePair[1].colorName()}}</td>
+            <td>{{nodePair[1].startTime}}</td>
+            <td>{{nodePair[1].finishTime}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </md-card-content>
+  </md-card>
+</div>

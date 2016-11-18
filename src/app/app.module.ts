@@ -6,9 +6,9 @@ import { RouterModule } from '@angular/router';
 
 import { MaterialModule } from '@angular/material';
 
-
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
+import { GraphSearchComponent } from './graph-search/graph-search.component';
 import { ProgramEditorComponent } from './program-editor/program-editor.component';
 import { PipelineDiagramComponent } from './pipeline-diagram/pipeline-diagram.component';
 import { MemorySimulatorComponent } from './memory-simulator/memory-simulator.component';
@@ -21,6 +21,7 @@ import { RadixPipe, AllRadixPipe } from './radix.pipe';
   declarations: [
     AppComponent,
     HomeComponent,
+    GraphSearchComponent,
     ProgramEditorComponent,
     PipelineDiagramComponent,
     MemorySimulatorComponent,
@@ -35,7 +36,8 @@ import { RadixPipe, AllRadixPipe } from './radix.pipe';
     MaterialModule.forRoot(),
     RouterModule.forRoot([
       {
-        path: 'cache', component: MemorySimulatorComponent, data: {
+        path: 'cache', component: MemorySimulatorComponent, 
+        data: {
           title: 'Cache Simulator'
         }
       },
@@ -44,6 +46,13 @@ import { RadixPipe, AllRadixPipe } from './radix.pipe';
         component: PipelineDiagramComponent,
         data: {
           title: 'Pipeline Digram Generator'
+        }
+      },
+      {
+        path: 'graph',
+        component: GraphSearchComponent,
+        data: {
+          title: 'Graph Search Demo'
         }
       },
       { path: '', component: HomeComponent },

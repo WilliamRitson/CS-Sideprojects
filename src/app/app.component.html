@@ -12,6 +12,9 @@
       <md-list-item> 
         <button md-button (click)="start.close()" routerLink="/pipe" routerLinkActive="active">Pipeline Simulator</button>
       </md-list-item>
+      <md-list-item> 
+        <button md-button (click)="start.close()" routerLink="/graph" routerLinkActive="active">Graph Search</button>
+      </md-list-item>
       <!--
       <md-list-item> 
         <button md-button #closeStartButton (click)="start.close()">Close</button>
@@ -23,7 +26,7 @@
   
   <md-toolbar color="primary">
     <button class="app-icon-button" (click)="start.toggle()"><md-icon class="app-toolbar-menu">menu</md-icon></button>
-    <span>CMPE 110 Simulators and Demos</span>
+    <span>Will's C.S Sideprojects</span>
   </md-toolbar>
   <div class="app-content">
     <router-outlet></router-outlet>

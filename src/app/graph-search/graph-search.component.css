@@ -1,0 +1,29 @@
+#graph-render-target {
+    height: 450px;
+    border: 1px solid black;
+}
+
+.row {
+    width: 100%;
+    overflow: hidden;
+}
+
+.table {
+    text-align: center;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th {
+    border-bottom: 2px solid gray;
+}
+
+.table td {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border-bottom: 0.5px solid lightgray;
+}
+
+/*.table tbody tr:nth-child(even) {
+    background-color: lightgray;
+}*/

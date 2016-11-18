@@ -7,65 +7,6 @@ enum AccessType {
   write
 }
 
-const setZero= [
-  new MemoryAccess(0, false),
-  new MemoryAccess(2, false),
-  new MemoryAccess(4, false),
-  new MemoryAccess(8, false),
-  new MemoryAccess(16, false),
-  new MemoryAccess(32, false),
-  new MemoryAccess(64, false),
-  new MemoryAccess(128, false)
-]
-const setOne = [
-  new MemoryAccess(0, false),
-  new MemoryAccess(1024, false),
-  new MemoryAccess(2048, false),
-  new MemoryAccess(3072, false),
-  new MemoryAccess(4096, false),
-  new MemoryAccess(3072, false),
-  new MemoryAccess(2048, false),
-  new MemoryAccess(1024, false),
-  new MemoryAccess(0, false)
-]
-const setTwo = [
-  new MemoryAccess(0, false),
-  new MemoryAccess(256, false),
-  new MemoryAccess(512, false),
-  new MemoryAccess(1024, false),
-  new MemoryAccess(2048, false),
-  new MemoryAccess(1024, false),
-  new MemoryAccess(512, false),
-  new MemoryAccess(256, false),
-  new MemoryAccess(0, false)
-]
-
-const setThree = [
-  new MemoryAccess(0, false), 
-  new MemoryAccess(512, false), 
-  new MemoryAccess(2048, false),
-  new MemoryAccess(0, false), 
-  new MemoryAccess(1536, false), 
-  new MemoryAccess(0, false), 
-  new MemoryAccess(1024, false), 
-  new MemoryAccess(512, false)
-
-]
-const setOld = [
-new MemoryAccess(296, false),
-new MemoryAccess(3904, true),
-new MemoryAccess(10485841, false),
-new MemoryAccess(147, true),
-new MemoryAccess(67111748, false),
-]
-
-const allSets = [setZero, setOne, setTwo, setThree];
-const setEV = [4/8, 3/9, 4/9, 2/8];
-const associativeOptions = [1, 2, 4];
-const blockSizeOptions = [1, 2, 4, 8, 16,  32];
-const cacheSizeOptions = [1024, 2048];
-const lruPolicyOptions = [true, false];
-
 @Component({
   selector: 'app-memory-simulator',
   templateUrl: './memory-simulator.component.html',
@@ -80,58 +21,28 @@ export class MemorySimulatorComponent implements OnInit {
   sparseCacheIndexes: Array<number>;
   sparseCacheLongestSet: Array<CacheBlock>;
 
-  testAll () {
-    this.config.addressSize = new MemoryQuantity(13, MemoryUnit.bit);
-    let tn = 0;
-    associativeOptions.forEach(ao => {
-      blockSizeOptions.forEach(bso => {
-        cacheSizeOptions.forEach(cso => {
-          lruPolicyOptions.forEach(lro => {
-            let failed = false;
-            tn++;
-            console.log("test", tn);
-            console.log("Associativity", ao, "block size", bso, "cache size", cso, "use lru", lro);
-            let good = 0;
-            allSets.forEach((test, i) => {
-              
-              this.config.cacheSize = new MemoryQuantity(cso, MemoryUnit.bit);
-              this.config.blockSize = new MemoryQuantity(bso, MemoryUnit.byte);
-              this.config.setSize = ao
-              this.config.lruPolicy = lro;
-              this.accesses = test;
-              this.runSimulation();
-              let result = this.getHitRate();
-              console.log(i, "r", result, "ev", setEV[i], result== setEV[i]);
-              if (result != setEV[i]) {
-                failed = true;
-              } else {
-                good++;
-              }
-            })
-            console.log('good', good);
-            if (!failed)
-             console.log('hazah');            
-          })
-        })
-      })
-    })
 
-  }
 
   constructor() {
     this.config = new CacheConfiguraiton();
     this.config.minimumAddressableUnit = new MemoryQuantity(1, MemoryUnit.byte);
-    this.config.cacheSize =   new MemoryQuantity(2048, MemoryUnit.bit);
+    this.config.cacheSize =   new MemoryQuantity(1, MemoryUnit.kibibyte);
     this.config.blockSize =   new MemoryQuantity(32, MemoryUnit.byte);
-    this.config.addressSize = new MemoryQuantity(13, MemoryUnit.bit);
-    this.config.setSize = 4;
+    this.config.addressSize = new MemoryQuantity(32, MemoryUnit.bit);
+    this.config.setSize = 1;
     this.config.lruPolicy = true;
     this.cache = new Cache();
     this.results = [];
-    this.accesses = setTwo; //setThree;
+    this.accesses = [
+      new MemoryAccess(0, true),
+      new MemoryAccess(1025, false),
+      new MemoryAccess(1027, false),
+      new MemoryAccess(512, false),
+      new MemoryAccess(0, false),
+      new MemoryAccess(16, false),
+    ];
     this.sparseCache = [];
     this.runSimulation();
-    //this.testAll();
   }
 
   getHitRate() {
