@@ -1,0 +1,45 @@
+<md-grid-list cols="2" rowHeight="300px" >
+  <md-grid-tile>
+    <md-card class="big-card">
+      <md-card-title>Cache Simulator</md-card-title>
+      <md-card-subtitle>Status: Experimental</md-card-subtitle>
+      <md-card-content>
+        <p>Cache Simulator which can simulate memory accesses displaying the result of each line of code and the status of the
+          cache.
+        </p>
+        <p>You can configure the cache size, set associativity, address size, addressing type, block size and replacement policy.</p>
+      </md-card-content>
+      <md-card-actions>
+        <button md-button routerLink="/cache" routerLinkActive="active">Goto</button>
+      </md-card-actions>
+    </md-card>
+  </md-grid-tile>
+  <md-grid-tile>
+    <md-card class="big-card">
+      <md-card-title>Pipeline Diagram Generator</md-card-title>
+      <md-card-subtitle>Status: Experimental</md-card-subtitle>
+      <md-card-content>
+        <p>Pipeline simulator which can generate pipeline diagrams from snippets of MIPS code (not all valid MIPS code will
+          work).</p>
+        <p>You can activate or disable forwarding as well as configure the runtime of each instruction and what functional unit
+          they use.</p>
+      </md-card-content>
+      <md-card-actions>
+        <button md-button routerLink="/pipe" routerLinkActive="active">Goto</button>
+      </md-card-actions>
+    </md-card>
+  </md-grid-tile>
+   <md-grid-tile>
+    <md-card class="big-card">
+      <md-card-title>Graph Search</md-card-title>
+      <md-card-subtitle>Status: Experimental</md-card-subtitle>
+      <md-card-content>
+        <p>Visual Graph which can be used to run breadth or depth first search on directed or undirected graphs.</p> 
+        <p>You can run each algorithm step by step and see how the colors and tables (parent, discovered, finished, ect) change over time.</p>
+      </md-card-content>
+      <md-card-actions>
+        <button md-button routerLink="/graph" routerLinkActive="active">Goto</button>
+      </md-card-actions>
+    </md-card>
+  </md-grid-tile>
+</md-grid-list>

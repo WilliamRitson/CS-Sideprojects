@@ -1,13 +1,16 @@
 <md-sidenav-layout>
-  <md-sidenav #start>
+  <md-sidenav #start mode="side" class="app-sidenav">
     Navigation
     <br>
     <md-list>
       <md-list-item> 
-        <button md-button routerLink="/cache" routerLinkActive="active">Cache Simulator</button>
+        <button md-button (click)="start.close()" routerLink="/" routerLinkActive="active">Home</button>
       </md-list-item>
       <md-list-item> 
-        <button md-button routerLink="/pipe" routerLinkActive="active">Pipeline Simulator</button>
+        <button md-button (click)="start.close()" routerLink="/cache" routerLinkActive="active">Cache Simulator</button>
+      </md-list-item>
+      <md-list-item> 
+        <button md-button (click)="start.close()" routerLink="/pipe" routerLinkActive="active">Pipeline Simulator</button>
       </md-list-item>
       <!--
       <md-list-item> 
@@ -15,14 +18,14 @@
       </md-list-item>
       --> 
     </md-list>
-
-    
   </md-sidenav>
+
+  
   <md-toolbar color="primary">
-    <button md-button (click)="start.open()">Menu</button>
+    <button class="app-icon-button" (click)="start.toggle()"><md-icon class="app-toolbar-menu">menu</md-icon></button>
     <span>CMPE 110 Simulators and Demos</span>
   </md-toolbar>
-  <div style="padding:20px">
+  <div class="app-content">
     <router-outlet></router-outlet>
   </div>
 

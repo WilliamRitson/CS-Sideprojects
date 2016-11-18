@@ -18,7 +18,8 @@ export class RadixedValueEditorComponent implements OnInit {
     this.radixes = [
       { name: 'hex', value: 16},
       { name: 'decimal', value: 10},
-      { name: 'octal', value: 8}
+      { name: 'octal', value: 8},
+      { name: 'binary', value: 2}
     ];
     this.radix = 16; 
   }

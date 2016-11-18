@@ -1,4 +1,4 @@
-import { minBy } from 'lodash';
+import { minBy, maxBy } from 'lodash';
 
 export enum MemoryUnit {
     bit = 1,
@@ -39,8 +39,6 @@ export class MemoryQuantity {
     log2() {
         return new MemoryQuantity(log2(this.convert(MemoryUnit.bit).amount), MemoryUnit.bit);
     }
-
-
     times(m: MemoryQuantity | number) {
         if ((<MemoryQuantity>m).convert) {
             return new MemoryQuantity(this.amount * (<MemoryQuantity>m).convert(this.unit).amount, this.unit);
@@ -80,6 +78,8 @@ export class CacheConfiguraiton {
     indexSize: MemoryQuantity;
     /** Size of the tag in the address*/
     tagSize: MemoryQuantity;
+    /** Cache replacement policy (true for lru, false for FIFO)*/
+    lruPolicy: boolean;
 
     constructor() {
         this.minimumAddressableUnit = new MemoryQuantity(1, MemoryUnit.byte);
@@ -87,7 +87,14 @@ export class CacheConfiguraiton {
         this.blockSize = new MemoryQuantity(64, MemoryUnit.word);
         this.addressSize = new MemoryQuantity(32, MemoryUnit.bit);
         this.setSize = 1;
+        this.lruPolicy = true;
         this.computeAddressParts();
+    }
+    getBlockCount() {
+        return this.cacheSize.div(this.blockSize).amount;
+    }
+    getSetCount () {
+        return this.getBlockCount() / this.setSize;
     }
     getOffsetSize() {
         this.computeAddressParts();
@@ -103,8 +110,8 @@ export class CacheConfiguraiton {
     }
     computeAddressParts() {
         this.offsetSize = this.blockSize.div(this.minimumAddressableUnit).log2();
-        this.indexSize = this.cacheSize.div(this.blockSize.times(this.setSize)).log2();
-        this.tagSize = this.addressSize.sub(this.offsetSize).sub(this.indexSize);
+        this.indexSize  = this.cacheSize.div(this.blockSize.times(this.setSize)).log2();
+        this.tagSize    = this.addressSize.sub(this.offsetSize).sub(this.indexSize);
     }
 }
 
@@ -119,11 +126,11 @@ export class SimulationResult {
     data: number;
 }
 
-class CacheBlock {
-    constructor() {
-        this.lastUsed = 0;
+export class CacheBlock {
+    constructor(lruPolicy:boolean) {
+        this.lastUsed = lruPolicy ? -Infinity : Infinity;
         this.valid = false;
-        this.tag = -1;
+        this.tag = NaN;
     }
     valid: boolean;
     tag: number;
@@ -135,7 +142,7 @@ function pad(pad: string, text: string, len: number) {
     return (pad.repeat(len) + text).slice(-len)
 }
 
-function dec2bin(dec: number, bits: number = 32): string {
+function dec2bin(dec: number, bits: number): string {
     return pad('0', (dec >>> 0).toString(2), bits);
 }
 function bin2dec(dec: string): number {
@@ -149,12 +156,12 @@ function getNBits(n: number, start: number, end: number) {
 class SplitAddress {
     constructor(address: number, config: CacheConfiguraiton) {
         this.decimal = address;
-        this.binary = dec2bin(address);
+        this.binary = dec2bin(address, config.addressSize.toBits());
         this.tagBinary = this.binary.substring(0, config.tagSize.toBits());
         this.indexBinary = this.binary.substring(config.tagSize.toBits(), config.tagSize.toBits() + config.indexSize.toBits());
         this.offsetBinary = this.binary.substring(config.tagSize.toBits() + config.indexSize.toBits(), config.addressSize.toBits());
         this.tag = bin2dec(this.tagBinary);
-        this.index = bin2dec(this.indexBinary);
+        this.index = bin2dec(this.indexBinary) || 0;
         this.offset = bin2dec(this.offsetBinary);
     }
     binary: string;
@@ -168,61 +175,94 @@ class SplitAddress {
 }
 
 export class Cache {
+    sets: Array<Array<CacheBlock>>;
+    stepTime: number; // Used to remember current step in  step by step execution
 
-    runCacheSimulation(config: CacheConfiguraiton, accesses: Array<MemoryAccess>): Array<SimulationResult> {
-        let blockCount = config.cacheSize.div(config.blockSize).amount;
-        let setCount = blockCount / config.setSize;
+    initilizeCache(config: CacheConfiguraiton) {
+        let setCount   = config.getSetCount();
         config.computeAddressParts();
-
-
-        let sets = new Array<Array<CacheBlock>>();
+        this.sets = new Array<Array<CacheBlock>>();
         for (let i = 0; i < setCount; i += 1) {
-            sets.push([]);
+            this.sets.push([]);
             for (let j = 0; j < config.setSize; j += 1) {
-                sets[i].push(new CacheBlock());
+                this.sets[i].push(new CacheBlock(config.lruPolicy));
             }
         }
+    }
 
-        let time = 0;
-        let result =  accesses.map(access => {
-            time++;
-            let res = new SimulationResult();
-            let address = new SplitAddress(access.address, config);
+    runCacheSimulation(config: CacheConfiguraiton, accesses: Array<MemoryAccess>): Array<SimulationResult> {
+        this.initilizeCache(config);
+        return accesses.map((access, time) => this.runMemoryAccess(access, config, time));
+    }
 
-            res.access = access;
-            res.cacheIndex = address.index;
-            res.tag = address.tag;
 
-            let blockSizeUnitless = config.blockSize.div(config.minimumAddressableUnit).amount;
-            res.data = blockSizeUnitless * Math.floor(address.decimal / blockSizeUnitless)           
+    
+    runCacheSimulationStep(config: CacheConfiguraiton, accesses: Array<MemoryAccess>): SimulationResult {
+        if (this.stepTime == undefined){
+            this.initilizeCache(config);
+            this.stepTime = 0;
+        }
+        if (accesses.length == 0)
+                return undefined;
+        let access = accesses[this.stepTime];
+        if (access) {
+            this.stepTime++;
+            return this.runMemoryAccess(access, config, this.stepTime);
+        } else {
+            this.stepTime = undefined;
+            this.sets = [];
+        }
+    }
 
-            let set = sets[res.cacheIndex];
-            let block = set.find(block => block.tag == address.tag);
+    fifoPolicy(set:Array<CacheBlock>):CacheBlock {
+        let unusedBlock = set.find(block => !block.valid);
+        if (unusedBlock)
+            return unusedBlock;
+        let firstBlock = set.shift();
+        set.push(firstBlock);
+        return firstBlock;
+    }
 
-            if (block) {
-                res.isHit = true;
-                block.lastUsed = time;
-            } else {
-                res.isHit = false;
-                // LRU policy
-                block = minBy(set, block => block.lastUsed);
-                if (block.modified) {
-                    res.writeBack = true;
-                    block.modified = false;
-                }
-                block.lastUsed = time;
-                res.causedReplace = block.valid;
-                block.valid = true;
-                block.tag = address.tag;
+    runMemoryAccess(access: MemoryAccess, config: CacheConfiguraiton, time: number): SimulationResult {
+        let res = new SimulationResult();
+        let address = new SplitAddress(access.address, config);
+        console.log(address);
+
+        res.access = access;
+        res.cacheIndex = address.index;
+        res.tag = address.tag;
+        
+        let blockSizeUnitless = config.blockSize.div(config.minimumAddressableUnit).amount;
+        res.data = blockSizeUnitless * Math.floor(address.decimal / blockSizeUnitless)
+
+        let set = this.sets[res.cacheIndex];
+        
+        let block = set.find(block => block.tag == address.tag);
+
+        if (block) {
+            res.isHit = true;
+            block.lastUsed = time;
+        } else {
+            res.isHit = false;
+            if (config.lruPolicy)
+                block = minBy(set, block => block.lastUsed); // LRU
+            else 
+                block = maxBy(set, block => block.lastUsed); // FIFO
+            if (block.modified) {
+                res.writeBack = true;
+                block.modified = false;
             }
-            if (access.isWrite) {
-                res.modified = true;
-                block.modified = true;
-            }
+            block.lastUsed = time;
+            res.causedReplace = block.valid;
+            block.valid = true;
+            block.tag = address.tag;
+        }
+        if (access.isWrite) {
+            res.modified = true;
+            block.modified = true;
+        }
 
-            return res;
-        });
-        return result;
+        return res;
     }
 
 }

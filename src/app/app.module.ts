@@ -2,12 +2,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { RouterModule }   from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 import { MaterialModule } from '@angular/material';
 
 
 import { AppComponent } from './app.component';
+import { HomeComponent } from './home/home.component';
 import { ProgramEditorComponent } from './program-editor/program-editor.component';
 import { PipelineDiagramComponent } from './pipeline-diagram/pipeline-diagram.component';
 import { MemorySimulatorComponent } from './memory-simulator/memory-simulator.component';
@@ -19,6 +20,7 @@ import { RadixPipe, AllRadixPipe } from './radix.pipe';
 @NgModule({
   declarations: [
     AppComponent,
+    HomeComponent,
     ProgramEditorComponent,
     PipelineDiagramComponent,
     MemorySimulatorComponent,
@@ -31,8 +33,12 @@ import { RadixPipe, AllRadixPipe } from './radix.pipe';
     FormsModule,
     HttpModule,
     MaterialModule.forRoot(),
-     RouterModule.forRoot([
-      { path: 'cache', component: MemorySimulatorComponent },
+    RouterModule.forRoot([
+      {
+        path: 'cache', component: MemorySimulatorComponent, data: {
+          title: 'Cache Simulator'
+        }
+      },
       {
         path: 'pipe',
         component: PipelineDiagramComponent,
@@ -40,8 +46,8 @@ import { RadixPipe, AllRadixPipe } from './radix.pipe';
           title: 'Pipeline Digram Generator'
         }
       },
-      { path: '', component: MemorySimulatorComponent },
-      { path: '**', component: MemorySimulatorComponent }
+      { path: '', component: HomeComponent },
+      { path: '**', component: HomeComponent }
     ])
   ],
   providers: [],

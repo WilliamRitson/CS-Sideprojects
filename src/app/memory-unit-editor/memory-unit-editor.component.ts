@@ -1,8 +1,6 @@
 import { Component, Directive, Input, OnInit } from '@angular/core';
 import {MemoryQuantity, MemoryUnit} from '../cache';
 
-
-
 @Component({
   selector: 'app-memory-unit-editor',
   templateUrl: './memory-unit-editor.component.html',

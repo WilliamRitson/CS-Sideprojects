@@ -3,11 +3,14 @@ import { Pipe, PipeTransform } from '@angular/core';
 const radixes = [
     { name: 'hex', value: 16 },
     { name: 'decimal', value: 10 },
-    { name: 'octal', value: 8 }
+    { name: 'octal', value: 8 },
+    { name: 'binary', value: 2 }
   ];
 
 function getPrefix(radix:number) {
   switch(radix) {
+    case 2:
+      return '0b'
     case 8:
       return '0';
     case 16:

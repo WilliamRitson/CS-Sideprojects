@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row"></div>
 <md-card class="big-card flex-stack-card">
   <md-card-title>Cache Configuraiton</md-card-title>
   <md-card-content>
@@ -34,6 +34,12 @@
       </label>
       </md-list-item>
 
+      <md-list-item>
+      <label>Use LRU Policy (false for FIFO)
+        <md-checkbox [(ngModel)] = "config.lruPolicy"></md-checkbox>
+      </label>
+      </md-list-item>
+
     </md-list> 
   </md-card-content>
 </md-card>
@@ -54,7 +60,7 @@
             <app-radixed-value-editor (onValueChange)="accesses[i].address = $event" [value]="getAddress(i)"></app-radixed-value-editor>
           </td>
           <td>
-            <md-checkbox [(checked)]="access.isWrite"></md-checkbox>
+            <md-checkbox [(ngModel)]="access.isWrite"></md-checkbox>
           </td>
           <td><button md-raised-button color="warn" (click)="deleteAccess(index)">Delete Access</button></td>
         </tr>
@@ -63,6 +69,7 @@
   </md-card-content>
   <md-card-actions>
     <button md-raised-button color="primary" (click)="addAccess()">Add Memory Access</button>
+    <button md-raised-button color="primary" (click)="runSimulationStep()">Run Step</button>
     <button md-raised-button color="primary" (click)="runSimulation()">Run Simulation</button>
   </md-card-actions>
 </md-card>
@@ -74,11 +81,22 @@
       <md-list-item>Tag Size: {{config.getTagSize().toString()}}</md-list-item>
       <md-list-item>Index Size: {{config.indexSize}}</md-list-item>
       <md-list-item>Offset Size: {{config.offsetSize}}</md-list-item>
-      <!--<md-list-item>Format: <span>{{'T'.repeat(config.tagSize.toBits())}}</span><span>{{'I'.repeat(config.indexSize.toBits())}}</span><span>{{'O'.repeat(config.offsetSize.toBits())}}</span></md-list-item>-->
     </md-list>
   </md-card-content>
 </md-card>
-</div>
+
+
+
+<md-card class="big-card flex-stack-card">
+  <md-card-title>Set Information</md-card-title>
+  <md-card-content>
+    <md-list> 
+      <md-list-item>Number of Sets: {{config.getSetCount()}}</md-list-item>
+      <md-list-item>Blocks Per Set: {{config.setSize}}</md-list-item>
+      <md-list-item>Total Blocks: {{config.getBlockCount()}}</md-list-item>
+    </md-list>
+  </md-card-content>
+</md-card>
 
 <md-card class="big-card flex-stack-card">
   <md-card-title>Results</md-card-title>
@@ -104,7 +122,7 @@
           </td>
           <td>{{result.access.isWrite ? 'write' : 'read' }}</td>
           <td>
-            <span md-tooltip="{{result.access.address | allRadix}}">{{result.cacheIndex | radix : 16}}</span>
+            <span md-tooltip="{{result.cacheIndex | allRadix}}">{{result.cacheIndex | radix : 16}}</span>
           </td>
           <td>{{result.isHit ? 'hit' : 'miss'}}</td>
           <td>{{result.modified ? 1 : 0}}</td>
@@ -116,6 +134,36 @@
           </td>
           <td>{{result.causedReplace ? 'yes' : 'no'}}</td>
           <td>{{result.writeBack ? 'yes' : 'no'}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </md-card-content>
+</md-card>
+
+<md-card class="big-card flex-stack-card">
+  <md-card-title>Cache Status</md-card-title>
+  <md-card-content>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Set Index</th>
+          <template ngFor let-block [ngForOf]="sparseCacheLongestSet">
+            <th class="lr">V</th>
+            <th>M</th>
+            <th>Tag</th>
+          </template>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let set of sparseCache; let i = index">
+          <td>
+            <span md-tooltip="{{getIndex(set) | allRadix}}">{{sparseCacheIndexes[i] | radix : 16}}</span>
+          </td>
+          <template ngFor let-block [ngForOf]="getIntrestingBlocks(set)">
+            <td class="lr">{{block.valid ? 1 :0}}</td>
+            <td>{{block.modified ? 1 : 0}}</td>
+            <td><span md-tooltip="{{block.tag | allRadix}}">{{block.tag | radix : 16}}</span></td>
+          </template>
         </tr>
       </tbody>
     </table>
