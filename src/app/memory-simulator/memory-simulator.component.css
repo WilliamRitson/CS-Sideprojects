@@ -19,6 +19,7 @@
 .lr {
     border-left: gray;
     border-left-style: solid;
+    border-left-width: 2px;
 }
 
 /*.table tbody tr:nth-child(even) {

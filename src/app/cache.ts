@@ -7,7 +7,7 @@ export enum MemoryUnit {
     word = 4 * byte,
     kibibyte = 1024 * byte,
     mebibyte = 1024 * kibibyte,
-    tebibyte = 1024 * mebibyte,
+    tebibyte = 1024 * mebibyte
 }
 
 export class MemoryAccess {
@@ -195,8 +195,6 @@ export class Cache {
         return accesses.map((access, time) => this.runMemoryAccess(access, config, time));
     }
 
-
-    
     runCacheSimulationStep(config: CacheConfiguraiton, accesses: Array<MemoryAccess>): SimulationResult {
         if (this.stepTime == undefined){
             this.initilizeCache(config);
@@ -222,6 +220,12 @@ export class Cache {
         set.push(firstBlock);
         return firstBlock;
     }
+    mruPolicy(set:Array<CacheBlock>):CacheBlock {
+        return maxBy(set, block => block.lastUsed);
+    }
+    lruPolicy(set:Array<CacheBlock>):CacheBlock {
+        return minBy(set, block => block.lastUsed);
+    }
 
     runMemoryAccess(access: MemoryAccess, config: CacheConfiguraiton, time: number): SimulationResult {
         let res = new SimulationResult();
@@ -244,9 +248,9 @@ export class Cache {
         } else {
             res.isHit = false;
             if (config.lruPolicy)
-                block = minBy(set, block => block.lastUsed); // LRU
+                block = this.lruPolicy(set);
             else 
-                block = maxBy(set, block => block.lastUsed); // FIFO
+                block = this.fifoPolicy(set);
             if (block.modified) {
                 res.writeBack = true;
                 block.modified = false;

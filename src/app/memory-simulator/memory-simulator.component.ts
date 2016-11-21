@@ -106,8 +106,7 @@ export class MemorySimulatorComponent implements OnInit {
   }
 
   getAddress(i) {
-    let n = this.accesses[i].address;
-    return n;
+    return this.accesses[i].address;
   }
 
   runSimulation() {
