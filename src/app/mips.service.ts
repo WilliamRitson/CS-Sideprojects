@@ -75,9 +75,11 @@ export class MipsInstruction {
   register2: string;
   immediate: string;
   executionPhase: string;
+  executionSubphase: number;
   source: string;
 
   constructor(source: string) {
+    this.executionSubphase = 0;
     this.source = source.replace(comment, '');
     this.read(source);
   }

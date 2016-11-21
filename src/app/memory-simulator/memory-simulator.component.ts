@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Cache, CacheBlock, MemoryQuantity, MemoryUnit, CacheConfiguraiton, MemoryAccess, SimulationResult } from '../cache';
 import { clone, maxBy, sumBy } from 'lodash';
+import { SaveService } from '../save.service';
 
 enum AccessType {
   read,
@@ -21,16 +22,41 @@ export class MemorySimulatorComponent implements OnInit {
   sparseCacheIndexes: Array<number>;
   sparseCacheLongestSet: Array<CacheBlock>;
 
+  getSaveData(): Object {
+    return {
+      config: this.config,
+      accesses: this.accesses
+    }
+  }
 
+  unloadSaveData(saveData: any) {
+    let loaded = saveData.config as CacheConfiguraiton;
+    this.config = new CacheConfiguraiton();
+    this.config.minimumAddressableUnit = new MemoryQuantity(loaded.minimumAddressableUnit.amount, loaded.minimumAddressableUnit.unit);
+    this.config.cacheSize = new MemoryQuantity(loaded.cacheSize.amount, loaded.cacheSize.unit);
+    this.config.blockSize = new MemoryQuantity(loaded.blockSize.amount, loaded.blockSize.unit);
+    this.config.addressSize = new MemoryQuantity(loaded.addressSize.amount, loaded.addressSize.unit);
+    this.config.setSize = loaded.setSize;
+    this.config.lruPolicy = loaded.lruPolicy;
 
-  constructor() {
+    this.accesses = []
+    let loadedAccesses = saveData.accesses as Array<MemoryAccess>;
+    for(let i = 0; i < loadedAccesses.length; i++) {
+      this.accesses.push(new MemoryAccess(loadedAccesses[i].address, loadedAccesses[i].isWrite));
+    }
+  }
+
+  constructor(public saver: SaveService) {
     this.config = new CacheConfiguraiton();
     this.config.minimumAddressableUnit = new MemoryQuantity(1, MemoryUnit.byte);
-    this.config.cacheSize =   new MemoryQuantity(1, MemoryUnit.kibibyte);
-    this.config.blockSize =   new MemoryQuantity(32, MemoryUnit.byte);
+    this.config.cacheSize = new MemoryQuantity(1, MemoryUnit.kibibyte);
+    this.config.blockSize = new MemoryQuantity(32, MemoryUnit.byte);
     this.config.addressSize = new MemoryQuantity(32, MemoryUnit.bit);
     this.config.setSize = 1;
     this.config.lruPolicy = true;
+
+    saver.load(this.unloadSaveData.bind(this), 'memory-sim');
+
     this.cache = new Cache();
     this.results = [];
     this.accesses = [
@@ -43,6 +69,7 @@ export class MemorySimulatorComponent implements OnInit {
     ];
     this.sparseCache = [];
     this.runSimulation();
+    saver.autosave(this.getSaveData.bind(this), 'memory-sim');
   }
 
   getHitRate() {
@@ -112,6 +139,9 @@ export class MemorySimulatorComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+  ngOnDestroy() {
+    this.saver.removeAutosave();
   }
 
 }

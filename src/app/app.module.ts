@@ -6,6 +6,9 @@ import { RouterModule } from '@angular/router';
 
 import { MaterialModule } from '@angular/material';
 
+import {SaveService} from './save.service';
+import {MipsService} from './mips.service';
+
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { GraphSearchComponent } from './graph-search/graph-search.component';
@@ -59,7 +62,7 @@ import { RadixPipe, AllRadixPipe } from './radix.pipe';
       { path: '**', component: HomeComponent }
     ])
   ],
-  providers: [],
+  providers: [SaveService, MipsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -27,6 +27,9 @@
   padding: 0 14px 0 14px;
   color: white;
 }
+.fill-remaining-space {
+  flex: 1 1 auto;
+}
 
 
 .app-icon-button {

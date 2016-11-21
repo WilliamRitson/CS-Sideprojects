@@ -6,6 +6,44 @@
 	  <textarea [(ngModel)]="program" rows="30" cols="60" class="text-editor"></textarea>
   </md-card-content>
 </md-card>
+	  
+
+
+<md-card class="big-card flex-stack-card">
+	<md-card-title>Funcitonal Units</md-card-title>
+	<md-card-content>
+		<table>
+			<thead>
+				<tr>
+					<th>Functional Unit </th>
+					<th>Pipelined </th>
+					<th>Execute Time </th>
+					<th>Execution Units </th>
+					<th>Reservation Stations</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let functionalUnit of pipeline.functionalUnits">
+					<td><md-input type="text" [(ngModel)]="functionalUnit.name"></md-input></td>
+					<td><md-checkbox [(ngModel)]="functionalUnit.isPipelined"></md-checkbox></td>
+					<td><md-input type="number" [(ngModel)]="functionalUnit.executeLength"></md-input></td>
+					<td><md-input type="number" [(ngModel)]="functionalUnit.units"></md-input></td>
+					<td><md-input type="number" [(ngModel)]="functionalUnit.stations"></md-input></td>
+				</tr>
+			</tbody>
+		</table>
+	</md-card-content>
+	<md-card-actions>
+		<button md-button color="primary" (click)="addFU()">Add Funcitonal Unit</button>
+	</md-card-actions>
+</md-card>
+
+<md-card class="big-card flex-stack-card">
+	<md-card-title>Basic Config</md-card-title>
+	<md-card-content>
+		<md-checkbox [(ngModel)]="pipeline.forwarding">Use forwarding</md-checkbox>
+	</md-card-content>
+</md-card>
 
 <md-card class="big-card flex-stack-card">
   <md-card-title>Pipeline Diagram</md-card-title>
@@ -32,37 +70,21 @@
 	</table>
   </md-card-content>
   <md-card-actions>
-	  <button md-button color="primary"(click)="runCycle()">Run Cycle</button>
-	  <button md-button color="primary"(click)="recompile()">Run All</button>
+	  <button md-button color="primary" (click)="runCycle()">Run Cycle</button>
+	  <button md-button color="primary" (click)="recompile()">Run All</button>
   </md-card-actions>
 </md-card>
-<!--
-<table>
-	<thead>
-		<tr>
-			<th>Register</th>
-			<th>Owner</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr *ngFor="let regOwner of iter(currentPipe.registers); let register=index">
-			<td>{{regOwner[0]}}</td>
-			<td>{{regOwner[1] ? regOwner[1].source : "unused"}}</td>
-		</tr>
-	</tbody>
-</table>
--->
+
+
 
 <md-card class="big-card flex-stack-card">
-  <md-card-title>Configuration</md-card-title>
+  <md-card-title>Instruciton Configuration</md-card-title>
   <md-card-content>
-	  <md-checkbox [(ngModel)]="currentPipe.forwarding">Use forwarding</md-checkbox>
 	  <table>
 		<thead>
 			<tr>
 				<th>Instruciton</th>
 				<th>Uses Memory Stage</th>
-				<th>Execution Lenth</th>
 				<th>Functional Unit</th>
 				<th>Point of Produciton</th>
 				<th>Point of Consumption</th>
@@ -70,13 +92,12 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr *ngFor="let config of configs">
+			<tr *ngFor="let config of pipeline.instructionConfigurations">
 				<td>{{config.instruciton}}</td>
 				<td><md-checkbox [(ngModel)]="config.hasMemory"></md-checkbox></td>
-				<td><md-input type="number" [(ngModel)]="config.executeLength"></md-input></td>
 				<td>
 					<select [(ngModel)]="config.functionalUnit">
-						<option *ngFor="let funcUnit of functionalUnits">{{funcUnit.name}}</option>
+						<option *ngFor="let funcUnit of pipeline.functionalUnits" [ngValue]="funcUnit">{{funcUnit.name}}</option>
 					</select>
 				</td>
 				<td>
@@ -96,29 +117,7 @@
   </md-card-content>
 </md-card>
 <!--
-<table>
-	<thead>
-		<tr>
-			<th>Functional Unit </th>
-			<th>Pipelined </th>
-			<th>Execute Time </th>
-			<th>Execution Units </th>
-			<th>Reservation Stations</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr *ngFor="let functionalUnit of functionalUnits">
-			<td><input type="text" [(ngModel)]="functionalUnit.name"></td>
-			<td><input type="checkbox" [(ngModel)]="functionalUnit.isPipelined"></td>
-			<td><input type="number" [(ngModel)]="functionalUnit.executeLength"></td>
-			<td><input type="number" [(ngModel)]="functionalUnit.units"></td>
-			<td><input type="number" [(ngModel)]="functionalUnit.reservationStations"></td>
-		</tr>
-		<tr>
-			<td colspan="5"><button (click)="addFU()">Add Funcitonal Unit</button> </td>
-		</tr>
-	</tbody>
-</table>
+
 -->
 
 
