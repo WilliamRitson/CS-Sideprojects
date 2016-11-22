@@ -1,5 +1,3 @@
-
-
 <md-card class="big-card flex-stack-card">
   <md-card-title>MIPS Program</md-card-title>
   <md-card-content>
@@ -7,8 +5,6 @@
   </md-card-content>
 </md-card>
 	  
-
-
 <md-card class="big-card flex-stack-card">
 	<md-card-title>Funcitonal Units</md-card-title>
 	<md-card-content>
@@ -64,7 +60,7 @@
 				<td>{{line.lineNumber}}</td>
 				<td>{{line.id}}</td>
 				<td>{{line.dependencyString()}}</td>
-				<td *ngFor="let stage of line.stages" [class.forwarded]="line.forwards[stage]">{{stage}}</td>
+				<td *ngFor="let stage of line.stages; let i = index" [class.forwarded]="line.forwards[i]">{{stage}}</td>
 			</tr>
 		</tbody>
 	</table>

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MipsService, MipsInstruction } from './mips.service';
+import {remove, lastIndexOf} from 'lodash';
 
 const LONG_INSTRUCITONS = {
   mult: 4,
@@ -48,6 +49,13 @@ class InstrucitonConfig {
     results.push('write');
     return results;
   }
+  remainingInstructions(instr:MipsInstruction):number {
+    let stages = this.resolve();
+    let index = stages.indexOf(instr.executionPhase)
+    if ( index == -1)
+      return 0;
+    return stages.length - index - instr.executionSubphase; 
+  }
   getExecuteName(stage: number) {
     return 'execute-' + this.functionalUnit.name + (this.functionalUnit.isPipelined ? '-' + stage : '');
   }
@@ -64,7 +72,8 @@ class InstrucitonConfig {
   }
   // Returns true if the result can be forwarded
   resultIsReady(instr: MipsInstruction): boolean {
-    return this.stageIs(instr.executionPhase, this.pointOfCompletion, (a, b) => a > b);
+    let stages = this.resolve();
+    return lastIndexOf(stages, this.pointOfCompletion) < stages.indexOf(instr.executionPhase);
   }
   // Returns true if we need the operands to have completed
   needsData(instr: MipsInstruction): boolean {
@@ -91,7 +100,8 @@ class FunctionalUnit {
     return this.currentUsers.length < this.units || this.currentUsers.indexOf(instr) != -1;
   }
   free(instr: MipsInstruction) {
-    this.currentUsers = this.currentUsers.filter(i => i != instr);
+    console.log('free', instr);
+    remove(this.currentUsers, i => i == instr);
   }
   name: string;
   isPipelined: boolean;
@@ -147,17 +157,19 @@ export class Pipeline {
   functionalUnits: Array<FunctionalUnit>;
   instructionConfigurations: Array<InstrucitonConfig>
   configLookup: ConfigHash;
+  remainingTime: Array<number>;
 
   constructor(public mipsService: MipsService) {
     this.registers = {};
     this.stages = {};
+    this.remainingTime = [];
     this.forwarding = false;
     this.algorithm = PipeAlgorithm.InOrder;
 
     this.functionalUnits = [
       new FunctionalUnit('arithmetic', 1, 1, 3, false),
       new FunctionalUnit('add', 2, 1, 3, true),
-      new FunctionalUnit('mult', 4, 1, 3, true)
+      new FunctionalUnit('mult', 4, 1, 3, false)
     ];
     this.instructionConfigurations = mipsService.instrucitons.map((instr) => {
       let unit = this.functionalUnits[0];
@@ -203,7 +215,7 @@ export class Pipeline {
     if (failCode) {
       return failCode;
     }
-
+    this.remainingTime[line.lineNumber] = this.instrConfig.remainingInstructions(line.instr);
     return this.advanceExecution(line.instr);
   }
 
@@ -211,6 +223,7 @@ export class Pipeline {
     let nextStage = this.getNextPhase(instr);
     if (nextStage == instr.executionPhase) {
       instr.executionSubphase++;
+      nextStage = this.getNextPhase(instr);
     }
     this.markHardware(instr, nextStage);
     instr.executionPhase = nextStage;
@@ -222,14 +235,15 @@ export class Pipeline {
       this.instrConfig.functionalUnit.use(instr);
       this.stages[nextStage] = instr;
     }
-    if (nextStage.indexOf('exe') == -1) {
+    if (!isExe(nextStage)) {
       this.instrConfig.functionalUnit.free(instr);
     }
     this.stages[instr.executionPhase] = undefined;
   }
 
   private hasStructuralHazard(nextStage: string, instr: MipsInstruction): boolean {
-    if (nextStage.indexOf('exe') != -1)
+    let fu = this.getConfig(instr).functionalUnit;
+    if (!fu.isPipelined && isExe(nextStage))
       return this.getConfig(instr).functionalUnit.canUse(instr, false);
     return (this.stages[nextStage] == instr) || (this.stages[nextStage] == undefined);
   }
@@ -247,8 +261,8 @@ export class Pipeline {
       if (config.isDone(dep.instr)) {
         continue;
       } else if (this.forwarding && config.resultIsReady(dep.instr)) {
-        potentialForwards.push([line.forwards, this.getConfig(line.instr).nextPhase(line.instr.executionPhase)]);
-        potentialForwards.push([dep.forwards, dep.instr.executionPhase]);
+        potentialForwards.push([line.forwards, line.stages.length]);
+        potentialForwards.push([dep.forwards,  lastIndexOf(dep.stages, dep.instr.executionPhase)]);
         continue;
       }
       return false;
@@ -260,10 +274,19 @@ export class Pipeline {
     return true;
   }
 
+  stallInOrder(line:DiagramLine): boolean {
+    if (line.lineNumber == 0 || line.instr.executionPhase != 'decode')
+      return false;
+    let prevTime = this.remainingTime[line.lineNumber - 1];
+    return this.instrConfig.remainingInstructions(line.instr) <= prevTime;
+  }
+
   cannotExecute(line: DiagramLine): string {
     let nextStage = this.getNextPhase(line.instr);
     if (!this.hasStructuralHazard(nextStage, line.instr))
       return `stall-SH (${line.instr.executionPhase})`; // Stall for structural hazard
+    if (this.stallInOrder(line))
+      return `stall-II (${line.instr.executionPhase})`; // Stall for in order execution
     if (!this.hasDataHazard(nextStage, line))
       return `stall-DH (${line.instr.executionPhase})`; // Stall for data hazard
     return undefined;
