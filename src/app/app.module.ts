@@ -6,6 +6,11 @@ import { RouterModule } from '@angular/router';
 
 import { MaterialModule } from '@angular/material';
 
+import {
+  LocationStrategy,
+  HashLocationStrategy
+} from '@angular/common';
+
 import {SaveService} from './save.service';
 import {MipsService} from './mips.service';
 
@@ -62,7 +67,7 @@ import { RadixPipe, AllRadixPipe } from './radix.pipe';
       { path: '**', component: HomeComponent }
     ])
   ],
-  providers: [SaveService, MipsService],
+  providers: [SaveService, MipsService, {provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
