@@ -1,0 +1,3 @@
+ <select [(ngModel)]="value">
+    <option *ngFor="let option of options" [ngValue]="parseInt(option)">{{label(option)}}</option>
+  </select>

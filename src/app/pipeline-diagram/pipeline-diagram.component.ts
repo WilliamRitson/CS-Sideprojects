@@ -1,6 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { MipsService, MipsInstruction } from '../mips.service';
-import {DiagramLine, Pipeline} from '../pipeline.service';
+import { DiagramLine, Pipeline, PipeAlgorithm } from '../pipeline.service';
+
+let otherProg = `mult r3, r1, r2
+add r5, r4, r3
+add r6, r4, r1
+mult r7, r8, r9
+add r4, r3, r7
+mult r10, r5, r6
+j l1`;
 
 @Component({
   selector: 'app-pipeline-diagram',
@@ -14,18 +22,22 @@ export class PipelineDiagramComponent implements OnInit {
   mips: Array<MipsInstruction>;
   lines: Array<DiagramLine>;
 
-  constructor(public mipsService: MipsService, public pipeline:Pipeline) {
-    this.program = `lw r3, r2
+  constructor(public mipsService: MipsService, public pipeline: Pipeline) {
+    this.program = otherProg; /*
+     `lw r3, r2
 mult r4, r3, r3
 mult r3, r3, r1
 addiu r0, r0, 1
 div r3, r4, r3
 sw r3, r2
 addiu r2, r2, 4
-bne r0, r1, -8`;
+bne r0, r1, -8`; */
     this.lines = [];
+    this.pipeline.algorithm = PipeAlgorithm.Scoreboarding;
+    this.algorithms = PipeAlgorithm;
   }
-  
+
+  algorithms: any;
   iter(obj: Object): Array<[string, any]> {
     let arr = [];
     for (let prop in obj) {
@@ -38,6 +50,8 @@ bne r0, r1, -8`;
     this.mips = this.mipsService.parseProgram(this.program);
     this.lines = this.mips.map((inst, n) => new DiagramLine(inst, n + 1));
     this.findDependencies(this.lines);
+    if (this.pipeline.algorithm == PipeAlgorithm.Scoreboarding)
+      this.pipeline.analyzeScorboardDeps(this.lines);
   }
 
   recompile() {
@@ -103,6 +117,6 @@ bne r0, r1, -8`;
     return lines;
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
 }

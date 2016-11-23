@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MipsService, MipsInstruction } from './mips.service';
-import {remove, lastIndexOf} from 'lodash';
+import { remove, lastIndexOf } from 'lodash';
 
 const LONG_INSTRUCITONS = {
   mult: 4,
@@ -27,6 +27,8 @@ const S_POP = {
 
 
 class InstrucitonConfig {
+
+  // TODO: Make POC rest to default after fu change
   constructor(instr: string, unit: FunctionalUnit, hasMemory = false) {
     this.instruciton = instr;
     this.hasMemory = hasMemory;
@@ -49,12 +51,12 @@ class InstrucitonConfig {
     results.push('write');
     return results;
   }
-  remainingInstructions(instr:MipsInstruction):number {
+  remainingInstructions(instr: MipsInstruction): number {
     let stages = this.resolve();
     let index = stages.indexOf(instr.executionPhase)
-    if ( index == -1)
+    if (index == -1)
       return 0;
-    return stages.length - index - instr.executionSubphase; 
+    return stages.length - index - instr.executionSubphase;
   }
   getExecuteName(stage: number) {
     return 'execute-' + this.functionalUnit.name + (this.functionalUnit.isPipelined ? '-' + stage : '');
@@ -73,6 +75,8 @@ class InstrucitonConfig {
   // Returns true if the result can be forwarded
   resultIsReady(instr: MipsInstruction): boolean {
     let stages = this.resolve();
+    console.log('RIR', lastIndexOf(stages, this.pointOfCompletion), '<', stages.indexOf(instr.executionPhase),
+      this.pointOfCompletion, instr.executionPhase);
     return lastIndexOf(stages, this.pointOfCompletion) < stages.indexOf(instr.executionPhase);
   }
   // Returns true if we need the operands to have completed
@@ -92,7 +96,8 @@ class FunctionalUnit {
   }
   currentUsers: Array<MipsInstruction>;
   use(instr: MipsInstruction) {
-    this.currentUsers.push(instr);
+    if (this.currentUsers.indexOf(instr) == -1)
+      this.currentUsers.push(instr);
   }
   canUse(instr: MipsInstruction, parallelAllowed: boolean) {
     if (!parallelAllowed)
@@ -100,7 +105,6 @@ class FunctionalUnit {
     return this.currentUsers.length < this.units || this.currentUsers.indexOf(instr) != -1;
   }
   free(instr: MipsInstruction) {
-    console.log('free', instr);
     remove(this.currentUsers, i => i == instr);
   }
   name: string;
@@ -110,21 +114,49 @@ class FunctionalUnit {
   stations: number;
 }
 
+enum DependencyType {
+  None = 0,
+  WriteAfterWrite,
+  WriteAfterRead,
+  ReadAfterWrite
+}
+
+function depTypeShort(type: DependencyType) {
+  switch (type) {
+    case DependencyType.None:
+      return 'None';
+    case DependencyType.ReadAfterWrite:
+      return 'RAW';
+    case DependencyType.WriteAfterWrite:
+      return 'WAW';
+    case DependencyType.WriteAfterRead:
+      return 'WAR';
+  }
+}
+
+class ScoreboardDep {
+  constructor(public line: DiagramLine, public type: DependencyType) { }
+}
+
 
 export class DiagramLine {
+  id: string;
+  forwards: {};
+  stages: Array<string>;
+  scoreboardDeps: Array<ScoreboardDep>;
+  dependencies: Array<DiagramLine>;
   constructor(public instr: MipsInstruction, public lineNumber: number) {
     this.id = instr.source;
     this.stages = [];
     this.dependencies = [];
+    this.scoreboardDeps = [];
     this.forwards = {};
   }
   dependencyString(): string {
+    if (this.scoreboardDeps.length != 0)
+      return this.scoreboardDeps.map(sd => sd.line.lineNumber).join(', ');
     return this.dependencies.map(d => d.lineNumber).join(", ");
   }
-  id: string;
-  forwards: {};
-  stages: Array<string>;
-  dependencies: Array<DiagramLine>;
 }
 
 interface Set {
@@ -143,7 +175,7 @@ function isExe(stage: string) {
   return stage.indexOf('exe') != -1
 }
 
-enum PipeAlgorithm {
+export enum PipeAlgorithm {
   InOrder,
   Tomasulo,
   Scoreboarding
@@ -165,11 +197,10 @@ export class Pipeline {
     this.remainingTime = [];
     this.forwarding = false;
     this.algorithm = PipeAlgorithm.InOrder;
-
     this.functionalUnits = [
-      new FunctionalUnit('arithmetic', 1, 1, 3, false),
-      new FunctionalUnit('add', 2, 1, 3, true),
-      new FunctionalUnit('mult', 4, 1, 3, false)
+      new FunctionalUnit('arithmetic', 1, 5, 3, false),
+      new FunctionalUnit('add', 2, 5, 3, false),
+      new FunctionalUnit('mult', 5, 5, 3, false)
     ];
     this.instructionConfigurations = mipsService.instrucitons.map((instr) => {
       let unit = this.functionalUnits[0];
@@ -183,6 +214,30 @@ export class Pipeline {
     this.instructionConfigurations.forEach(c => {
       this.configLookup[c.instruciton] = c;
     });
+  }
+
+  analyzeScorboardDeps(lines: Array<DiagramLine>) {
+    for (let i = 0; i < lines.length - 1; i++) {
+      for (let j = i + 1; j < lines.length; j++) {
+        let lineAfer = lines[j];
+        let lineBefore = lines[i]
+        let before = lineBefore.instr;
+        let after = lineAfer.instr;
+        //WAW
+        if (before.returnRegister == after.returnRegister) {
+          lineAfer.scoreboardDeps.push(new ScoreboardDep(lineBefore, DependencyType.WriteAfterWrite));
+        }
+        //WAR
+        if (before.register1 == after.returnRegister || before.register2 == after.returnRegister) {
+          lineAfer.scoreboardDeps.push(new ScoreboardDep(lineBefore, DependencyType.WriteAfterRead));
+        }
+        //RAW
+        if (before.returnRegister == after.register1 || before.returnRegister == after.register2) {
+          lineAfer.scoreboardDeps.push(new ScoreboardDep(lineBefore, DependencyType.ReadAfterWrite));
+        }
+      }
+    }
+
   }
 
   clean() {
@@ -232,19 +287,28 @@ export class Pipeline {
 
   private markHardware(instr: MipsInstruction, nextStage: string) {
     if (nextStage != 'done') {
-      this.instrConfig.functionalUnit.use(instr);
       this.stages[nextStage] = instr;
     }
     if (!isExe(nextStage)) {
       this.instrConfig.functionalUnit.free(instr);
+    } else {
+      this.instrConfig.functionalUnit.use(instr);
     }
     this.stages[instr.executionPhase] = undefined;
   }
 
+  multipleExecutionAllowed(): boolean {
+    return this.algorithm != PipeAlgorithm.InOrder;
+  }
+
   private hasStructuralHazard(nextStage: string, instr: MipsInstruction): boolean {
     let fu = this.getConfig(instr).functionalUnit;
-    if (!fu.isPipelined && isExe(nextStage))
-      return this.getConfig(instr).functionalUnit.canUse(instr, false);
+    if (isExe(nextStage)) {
+      if (this.multipleExecutionAllowed()) {
+        return this.getConfig(instr).functionalUnit.canUse(instr, true);
+      } else if (!fu.isPipelined)
+        return this.getConfig(instr).functionalUnit.canUse(instr, false);
+    }
     return (this.stages[nextStage] == instr) || (this.stages[nextStage] == undefined);
   }
 
@@ -262,7 +326,7 @@ export class Pipeline {
         continue;
       } else if (this.forwarding && config.resultIsReady(dep.instr)) {
         potentialForwards.push([line.forwards, line.stages.length]);
-        potentialForwards.push([dep.forwards,  lastIndexOf(dep.stages, dep.instr.executionPhase)]);
+        potentialForwards.push([dep.forwards, lastIndexOf(dep.stages, dep.instr.executionPhase)]);
         continue;
       }
       return false;
@@ -270,23 +334,53 @@ export class Pipeline {
     // Commit forwards
     potentialForwards.forEach(f => {
       f[0][f[1]] = true;
-    })
+    });
     return true;
   }
 
-  stallInOrder(line:DiagramLine): boolean {
+  stallInOrder(line: DiagramLine): boolean {
     if (line.lineNumber == 0 || line.instr.executionPhase != 'decode')
       return false;
     let prevTime = this.remainingTime[line.lineNumber - 1];
     return this.instrConfig.remainingInstructions(line.instr) <= prevTime;
   }
 
+  readyForScoreboard(dep: DiagramLine, curr: DiagramLine) {
+    let done = this.getConfig(dep.instr).isDone(dep.instr);
+    if (this.forwarding) {
+      return done || this.getConfig(dep.instr).resultIsReady(dep.instr)
+    }
+    return done && dep.stages.indexOf('write') < curr.stages.length - 1
+  }
+
+  stallForScoreboard(nextStage: string, line: DiagramLine): DependencyType {
+    if (!isExe(nextStage))
+      return DependencyType.None;
+    for (let i = 0; i < line.scoreboardDeps.length; i++) {
+      let dep = line.scoreboardDeps[i].line.instr;
+      let type = line.scoreboardDeps[i].type;
+
+      if (type != DependencyType.WriteAfterRead && !this.readyForScoreboard(line.scoreboardDeps[i].line, line)) {
+        return line.scoreboardDeps[i].type;
+      }
+      if (type == DependencyType.WriteAfterRead && nextStage == 'write') {
+        return line.scoreboardDeps[i].type;
+      }
+    }
+    return DependencyType.None;
+  }
+
   cannotExecute(line: DiagramLine): string {
     let nextStage = this.getNextPhase(line.instr);
     if (!this.hasStructuralHazard(nextStage, line.instr))
       return `stall-SH (${line.instr.executionPhase})`; // Stall for structural hazard
-    if (this.stallInOrder(line))
+    if (this.algorithm == PipeAlgorithm.InOrder && this.stallInOrder(line))
       return `stall-II (${line.instr.executionPhase})`; // Stall for in order execution
+    if (this.algorithm == PipeAlgorithm.Scoreboarding) {
+      let type = this.stallForScoreboard(nextStage, line);
+      if (type != DependencyType.None)
+        return `stall-${depTypeShort(type)} (${line.instr.executionPhase})`; // Stall for scorebord WAW, WAR or RAW
+    }
     if (!this.hasDataHazard(nextStage, line))
       return `stall-DH (${line.instr.executionPhase})`; // Stall for data hazard
     return undefined;

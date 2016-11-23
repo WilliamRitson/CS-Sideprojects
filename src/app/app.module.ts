@@ -23,6 +23,7 @@ import { MemorySimulatorComponent } from './memory-simulator/memory-simulator.co
 import { MemoryUnitEditorComponent } from './memory-unit-editor/memory-unit-editor.component';
 import { RadixedValueEditorComponent } from './radixed-value-editor/radixed-value-editor.component';
 import { RadixPipe, AllRadixPipe } from './radix.pipe';
+import { EnumEditorComponent } from './enum-editor/enum-editor.component';
 
 
 @NgModule({
@@ -35,7 +36,7 @@ import { RadixPipe, AllRadixPipe } from './radix.pipe';
     MemorySimulatorComponent,
     MemoryUnitEditorComponent,
     RadixedValueEditorComponent,
-    RadixPipe, AllRadixPipe
+    RadixPipe, AllRadixPipe, EnumEditorComponent
   ],
   imports: [
     BrowserModule,
