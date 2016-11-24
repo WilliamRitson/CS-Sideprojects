@@ -33,11 +33,28 @@ sw r3, r2
 addiu r2, r2, 4
 bne r0, r1, -8`; */
     this.lines = [];
-    this.pipeline.algorithm = PipeAlgorithm.Scoreboarding;
+    this.pipeline.algorithm = PipeAlgorithm.InOrder;
     this.algorithms = PipeAlgorithm;
   }
 
-  algorithms: any;
+  algorithms: Object;
+  setAlgorithm(newVal: number) {
+    let val = PipeAlgorithm[newVal];
+    switch (val) {
+      case 'InOrder':
+        this.pipeline.algorithm = PipeAlgorithm.InOrder;
+        break;
+      case 'Scoreboarding':
+        this.pipeline.algorithm = PipeAlgorithm.Scoreboarding;
+        break;
+      case 'Tomasulo':
+        this.pipeline.algorithm = PipeAlgorithm.Tomasulo;
+        break;
+
+    }
+
+  }
+
   iter(obj: Object): Array<[string, any]> {
     let arr = [];
     for (let prop in obj) {

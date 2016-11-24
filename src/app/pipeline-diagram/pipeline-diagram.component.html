@@ -38,6 +38,7 @@
 	<md-card-title>Basic Config</md-card-title>
 	<md-card-content>
 		<md-checkbox [(ngModel)]="pipeline.forwarding">Use forwarding</md-checkbox>
+		<app-enum-editor (onValueChange)="setAlgorithm($event)" [enum]="algorithms" [value]="pipeline.algorithm"></app-enum-editor>
 	</md-card-content>
 </md-card>
 

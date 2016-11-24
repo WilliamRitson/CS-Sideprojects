@@ -176,9 +176,9 @@ function isExe(stage: string) {
 }
 
 export enum PipeAlgorithm {
-  InOrder,
-  Tomasulo,
-  Scoreboarding
+  InOrder = 1,
+  Tomasulo = 2,
+  Scoreboarding = 3
 }
 
 @Injectable()

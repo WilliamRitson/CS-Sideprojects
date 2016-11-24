@@ -1,5 +1,5 @@
 import { Component, Directive, Input, OnInit } from '@angular/core';
-import {MemoryQuantity, MemoryUnit} from '../cache';
+import { MemoryQuantity, MemoryUnit } from '../cache';
 
 @Component({
   selector: 'app-memory-unit-editor',
@@ -8,7 +8,7 @@ import {MemoryQuantity, MemoryUnit} from '../cache';
 })
 export class MemoryUnitEditorComponent implements OnInit {
   units: Array<string>;
-  @Input() value:MemoryUnit
+  @Input() value: MemoryUnit
   constructor() {
     this.units = [];
     for (let unit in MemoryUnit) {
@@ -17,13 +17,13 @@ export class MemoryUnitEditorComponent implements OnInit {
     }
   }
 
-  parseInt(toParse:string) {
+  parseInt(toParse: string) {
     return parseInt(toParse);
   }
 
-  label(raw:string) {
+  label(raw: string) {
     return MemoryUnit[raw];
-  } 
+  }
 
   ngOnInit() {
   }

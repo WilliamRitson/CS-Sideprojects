@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component,  OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-enum-editor',
@@ -6,26 +6,31 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./enum-editor.component.css']
 })
 export class EnumEditorComponent implements OnInit {
-  @Input() enum: any;
-  @Input() value:string;
+  @Input('enum') enum: Object;
+  @Input('value') value: number;
+  @Output() onValueChange = new EventEmitter<number>();
   options: Array<string>;
-  constructor() {
-    this.options = [];
-    for (let option in this.enum) {
-      if (parseInt(option))
-        this.options.push(option);
-    }
+  constructor() {}
+
+  changeVal(val) {
+    console.log('CV', val, this.value);
+    this.onValueChange.emit(this.value);
   }
 
-  parseInt(toParse:string) {
+  parseInt(toParse: string) {
     return parseInt(toParse);
   }
 
-  label(raw:string) {
+  label(raw: string) {
     return this.enum[raw];
-  } 
+  }
 
-
-  ngOnInit() {}
+  ngOnInit() { 
+    this.options = [];
+    for (let option in this.enum) {
+      if (!isNaN(parseInt(option)))
+        this.options.push(option);
+    }
+  }
 
 }
