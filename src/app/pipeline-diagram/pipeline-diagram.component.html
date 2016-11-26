@@ -3,7 +3,7 @@
   <md-card-content>
 	  <textarea [(ngModel)]="program" rows="30" cols="60" class="text-editor"></textarea>
   </md-card-content>
-</md-card>
+</md-card>	
 	  
 <md-card class="big-card flex-stack-card">
 	<md-card-title>Funcitonal Units</md-card-title>
@@ -37,8 +37,16 @@
 <md-card class="big-card flex-stack-card">
 	<md-card-title>Basic Config</md-card-title>
 	<md-card-content>
-		<md-checkbox [(ngModel)]="pipeline.forwarding">Use forwarding</md-checkbox>
-		<app-enum-editor (onValueChange)="setAlgorithm($event)" [enum]="algorithms" [value]="pipeline.algorithm"></app-enum-editor>
+		<md-list>
+			<md-list-item>
+				<md-checkbox [(ngModel)]="pipeline.forwarding">Use forwarding</md-checkbox>
+			</md-list-item>
+			<md-list-item>
+				<label> Algorithm:
+				<app-enum-editor (onValueChange)="setAlgorithm($event)" [enum]="algorithms" [value]="pipeline.algorithm"></app-enum-editor>
+				</label>
+			</md-list-item>
+		</md-list>
 	</md-card-content>
 </md-card>
 
@@ -71,8 +79,6 @@
 	  <button md-button color="primary" (click)="recompile()">Run All</button>
   </md-card-actions>
 </md-card>
-
-
 
 <md-card class="big-card flex-stack-card">
   <md-card-title>Instruciton Configuration</md-card-title>
@@ -113,8 +119,3 @@
 	</table>
   </md-card-content>
 </md-card>
-<!--
-
--->
-
-

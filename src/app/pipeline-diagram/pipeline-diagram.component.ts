@@ -33,7 +33,7 @@ sw r3, r2
 addiu r2, r2, 4
 bne r0, r1, -8`; */
     this.lines = [];
-    this.pipeline.algorithm = PipeAlgorithm.InOrder;
+    this.pipeline.algorithm = PipeAlgorithm.Tomasulo;
     this.algorithms = PipeAlgorithm;
   }
 
