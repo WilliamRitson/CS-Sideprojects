@@ -11,8 +11,8 @@ import {
   HashLocationStrategy
 } from '@angular/common';
 
-import {SaveService} from './save.service';
-import {MipsService} from './mips.service';
+import { SaveService } from './save.service';
+import { MipsService } from './mips.service';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -24,6 +24,8 @@ import { MemoryUnitEditorComponent } from './memory-unit-editor/memory-unit-edit
 import { RadixedValueEditorComponent } from './radixed-value-editor/radixed-value-editor.component';
 import { RadixPipe, AllRadixPipe } from './radix.pipe';
 import { EnumEditorComponent } from './enum-editor/enum-editor.component';
+import { AiGamesComponent } from './ai-games/ai-games.component';
+import { TicTacToeComponent } from './tic-tac-toe/tic-tac-toe.component';
 
 
 @NgModule({
@@ -36,7 +38,10 @@ import { EnumEditorComponent } from './enum-editor/enum-editor.component';
     MemorySimulatorComponent,
     MemoryUnitEditorComponent,
     RadixedValueEditorComponent,
-    RadixPipe, AllRadixPipe, EnumEditorComponent
+    RadixPipe, AllRadixPipe,
+    EnumEditorComponent,
+    AiGamesComponent,
+    TicTacToeComponent
   ],
   imports: [
     BrowserModule,
@@ -45,9 +50,15 @@ import { EnumEditorComponent } from './enum-editor/enum-editor.component';
     MaterialModule.forRoot(),
     RouterModule.forRoot([
       {
-        path: 'cache', component: MemorySimulatorComponent, 
+        path: 'cache', component: MemorySimulatorComponent,
         data: {
           title: 'Cache Simulator'
+        }
+      },
+      {
+        path: 'ai-games', component: AiGamesComponent,
+        data: {
+          title: 'AI Games'
         }
       },
       {
@@ -68,7 +79,7 @@ import { EnumEditorComponent } from './enum-editor/enum-editor.component';
       { path: '**', component: HomeComponent }
     ])
   ],
-  providers: [SaveService, MipsService, {provide: LocationStrategy, useClass: HashLocationStrategy}],
+  providers: [SaveService, MipsService, { provide: LocationStrategy, useClass: HashLocationStrategy }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

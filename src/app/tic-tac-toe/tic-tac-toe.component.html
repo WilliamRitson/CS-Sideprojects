@@ -1,0 +1,11 @@
+<div class="tic-tac-toe-board">
+  <div class="tic-tac-toe-row" *ngFor="let row of game.state; let r = index;">
+    <div class="tic-tac-toe-cell" *ngFor="let col of row; let c = index;" (click)="makeMove(r, c)">
+      <md-icon *ngIf="col == 1" class="ttt-icon">clear</md-icon>
+      <md-icon *ngIf="col == 2" class="ttt-icon">radio_button_unchecked</md-icon>
+    </div>
+  </div>
+</div>
+
+{{winString()}}
+<button md-button color="primary" *ngIf="isOver()" (click)="reset">Reset</button>
