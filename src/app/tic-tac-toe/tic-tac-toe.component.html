@@ -1,11 +1,20 @@
-<div class="tic-tac-toe-board">
-  <div class="tic-tac-toe-row" *ngFor="let row of game.state; let r = index;">
-    <div class="tic-tac-toe-cell" *ngFor="let col of row; let c = index;" (click)="makeMove(r, c)">
-      <md-icon *ngIf="col == 1" class="ttt-icon">clear</md-icon>
-      <md-icon *ngIf="col == 2" class="ttt-icon">radio_button_unchecked</md-icon>
+<md-card class="big-card flex-stack-card">
+  <md-card-title>Tic Tac Toe</md-card-title>
+  <md-card-content>
+  <div class="tic-tac-toe-board">
+    <div class="tic-tac-toe-row" *ngFor="let row of game.state; let r = index;">
+      <div class="tic-tac-toe-cell" *ngFor="let col of row; let c = index;" (click)="makeMove(r, c)">
+        <img *ngIf="col == 1" class="ttt-icon" src="assets/X-icon.svg" alt="X">
+        <img *ngIf="col == 2" class="ttt-icon" src="assets/O-icon.svg" alt="O">
+      </div>
     </div>
   </div>
-</div>
+</md-card-content>
 
 {{winString()}}
-<button md-button color="primary" *ngIf="isOver()" (click)="reset">Reset</button>
+  <md-card-actions>
+    <button md-raised-button color="primary" (click)="reset()">Reset</button>
+    <button md-raised-button color="primary" (click)="runAiMove()">Run AI Move</button>
+    <button md-raised-button color="primary" (click)="runAiGame()">Run AI Game</button>
+  </md-card-actions>
+</md-card>

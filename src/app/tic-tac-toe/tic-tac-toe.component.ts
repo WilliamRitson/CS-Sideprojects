@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { TicTacToe, TicTacToeMove, TicTacToeMark } from '../searchable-game';
-import { Minimax } from '../minimax';
+import { Component, OnInit, Input } from '@angular/core';
+import { TicTacToe, TicTacToeMove, TicTacToeMark } from '../tic-tac-toe';
+import { GameAI } from '../game-ai';
 
-const ai = new Minimax();
+
 
 @Component({
   selector: 'app-tic-tac-toe',
@@ -11,31 +11,63 @@ const ai = new Minimax();
 })
 export class TicTacToeComponent implements OnInit {
   game: TicTacToe;
+  @Input() ai1: GameAI;
+  @Input() ai2: GameAI;
   winner: number;
   constructor() {
     this.reset();
   }
-
   reset() {
     this.game = new TicTacToe();
     this.winner = 0;
   }
-
   isOver() {
     this.winner = this.game.getWinner();
     return this.winner != 0;
   }
-
   makeMove(row: number, col: number) {
     if (this.isOver())
       return;
     this.game.executeMove(new TicTacToeMove(row, col));
+    this.isOver();
+    
+    /*
     if (this.isOver())
       return;
-    let aiMove = <TicTacToeMove>ai.getAlphaBetaMove(this.game);
+    let aiMove = <TicTacToeMove>this.ai2.getNextMove(this.game);
+    this.game.executeMove(aiMove);
+    */
+  }
+  runAiMove() {
+    if (this.isOver())
+      return;
+    let aiMove = <TicTacToeMove>this.ai1.getNextMove(this.game);
+    if (this.isOver())
+      return;
+    aiMove = <TicTacToeMove>this.ai2.getNextMove(this.game);
     this.game.executeMove(aiMove);
   }
-
+  runAiGame() {
+    if (this.isOver())
+      this.reset();
+    let ais = [this.ai1, this.ai2];
+    let currentAi = 0;
+    
+    let runAiGameStep = () => {
+      let t1 = performance.now();
+      let netMove = <TicTacToeMove>ais[currentAi].getNextMove(this.game);
+      let timeUsed = performance.now() - t1;
+      this.game.executeMove(netMove);
+      // Toggle ai
+      currentAi = 1 - currentAi;
+      if (!this.isOver()) {
+        setTimeout(runAiGameStep, Math.max(0, 500 - timeUsed));
+      } 
+    }
+      runAiGameStep();
+        
+  }
+  
   winString() {
     switch (this.winner) {
       case -1:
@@ -43,12 +75,11 @@ export class TicTacToeComponent implements OnInit {
       case 0:
         return 'The game is in progress.';
       case 1:
-        return 'You won.';
+        return 'Player 1 wins.';
       case 2:
-        return 'You lost.';
+        return 'Player 2 wins.';
     }
   }
-
   ngOnInit() { }
 
 }
