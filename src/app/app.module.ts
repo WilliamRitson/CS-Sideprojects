@@ -26,6 +26,7 @@ import { RadixPipe, AllRadixPipe } from './radix.pipe';
 import { EnumEditorComponent } from './enum-editor/enum-editor.component';
 import { AiGamesComponent } from './ai-games/ai-games.component';
 import { TicTacToeComponent } from './tic-tac-toe/tic-tac-toe.component';
+import { TreeViewComponent } from './tree-view/tree-view.component';
 
 
 @NgModule({
@@ -41,7 +42,8 @@ import { TicTacToeComponent } from './tic-tac-toe/tic-tac-toe.component';
     RadixPipe, AllRadixPipe,
     EnumEditorComponent,
     AiGamesComponent,
-    TicTacToeComponent
+    TicTacToeComponent,
+    TreeViewComponent
   ],
   imports: [
     BrowserModule,
