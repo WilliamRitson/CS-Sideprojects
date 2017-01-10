@@ -5,8 +5,7 @@
     <table>
       <thead>
         <tr>
-          <th></th>
-          <th></th>
+          <th colspan="3"></th>
           <th>Directed</th>
         </tr>
       </thead>
@@ -17,6 +16,9 @@
           </th>
           <th>
             <md-input placeholder="to" [(ngModel)]="link.to"></md-input>
+          </th>
+          <th>
+            <md-input placeholder="weight" [(ngModel)]="link.weight" type="number"></md-input>
           </th>
           <th>
             <md-checkbox [(ngModel)]="link.directed"></md-checkbox>
@@ -47,6 +49,7 @@
     <button md-raised-button color="primary" (click)="bfs()">Run BFS</button>
     <button md-raised-button color="primary" (click)="dfsStep()">Run DFS Step</button>
     <button md-raised-button color="primary" (click)="dfs()">Run DFS</button>
+    <button md-raised-button color="primary" (click)="bellmanFord()">Run Bellman Ford</button>
   </md-card-actions>
 </md-card>
 

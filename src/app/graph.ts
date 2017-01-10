@@ -4,6 +4,10 @@ interface NodeHash<T> {
     [name: string]: GraphNode<T>;
 }
 
+interface NumericHash {
+    [name: string]: number;
+}
+
 enum NodeColor {
     white = 1,
     gray = 2,
@@ -17,6 +21,7 @@ class GraphNode<T> {
         this.parent = null;
         this.color = NodeColor.white;
         this.links = {};
+        this.linkWeights = {};
         this.startTime = Infinity;
         this.finishTime = Infinity;
     }
@@ -25,6 +30,7 @@ class GraphNode<T> {
     parent: GraphNode<T>;
     color: NodeColor;
     links: NodeHash<T>;
+    linkWeights: NumericHash;
     startTime: number;
     finishTime: number;
     colorName(): string {
@@ -74,12 +80,12 @@ export class Graph<T> {
         return str;
     }
 
-    addLink(source: T, dest: T) {
-        this.addDirectedLink(source, dest);
-        this.addDirectedLink(dest, source);
+    addLink(source: T, dest: T, weight: number) {
+        this.addDirectedLink(source, dest, weight);
+        this.addDirectedLink(dest, source, weight);
     }
 
-    addDirectedLink(source: T, dest: T) {
+    addDirectedLink(source: T, dest: T, weight: number) {
         if (this.nodes[source.toString()] == undefined) {
             this.nodes[source.toString()] = new GraphNode(source);
         }
@@ -87,11 +93,12 @@ export class Graph<T> {
             this.nodes[dest.toString()] = new GraphNode(dest);
         }
         this.nodes[source.toString()].links[dest.toString()] = this.nodes[dest.toString()];
+        this.nodes[source.toString()].linkWeights[dest.toString()] = weight;
     }
 
-    makeSnapshots(algorithm:string, source:T = undefined) {
+    makeSnapshots(algorithm: string, source: T = undefined) {
         this.snapshots = [];
-        switch(algorithm) {
+        switch (algorithm) {
             case 'bfs': {
                 this.makeBfsSnapshots(source)
                 return this.snapshots;
@@ -108,12 +115,12 @@ export class Graph<T> {
     }
 
     hash(node: GraphNode<T>): string {
-          return node.data.toString();
+        return node.data.toString();
     }
 
     clone(): Graph<T> {
         let clone = new Graph<T>();
-        // Clone all nodes
+        // Clone basic data for all nodes
         for (let nodeName in this.nodes) {
             let oldNode = this.nodes[nodeName];
             clone.nodes[nodeName] = new GraphNode(oldNode.data);
@@ -129,6 +136,7 @@ export class Graph<T> {
         for (let nodeName in this.nodes) {
             let oldNode = this.nodes[nodeName];
             let cloneNode = clone.nodes[nodeName];
+            cloneNode.linkWeights = oldNode.linkWeights;
 
             if (oldNode.parent)
                 cloneNode.parent = clone.nodes[clone.hash(oldNode.parent)];
@@ -139,6 +147,47 @@ export class Graph<T> {
 
         return clone;
     }
+
+    getNode(data: T): GraphNode<T> {
+        return this.nodes[data.toString()];
+    }
+
+    bellmanFord(source: T) {
+        let edges = [];
+
+        for (let nodeName in this.nodes) {
+            this.nodes[nodeName].distance = Infinity;
+            this.nodes[nodeName].parent = null;
+            for (let linkName in this.nodes[nodeName].links) {
+                edges.push({
+                    u: this.nodes[nodeName],
+                    v: this.nodes[linkName],
+                    w: this.nodes[nodeName].linkWeights[linkName]
+                });
+            }
+
+        }
+
+        let sourceNode = this.getNode(source);
+        sourceNode.distance = 0;
+
+        for (let nodeName in this.nodes) {
+            edges.forEach(edge => {
+                if (edge.u.distance + edge.w < edge.v.distance) {
+                    edge.v.distance = edge.u.distance + edge.w
+                    edge.v.parent = edge.u;
+                }
+            });
+        }
+
+        edges.forEach(edge => {
+            if (edge.u.distance + edge.w < edge.v.distance) {
+                alert("Graph contains a negative-weight cycle");
+                return;
+            }
+        });
+    }
+
 
     queue: Queue<GraphNode<T>>;
     makeBfsSnapshots(source: T) {
@@ -171,7 +220,7 @@ export class Graph<T> {
         }
         this.queue = undefined;
     }
-    
+
 
     bfs(source: T) {
         for (let nodeName in this.nodes) {

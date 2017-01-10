@@ -5,14 +5,16 @@ import 'sigma';
 //import 'sigma/forceAtlas2'
 
 class Link {
-  constructor(from, to) {
+  constructor(from, to, weight = 1) {
     this.from = from;
     this.to = to;
     this.directed = false;
+    this.weight = weight;
   }
   from: string;
   to: string;
   directed: boolean;
+  weight: number;
 }
 
 
@@ -34,14 +36,12 @@ export class GraphSearchComponent implements OnInit {
 
   constructor() {
     this.links = [
-      new Link('A', 'B'),
-      new Link('B', 'G'),
-      new Link('B', 'C'),
-      new Link('B', 'D'),
-      new Link('D', 'F'),
-      new Link('F', 'A'),
-      new Link('1', '2'),
-      new Link('2', '3'),
+      new Link('A', 'B', 5),
+      new Link('A', '2', 2),
+      new Link('B', 'C', 2),
+      new Link('2', 'C', 3),
+      new Link('A', 'X', -1),
+      new Link('X', 'A', 0),
     ]
     this.graph = new Graph<string>();
     this.snapshot = this.graph;
@@ -69,6 +69,12 @@ export class GraphSearchComponent implements OnInit {
     let i = this.snapshots[algorithm].indexOf(this.snapshot);
     i = i == this.snapshots[algorithm].length - 1 ? 0 : i + 1
     this.snapshot = this.snapshots[algorithm][i];
+  }
+
+  bellmanFord() {
+    this.graph.bellmanFord(this.source);
+    this.snapshot = this.graph;
+    this.recolor(this.graph);
   }
 
   bfs() {
@@ -110,9 +116,9 @@ export class GraphSearchComponent implements OnInit {
     this.source = this.links[0].from;
     this.links.forEach(l => {
       if (l.directed) {
-        this.graph.addDirectedLink(l.from, l.to);
+        this.graph.addDirectedLink(l.from, l.to, l.weight);
       } else {
-        this.graph.addLink(l.from, l.to);
+        this.graph.addLink(l.from, l.to, l.weight);
       }
     });
     this.refresh();
