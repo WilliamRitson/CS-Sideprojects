@@ -11,7 +11,7 @@ import { galeShapley } from '../group-matcher';
 })
 export class StableMarriageComponent implements OnInit {
   mensNames: Array<string>;
-  womansNames: Array<string>;
+  womensNames: Array<string>;
   pairings: Array<number>;
   mensPrefs: Array<Array<number>>;
   womansPrefs: Array<Array<number>>;
@@ -32,7 +32,7 @@ export class StableMarriageComponent implements OnInit {
   reinit() {
     this.pairings = [];
     this.mensNames = [];
-    this.womansNames = [];
+    this.womensNames = [];
     this.mensPrefs = [];
     this.womansPrefs = [];
   }
@@ -56,7 +56,7 @@ export class StableMarriageComponent implements OnInit {
     this.womansPrefs = this.womansPrefs.map(prefs => this.chance.shuffle(prefs));
   }
 
-  perefenseList() {
+ preferenceList() {
     let len = this.mensNames.length;
     let inOrder = (new Array<number>(len)).fill(0).map((val, index) => index);
     return inOrder;
@@ -68,9 +68,9 @@ export class StableMarriageComponent implements OnInit {
     this.womansPrefs.forEach(prefs => prefs.push(newIndex));
 
     this.mensNames.push(this.chance.first({ gender: 'male' }));
-    this.womansNames.push(this.chance.first({ gender: 'female' }));
-    this.mensPrefs.push(this.perefenseList());
-    this.womansPrefs.push(this.perefenseList());
+    this.womensNames.push(this.chance.first({ gender: 'female' }));
+    this.mensPrefs.push(this.preferenceList());
+    this.womansPrefs.push(this.preferenceList());
   }
 
   invertArray(ordered: Array<number>) {
@@ -90,20 +90,25 @@ export class StableMarriageComponent implements OnInit {
     this.pairings = this.invertArray(this.pairings);
   }
 
+  getList(prefs:Array<number>, names:Array<string>, limit:number):string {
+    let end = Math.min(prefs.length, limit - 1);
+    let namedPrefs = prefs.map(pref => names[pref]);
+    return namedPrefs.slice(0, end).join(', ');
+  }
+
   runGaleShapley() {
     let womensPrefTable = this.makeTable(this.womansPrefs);
     let mensPrefTable = this.makeTable(this.mensPrefs);
 
     if (this.womenPropose) {
       this.pairings = galeShapley(this.womansPrefs, mensPrefTable);
+      this.invertPairings();
     } else {
       this.pairings = galeShapley(this.mensPrefs, womensPrefTable);
-      this.invertPairings();
     }
 
 
     this.mensAverage = this.womensAverage = this.totalAverage = 0;
-
     this.mensPairingValues = [];
     this.womensPairingValues = [];
 
@@ -111,8 +116,8 @@ export class StableMarriageComponent implements OnInit {
       this.mensPairingValues[man] = mensPrefTable[man][woman] + 1;
       this.womensPairingValues[woman] = womensPrefTable[woman][man] + 1;
 
-      this.mensAverage += mensPrefTable[man][woman] + 1;
-      this.womensAverage += womensPrefTable[woman][man] + 1;
+      this.mensAverage   += this.mensPairingValues[man];
+      this.womensAverage += this.womensPairingValues[woman];
     });
 
     this.mensAverage /= this.mensPrefs.length;

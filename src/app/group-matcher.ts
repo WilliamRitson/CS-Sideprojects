@@ -21,11 +21,9 @@ const SINGLE = -1;
 
 export function galeShapley(proposerPrefs: Array<Array<number>>, acceptorPrefs: Array<Array<number>>) {
     let n = proposerPrefs.length;
-
     let acceptorStatus = new Array<number>(n).fill(SINGLE);
     let proposerPosition = new Array<number>(n).fill(0);
     let proposers = new LinkedList<number>();
-
     proposerPosition.forEach((pos, index) => proposers.add(index));
 
 

@@ -1,25 +1,50 @@
 <md-card class="big-card flex-stack-card">
-  <md-card-title>Men’s Preferences </md-card-title>
+  <md-card-title>Preferences </md-card-title>
   <md-card-content>
-    <md-list>
-      <md-list-item *ngFor="let prefs of mensPrefs; let man = index;">
-        <span>{{mensNames[man]}}: &nbsp;</span>
-        <span *ngFor="let woman of prefs;">{{womansNames[woman]}} &nbsp; </span>
-      </md-list-item>
-    </md-list>
-  </md-card-content>
-</md-card>
 
-<md-card class="big-card flex-stack-card">
-  <md-card-title>Women’s Preferences</md-card-title>
-  <md-card-content>
-    <md-list>
-      <md-list-item *ngFor="let prefs of womansPrefs; let woman = index;">
-        <span>{{womansNames[woman]}}: &nbsp;</span>
-        <span *ngFor="let man of prefs;"> {{mensNames[man]}} &nbsp; </span>
-      </md-list-item>
-    </md-list>
+    <md-tab-group>
+      <md-tab label="Men">
+
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Pref List (first 10)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let prefs of mensPrefs; let man = index;">
+              <td>{{mensNames[man]}}</td>
+              <td>{{getList(prefs, womensNames, 10)}}</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </md-tab>
+      <md-tab label="Women">
+
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Pref List (first 10)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let prefs of womansPrefs; let woman = index;">
+              <td>{{womensNames[woman]}}</td>
+              <td>{{getList(prefs, mensNames, 10)}}</td>
+            </tr>
+          </tbody>
+        </table>
+        
+      </md-tab>
+    </md-tab-group>
   </md-card-content>
+  <md-card-actions>
+    <button md-raised-button color="primary" (click)="makeRandomPairs()">Generate</button>
+    <md-input placeholder="number" [(ngModel)]="randomPairCount"></md-input> Random pairs
+  </md-card-actions>
 </md-card>
 
 <md-card class="big-card flex-stack-card">
@@ -28,7 +53,7 @@
     <md-checkbox [(ngModel)]="womenPropose">Women Propose</md-checkbox>
   </md-card-content>
   <md-card-actions>
-    <button md-raised-button color="primary" (click)="makeRandomPairs()">Generate</button> <md-input placeholder="number" [(ngModel)]="randomPairCount"></md-input> Random pairs
+    
     <button md-raised-button color="primary" (click)="runGaleShapley()">Run Gale-Shapley</button>
   </md-card-actions>
 
@@ -40,12 +65,12 @@
   <md-card-content>
     <md-list>
       <md-list-item> Average Result: {{totalAverage | number}}</md-list-item>
-      <md-list-item> Men's Average Result: {{mensAverage}}</md-list-item>
-      <md-list-item> Women's Average Result: {{womensAverage}}</md-list-item>
+      <md-list-item> Men's Average Result: {{mensAverage | number}}</md-list-item>
+      <md-list-item> Women's Average Result: {{womensAverage | number}}</md-list-item>
       <md-list-item *ngFor="let man of pairings; let woman = index;">
-        <span>{{womansNames[woman]}} ({{mensNames[man]}}'s {{mensPairingValues[man] | ordinal }} choice) </span>
+        <span>{{womensNames[woman]}} ({{mensNames[man]}}'s {{mensPairingValues[man] | ordinal }} choice) </span>
         <span> &nbsp; and &nbsp; </span>
-        <span>{{mensNames[man]}} ({{womansNames[woman]}}'s {{womensPairingValues[woman] | ordinal }} choice)</span>
+        <span>{{mensNames[man]}} ({{womensNames[woman]}}'s {{womensPairingValues[woman] | ordinal }} choice)</span>
       </md-list-item>
     </md-list>
   </md-card-content>
