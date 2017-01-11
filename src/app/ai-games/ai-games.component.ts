@@ -22,7 +22,7 @@ export class AiGamesComponent implements OnInit {
     this.aiNames = ['minimax', 'mcts'];
     this.players = [
       new Player(true, this.aiChoices[0], 0),
-      new Player(false, this.aiChoices[1], 1),
+      new Player(false, this.aiChoices[0], 1),
     ]
     console.log(this.players);
   }

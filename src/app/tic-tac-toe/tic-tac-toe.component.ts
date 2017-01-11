@@ -13,9 +13,11 @@ export class TicTacToeComponent implements OnInit {
   game: TicTacToe;
   @Input() ai1: GameAI;
   @Input() ai2: GameAI;
+  automove: boolean;
   winner: number;
   constructor() {
     this.reset();
+    this.automove = true;
   }
   reset() {
     this.game = new TicTacToe();
@@ -30,13 +32,13 @@ export class TicTacToeComponent implements OnInit {
       return;
     this.game.executeMove(new TicTacToeMove(row, col));
     this.isOver();
+
     
-    /*
-    if (this.isOver())
+    if (!this.automove || this.isOver())
       return;
     let aiMove = <TicTacToeMove>this.ai2.getNextMove(this.game);
     this.game.executeMove(aiMove);
-    */
+    
   }
   runAiMove() {
     if (this.isOver())
@@ -52,7 +54,7 @@ export class TicTacToeComponent implements OnInit {
       this.reset();
     let ais = [this.ai1, this.ai2];
     let currentAi = 0;
-    
+
     let runAiGameStep = () => {
       let t1 = performance.now();
       let netMove = <TicTacToeMove>ais[currentAi].getNextMove(this.game);
@@ -62,12 +64,12 @@ export class TicTacToeComponent implements OnInit {
       currentAi = 1 - currentAi;
       if (!this.isOver()) {
         setTimeout(runAiGameStep, Math.max(0, 500 - timeUsed));
-      } 
+      }
     }
-      runAiGameStep();
-        
+    runAiGameStep();
+
   }
-  
+
   winString() {
     switch (this.winner) {
       case -1:
