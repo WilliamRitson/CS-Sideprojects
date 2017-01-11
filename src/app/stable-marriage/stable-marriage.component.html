@@ -1,0 +1,46 @@
+<md-card class="big-card flex-stack-card">
+  <md-card-title>Men's Prefs</md-card-title>
+  <md-card-content>
+    <md-list>
+      <md-list-item *ngFor="let prefs of menPrefs; let man = index;">
+        <span>{{mensNames[man]}}:</span>
+        <span *ngFor="let woman of prefs;">{{womansNames[woman]}} </span>
+      </md-list-item>
+    </md-list>
+  </md-card-content>
+</md-card>
+
+<md-card class="big-card flex-stack-card">
+  <md-card-title>Womans's Prefs</md-card-title>
+  <md-card-content>
+    <md-list>
+      <md-list-item *ngFor="let prefs of womanPrefs; let woman = index;">
+        <span>{{womansNames[woman]}}:</span>
+        <span *ngFor="let man of prefs;">{{mensNames[man]}}</span>
+      </md-list-item>
+    </md-list>
+  </md-card-content>
+</md-card>
+
+<md-card class="big-card flex-stack-card">
+  <md-card-title>Algorithm</md-card-title>
+  <md-card-content>
+    Settings go here
+  </md-card-content>
+  <md-card-actions>
+    <button md-button (click)="runGaleShapley()">Run Gale Shapely</button>
+  </md-card-actions>
+
+</md-card>
+
+
+<md-card class="big-card flex-stack-card">
+  <md-card-title>Results</md-card-title>
+  <md-card-content>
+    <md-list>
+      <md-list-item *ngFor="let man of pairings; let woman = index;">
+        {{womansNames[woman]}} and {{mensNames[man]}}
+      </md-list-item>
+    </md-list>
+  </md-card-content>
+</md-card>

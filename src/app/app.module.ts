@@ -27,6 +27,7 @@ import { EnumEditorComponent } from './enum-editor/enum-editor.component';
 import { AiGamesComponent } from './ai-games/ai-games.component';
 import { TicTacToeComponent } from './tic-tac-toe/tic-tac-toe.component';
 import { TreeViewComponent } from './tree-view/tree-view.component';
+import { StableMarriageComponent } from './stable-marriage/stable-marriage.component';
 
 
 @NgModule({
@@ -43,7 +44,8 @@ import { TreeViewComponent } from './tree-view/tree-view.component';
     EnumEditorComponent,
     AiGamesComponent,
     TicTacToeComponent,
-    TreeViewComponent
+    TreeViewComponent,
+    StableMarriageComponent
   ],
   imports: [
     BrowserModule,
@@ -75,6 +77,13 @@ import { TreeViewComponent } from './tree-view/tree-view.component';
         component: GraphSearchComponent,
         data: {
           title: 'Graph Search Demo'
+        }
+      },
+      {
+        path: 'stable-marriage',
+        component: StableMarriageComponent,
+        data: {
+          title: 'Stable Marriage Demo'
         }
       },
       { path: '', component: HomeComponent },
