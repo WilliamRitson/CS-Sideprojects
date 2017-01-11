@@ -1,4 +1,4 @@
-import { Queue } from 'typescript-collections';
+import { LinkedList } from 'typescript-collections';
 
 /*
 function stableMatching {
@@ -20,31 +20,32 @@ function stableMatching {
 const SINGLE = -1;
 
 export function galeShapley(proposerPrefs: Array<Array<number>>, acceptorPrefs: Array<Array<number>>) {
-        let n = proposerPrefs.length;
+    let n = proposerPrefs.length;
 
-        let acceptorStatus = new Array<number>(n).fill(SINGLE);
-        let proposerPosition = new Array<number>(n).fill(0);
-        let proposers = new Queue<number>();
+    let acceptorStatus = new Array<number>(n).fill(SINGLE);
+    let proposerPosition = new Array<number>(n).fill(0);
+    let proposers = new LinkedList<number>();
 
-        proposerPosition.forEach((pos, index) => proposers.enqueue(index));
+    proposerPosition.forEach((pos, index) => proposers.add(index));
 
 
-        for (let proposer = proposers.dequeue(); !proposers.isEmpty(); proposer = proposers.dequeue()) {
-            let acceptor = proposerPrefs[proposer][proposerPosition[proposer]];
+    for (let proposer = proposers.first(); !proposers.isEmpty(); proposer = proposers.first()) {
+        let acceptor = proposerPrefs[proposer][proposerPosition[proposer]];
 
-            let current = acceptorStatus[acceptor];
-            if (current === SINGLE) {
-                acceptorStatus[acceptor] = proposer;
-            } else if (acceptorPrefs[acceptor][proposer] > acceptorPrefs[acceptor][current]) {
-                proposers.enqueue(current);
-                acceptorStatus[acceptor] = proposer;
-                proposerPosition[current]++;
-            } else {
-                proposerPosition[proposer]++;
-                proposers.enqueue(proposer);
-            }
-
+        let currentMatch = acceptorStatus[acceptor];
+        // Acceptor currently single (always accepts)
+        if (currentMatch === SINGLE) { 
+            acceptorStatus[acceptor] = proposer;
+            proposers.remove(proposer);
+        } 
+        // Accepter prefers proposer to current (proposer lower in pref list)
+        else if (acceptorPrefs[acceptor][proposer] < acceptorPrefs[acceptor][currentMatch]) {
+            proposers.remove(proposer);
+            proposers.add(currentMatch);
+            acceptorStatus[acceptor] = proposer;
         }
-
-        return acceptorStatus;
+        proposerPosition[proposer]++;
     }
+
+    return acceptorStatus;
+}

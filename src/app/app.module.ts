@@ -28,6 +28,7 @@ import { AiGamesComponent } from './ai-games/ai-games.component';
 import { TicTacToeComponent } from './tic-tac-toe/tic-tac-toe.component';
 import { TreeViewComponent } from './tree-view/tree-view.component';
 import { StableMarriageComponent } from './stable-marriage/stable-marriage.component';
+import { OrdinalPipe } from './ordinal.pipe';
 
 
 @NgModule({
@@ -45,7 +46,8 @@ import { StableMarriageComponent } from './stable-marriage/stable-marriage.compo
     AiGamesComponent,
     TicTacToeComponent,
     TreeViewComponent,
-    StableMarriageComponent
+    StableMarriageComponent,
+    OrdinalPipe
   ],
   imports: [
     BrowserModule,

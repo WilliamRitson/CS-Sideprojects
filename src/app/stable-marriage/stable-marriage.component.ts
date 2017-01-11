@@ -13,62 +13,111 @@ export class StableMarriageComponent implements OnInit {
   mensNames: Array<string>;
   womansNames: Array<string>;
   pairings: Array<number>;
-  menPrefs: Array<Array<number>>;
-  womanPrefs: Array<Array<number>>;
+  mensPrefs: Array<Array<number>>;
+  womansPrefs: Array<Array<number>>;
+
+  mensPairingValues: Array<number>;
+  womensPairingValues: Array<number>;
   chance: Chance.Chance;
 
+  womenPropose: boolean;
+  randomPairCount: number;
 
-  constructor() {
+  mensAverage: number;
+  womensAverage: number;
+  totalAverage: number;
+
+
+
+  reinit() {
     this.pairings = [];
     this.mensNames = [];
     this.womansNames = [];
-    this.menPrefs = [];
-    this.womanPrefs = [];
+    this.mensPrefs = [];
+    this.womansPrefs = [];
+  }
 
+  constructor() {
     this.chance = new Chance();
+    this.randomPairCount = 10;
 
-    for (let i = 0; i < 5; i++) {
+    this.makeRandomPairs();
+    this.runGaleShapley
+  }
+
+  makeRandomPairs() {
+    this.reinit();
+
+    for (let i = 0; i < this.randomPairCount; i++) {
       this.addPair();
     }
 
-    //this.menPrefs = this.menPrefs.map(this.chance.shuffle);
-    //this.womanPrefs = this.womanPrefs.map(this.chance.shuffle);
+    this.mensPrefs = this.mensPrefs.map(prefs => this.chance.shuffle(prefs));
+    this.womansPrefs = this.womansPrefs.map(prefs => this.chance.shuffle(prefs));
   }
 
-  randomPreferenseList() {
+  perefenseList() {
     let len = this.mensNames.length;
     let inOrder = (new Array<number>(len)).fill(0).map((val, index) => index);
-    return chance.shuffle(inOrder);
+    return inOrder;
   }
 
   addPair() {
     let newIndex = this.mensNames.length;
-    this.menPrefs.forEach(prefs => prefs.push(newIndex));
-    this.womanPrefs.forEach(prefs => prefs.push(newIndex));
-
+    this.mensPrefs.forEach(prefs => prefs.push(newIndex));
+    this.womansPrefs.forEach(prefs => prefs.push(newIndex));
 
     this.mensNames.push(this.chance.first({ gender: 'male' }));
     this.womansNames.push(this.chance.first({ gender: 'female' }));
-    this.menPrefs.push(this.randomPreferenseList());
-    this.womanPrefs.push(this.randomPreferenseList());
+    this.mensPrefs.push(this.perefenseList());
+    this.womansPrefs.push(this.perefenseList());
+  }
 
-    
+  invertArray(ordered: Array<number>) {
+    let arr = new Array<number>(ordered.length).fill(0);
+    for (let i = 0; i < ordered.length; i++) {
+      let val = ordered[i];
+      arr[val] = i;
+    }
+    return arr;
   }
 
   makeTable(prefs: Array<Array<number>>): number[][] {
-    let table = Array<Array<number>>(prefs.length).fill([]);
+    return prefs.map(this.invertArray);
+  }
 
-    for (let i = 0; i < prefs.length; i++) {
-      for (let j = 0; j < prefs.length; j++) {
-        table[i][prefs[i][j]] = prefs.length - j;
-      }
-    }
-
-    return table;
+  invertPairings() {
+    this.pairings = this.invertArray(this.pairings);
   }
 
   runGaleShapley() {
-    this.pairings = galeShapley(this.menPrefs, this.makeTable(this.womanPrefs));
+    let womensPrefTable = this.makeTable(this.womansPrefs);
+    let mensPrefTable = this.makeTable(this.mensPrefs);
+
+    if (this.womenPropose) {
+      this.pairings = galeShapley(this.womansPrefs, mensPrefTable);
+    } else {
+      this.pairings = galeShapley(this.mensPrefs, womensPrefTable);
+      this.invertPairings();
+    }
+
+
+    this.mensAverage = this.womensAverage = this.totalAverage = 0;
+
+    this.mensPairingValues = [];
+    this.womensPairingValues = [];
+
+    this.pairings.forEach((man, woman) => {
+      this.mensPairingValues[man] = mensPrefTable[man][woman] + 1;
+      this.womensPairingValues[woman] = womensPrefTable[woman][man] + 1;
+
+      this.mensAverage += mensPrefTable[man][woman] + 1;
+      this.womensAverage += womensPrefTable[woman][man] + 1;
+    });
+
+    this.mensAverage /= this.mensPrefs.length;
+    this.womensAverage /= this.womansPrefs.length;
+    this.totalAverage = (this.mensAverage + this.womensAverage) / 2;
   }
 
   ngOnInit() {
