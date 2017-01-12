@@ -4,6 +4,8 @@ import { Chance } from 'chance';
 
 import { galeShapley } from '../group-matcher';
 
+import { sortBy } from 'lodash';
+
 @Component({
   selector: 'app-stable-marriage',
   templateUrl: './stable-marriage.component.html',
@@ -22,6 +24,7 @@ export class StableMarriageComponent implements OnInit {
 
   womenPropose: boolean;
   randomPairCount: number;
+  correlationFactor: number;
 
   mensAverage: number;
   womensAverage: number;
@@ -40,37 +43,53 @@ export class StableMarriageComponent implements OnInit {
   constructor() {
     this.chance = new Chance();
     this.randomPairCount = 10;
+    this.correlationFactor = 0;
 
     this.makeRandomPairs();
     this.runGaleShapley
+  }
+
+  correlatedShuffle<T>(arr: Array<T>, weights: Array<number>, corelation: number): Array<T> {
+    let n = arr.length;
+    return arr
+      .map((val, index) => {
+        return {
+          value: val,
+          key: weights[index] * corelation + Math.random() * (1 - Math.sqrt(corelation))
+        }
+      })
+      .sort((p1, p2) => p1.key > p2.key ? 1 : 0)
+      .map(pair => pair.value);
   }
 
   makeRandomPairs() {
     this.reinit();
 
     for (let i = 0; i < this.randomPairCount; i++) {
-      this.addPair();
+      this.addPairOfSize(this.randomPairCount);
     }
 
-    this.mensPrefs = this.mensPrefs.map(prefs => this.chance.shuffle(prefs));
-    this.womansPrefs = this.womansPrefs.map(prefs => this.chance.shuffle(prefs));
+    let atractivness = [
+      this.preferenceList(this.randomPairCount).map(Math.random),
+      this.preferenceList(this.randomPairCount).map(Math.random)
+    ];
+    this.mensPrefs = this.mensPrefs.map(prefs => this.correlatedShuffle(prefs, atractivness[0], this.correlationFactor / 100));
+    this.womansPrefs = this.womansPrefs.map(prefs => this.correlatedShuffle(prefs, atractivness[1], this.correlationFactor / 100));
   }
 
- preferenceList() {
-    let len = this.mensNames.length;
-    let inOrder = (new Array<number>(len)).fill(0).map((val, index) => index);
-    return inOrder;
+  preferenceList(size: number) {
+    let list = [];
+    for (let i = 0; i < size; i++) {
+      list.push(i);
+    }
+    return list;
   }
 
-  addPair() {
-    let newIndex = this.mensNames.length;
-    this.mensPrefs.forEach(prefs => prefs.push(newIndex));
-    this.womansPrefs.forEach(prefs => prefs.push(newIndex));
-
+  addPairOfSize(size: number) {
     this.mensNames.push(this.chance.first({ gender: 'male' }));
     this.womensNames.push(this.chance.first({ gender: 'female' }));
-    this.mensPrefs.push(this.preferenceList());
-    this.womansPrefs.push(this.preferenceList());
+    this.mensPrefs.push(this.preferenceList(size));
+    this.womansPrefs.push(this.preferenceList(size));
   }
 
   invertArray(ordered: Array<number>) {
@@ -90,7 +109,7 @@ export class StableMarriageComponent implements OnInit {
     this.pairings = this.invertArray(this.pairings);
   }
 
-  getList(prefs:Array<number>, names:Array<string>, limit:number):string {
+  getList(prefs: Array<number>, names: Array<string>, limit: number): string {
     let end = Math.min(prefs.length, limit - 1);
     let namedPrefs = prefs.map(pref => names[pref]);
     return namedPrefs.slice(0, end).join(', ');
@@ -116,7 +135,7 @@ export class StableMarriageComponent implements OnInit {
       this.mensPairingValues[man] = mensPrefTable[man][woman] + 1;
       this.womensPairingValues[woman] = womensPrefTable[woman][man] + 1;
 
-      this.mensAverage   += this.mensPairingValues[man];
+      this.mensAverage += this.mensPairingValues[man];
       this.womensAverage += this.womensPairingValues[woman];
     });
 

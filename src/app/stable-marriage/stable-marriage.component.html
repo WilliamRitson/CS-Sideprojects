@@ -1,10 +1,8 @@
 <md-card class="big-card flex-stack-card">
   <md-card-title>Preferences </md-card-title>
   <md-card-content>
-
     <md-tab-group>
       <md-tab label="Men">
-
         <table>
           <thead>
             <tr>
@@ -19,10 +17,8 @@
             </tr>
           </tbody>
         </table>
-
       </md-tab>
       <md-tab label="Women">
-
         <table>
           <thead>
             <tr>
@@ -37,13 +33,15 @@
             </tr>
           </tbody>
         </table>
-        
       </md-tab>
     </md-tab-group>
   </md-card-content>
   <md-card-actions>
     <button md-raised-button color="primary" (click)="makeRandomPairs()">Generate</button>
-    <md-input placeholder="number" [(ngModel)]="randomPairCount"></md-input> Random pairs
+    <md-input placeholder="number" [(ngModel)]="randomPairCount"></md-input> Random pairs 
+    <!--<md-input placeholder="Correlation" ></md-input>-->
+    <md-slider [(ngModel)]="correlationFactor" maxLabel="Corl"  max="100" min="0">Correlation-</md-slider> 
+    {{correlationFactor}} % Correlation
   </md-card-actions>
 </md-card>
 
@@ -53,10 +51,8 @@
     <md-checkbox [(ngModel)]="womenPropose">Women Propose</md-checkbox>
   </md-card-content>
   <md-card-actions>
-    
     <button md-raised-button color="primary" (click)="runGaleShapley()">Run Gale-Shapley</button>
   </md-card-actions>
-
 </md-card>
 
 
@@ -75,3 +71,15 @@
     </md-list>
   </md-card-content>
 </md-card>
+
+<!--
+<md-card class="big-card flex-stack-card">
+  <md-card-title>Chart</md-card-title>
+  <md-card-content>            
+
+
+     
+
+  </md-card-content>
+</md-card>
+-->
