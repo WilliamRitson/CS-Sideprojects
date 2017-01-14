@@ -38,10 +38,10 @@
   </md-card-content>
   <md-card-actions>
     <button md-raised-button color="primary" (click)="makeRandomPairs()">Generate</button>
-    <md-input placeholder="number" [(ngModel)]="randomPairCount"></md-input> Random pairs 
+    <md-input placeholder="number" [(ngModel)]="randomPairCount"></md-input> Random pairs
     <!--<md-input placeholder="Correlation" ></md-input>-->
-    <md-slider [(ngModel)]="correlationFactor" maxLabel="Corl"  max="100" min="0">Correlation-</md-slider> 
-    {{correlationFactor}} % Correlation
+    <md-slider [(ngModel)]="correlationFactor" maxLabel="Corl" max="1000" min="0">Correlation-</md-slider>
+    {{correlationFactor / 10}} % Correlation
   </md-card-actions>
 </md-card>
 
@@ -57,12 +57,33 @@
 
 
 <md-card class="big-card flex-stack-card">
-  <md-card-title>Results</md-card-title>
+  <md-card-title>Trends</md-card-title>
+  <md-card-content>
+    <table class="table">
+      <thead>
+        <tr>
+          <th> Total Average</th>
+          <th> Men's Average</th>
+          <th> Women's Average </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{totalAverage | number}}</td>
+          <td>{{mensAverage | number}}</td>
+          <td>{{womensAverage | number}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <app-scatter-plot [data]="resultsCords" [maxValX]="worstRes" [maxValY]="worstRes" xAxisLabel="Women's Results" yAxisLabel="Men's Results"></app-scatter-plot>
+  </md-card-content>
+</md-card>
+
+
+<md-card class="big-card flex-stack-card">
+  <md-card-title>Pairings</md-card-title>
   <md-card-content>
     <md-list>
-      <md-list-item> Average Result: {{totalAverage | number}}</md-list-item>
-      <md-list-item> Men's Average Result: {{mensAverage | number}}</md-list-item>
-      <md-list-item> Women's Average Result: {{womensAverage | number}}</md-list-item>
       <md-list-item *ngFor="let man of pairings; let woman = index;">
         <span>{{womensNames[woman]}} ({{mensNames[man]}}'s {{mensPairingValues[man] | ordinal }} choice) </span>
         <span> &nbsp; and &nbsp; </span>
@@ -71,15 +92,3 @@
     </md-list>
   </md-card-content>
 </md-card>
-
-<!--
-<md-card class="big-card flex-stack-card">
-  <md-card-title>Chart</md-card-title>
-  <md-card-content>            
-
-
-     
-
-  </md-card-content>
-</md-card>
--->

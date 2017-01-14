@@ -1,0 +1,31 @@
+<svg [attr.width]="size" [attr.height]="size">
+  <!-- X Axis -->
+  <line 
+  [attr.x1]="axisSize" [attr.y1]="size - axisSize" 
+  [attr.x2]="size"     [attr.y2]="size - axisSize" 
+  stroke-width="2" stroke="black"/>
+
+  <!-- X  Axis Label -->
+  <text [attr.x]="(size )/2" [attr.y]="size" 
+  font-family="Verdana" text-anchor="middle" 
+  [attr.font-size]="axisSize - 1">{{xAxisLabel}}</text>
+
+  <!-- Y  Axis -->
+  <line 
+  [attr.x1]="axisSize" [attr.y1]="size - axisSize" 
+  [attr.x2]="axisSize" [attr.y2]="axisSize" 
+  stroke-width="2" stroke="black"/>
+
+   <!-- Y  Axis Label -->
+  <text [attr.x]="axisSize /2" [attr.y]="size / 2" 
+  font-family="Verdana" style="writing-mode: tb; glyph-orientation-vertical: 0;" 
+  text-anchor="middle" [attr.font-size]="axisSize - 1">{{yAxisLabel}}</text>
+
+  <!-- Points -->
+  <svg:circle *ngFor="let point of data;" 
+  [attr.cx]="getX(point)" 
+  [attr.cy]="getY(point)" 
+  [attr.r]="pointRadius" 
+  mdTooltip="({{point[0]}}, {{point[1]}})"
+  fill="black" />
+</svg>

@@ -1,3 +1,4 @@
+import { Args } from 'webdriver-manager/built/lib/cli';
 import { Component, OnInit } from '@angular/core';
 
 import { Chance } from 'chance';
@@ -30,14 +31,19 @@ export class StableMarriageComponent implements OnInit {
   womensAverage: number;
   totalAverage: number;
 
+  worstRes: number;
+  resultsCords: Array<[number, number]>;
+
 
 
   reinit() {
+    this.worstRes = 10;
     this.pairings = [];
     this.mensNames = [];
     this.womensNames = [];
     this.mensPrefs = [];
     this.womansPrefs = [];
+    this.resultsCords = [];
   }
 
   constructor() {
@@ -49,16 +55,15 @@ export class StableMarriageComponent implements OnInit {
     this.runGaleShapley
   }
 
-  correlatedShuffle<T>(arr: Array<T>, weights: Array<number>, corelation: number): Array<T> {
-    let n = arr.length;
+  correlatedShuffle<T>(arr: Array<T>, corelation: number): Array<T> {
     return arr
       .map((val, index) => {
         return {
           value: val,
-          key: weights[index] * corelation + Math.random() * (1 - Math.sqrt(corelation))
+          key: (index + 1) / arr.length * corelation + Math.random() * (1 - corelation)
         }
       })
-      .sort((p1, p2) => p1.key > p2.key ? 1 : 0)
+      .sort((p1, p2) => p1.key - p2.key)
       .map(pair => pair.value);
   }
 
@@ -69,12 +74,8 @@ export class StableMarriageComponent implements OnInit {
       this.addPairOfSize(this.randomPairCount);
     }
 
-    let atractivness = [
-      this.preferenceList(this.randomPairCount).map(Math.random),
-      this.preferenceList(this.randomPairCount).map(Math.random)
-    ];
-    this.mensPrefs = this.mensPrefs.map(prefs => this.correlatedShuffle(prefs, atractivness[0], this.correlationFactor / 100));
-    this.womansPrefs = this.womansPrefs.map(prefs => this.correlatedShuffle(prefs, atractivness[1], this.correlationFactor / 100));
+    this.mensPrefs = this.mensPrefs.map(prefs => this.correlatedShuffle(prefs, this.correlationFactor / 1000));
+    this.womansPrefs = this.womansPrefs.map(prefs => this.correlatedShuffle(prefs, this.correlationFactor / 1000));
   }
 
   preferenceList(size: number) {
@@ -115,6 +116,8 @@ export class StableMarriageComponent implements OnInit {
     return namedPrefs.slice(0, end).join(', ');
   }
 
+
+
   runGaleShapley() {
     let womensPrefTable = this.makeTable(this.womansPrefs);
     let mensPrefTable = this.makeTable(this.mensPrefs);
@@ -138,6 +141,13 @@ export class StableMarriageComponent implements OnInit {
       this.mensAverage += this.mensPairingValues[man];
       this.womensAverage += this.womensPairingValues[woman];
     });
+
+    this.resultsCords = this.pairings.map((man, woman) =>
+      [this.womensPairingValues[woman], this.mensPairingValues[man]] as [number, number]);
+    this.worstRes = Math.max(
+      Math.max(...this.mensPairingValues),
+      Math.max(...this.womensPairingValues)
+    ) + 1;
 
     this.mensAverage /= this.mensPrefs.length;
     this.womensAverage /= this.womansPrefs.length;

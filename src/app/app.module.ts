@@ -29,6 +29,7 @@ import { TicTacToeComponent } from './tic-tac-toe/tic-tac-toe.component';
 import { TreeViewComponent } from './tree-view/tree-view.component';
 import { StableMarriageComponent } from './stable-marriage/stable-marriage.component';
 import { OrdinalPipe } from './ordinal.pipe';
+import { ScatterPlotComponent } from './scatter-plot/scatter-plot.component';
 
 
 @NgModule({
@@ -47,7 +48,8 @@ import { OrdinalPipe } from './ordinal.pipe';
     TicTacToeComponent,
     TreeViewComponent,
     StableMarriageComponent,
-    OrdinalPipe
+    OrdinalPipe,
+    ScatterPlotComponent
   ],
   imports: [
     BrowserModule,
