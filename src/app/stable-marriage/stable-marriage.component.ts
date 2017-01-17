@@ -13,28 +13,31 @@ import { sortBy } from 'lodash';
   styleUrls: ['./stable-marriage.component.css']
 })
 export class StableMarriageComponent implements OnInit {
+  // Algorithm Paramters
+  womenPropose: boolean;
+
+  // Generation Paramters
+  randomPairCount: number;
+  correlationFactor: number;
+  chance: Chance.Chance;
+
+  // Generated data (algorithm input)
   mensNames: Array<string>;
   womensNames: Array<string>;
   pairings: Array<number>;
   mensPrefs: Array<Array<number>>;
   womansPrefs: Array<Array<number>>;
 
+  // Algorithm results
   mensPairingValues: Array<number>;
   womensPairingValues: Array<number>;
-  chance: Chance.Chance;
-
-  womenPropose: boolean;
-  randomPairCount: number;
-  correlationFactor: number;
-
   mensAverage: number;
   womensAverage: number;
   totalAverage: number;
 
+  // Graph Data (algorithm results)
   worstRes: number;
   resultsCords: Array<[number, number]>;
-
-
 
   reinit() {
     this.worstRes = 10;
@@ -44,6 +47,9 @@ export class StableMarriageComponent implements OnInit {
     this.mensPrefs = [];
     this.womansPrefs = [];
     this.resultsCords = [];
+    this.mensAverage = undefined;
+    this.womensAverage = undefined;
+    this.totalAverage = undefined;
   }
 
   constructor() {
@@ -52,7 +58,7 @@ export class StableMarriageComponent implements OnInit {
     this.correlationFactor = 0;
 
     this.makeRandomPairs();
-    this.runGaleShapley
+    
   }
 
   correlatedShuffle<T>(arr: Array<T>, corelation: number): Array<T> {
@@ -76,6 +82,8 @@ export class StableMarriageComponent implements OnInit {
 
     this.mensPrefs = this.mensPrefs.map(prefs => this.correlatedShuffle(prefs, this.correlationFactor / 1000));
     this.womansPrefs = this.womansPrefs.map(prefs => this.correlatedShuffle(prefs, this.correlationFactor / 1000));
+
+    this.runGaleShapley();
   }
 
   preferenceList(size: number) {
@@ -115,8 +123,6 @@ export class StableMarriageComponent implements OnInit {
     let namedPrefs = prefs.map(pref => names[pref]);
     return namedPrefs.slice(0, end).join(', ');
   }
-
-
 
   runGaleShapley() {
     let womensPrefTable = this.makeTable(this.womansPrefs);
