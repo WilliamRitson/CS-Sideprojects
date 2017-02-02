@@ -1,21 +1,21 @@
 .editor {
-    box-sizing: border-box;
-    float: left;
-    width: 25%;
+  box-sizing: border-box;
+  float: left;
+  width: 25%;
 }
 
 .text-editor {
-    width:100%;
+  width: 100%;
 }
 
 .diagrams {
-    box-sizing: border-box;
-    float: left;
-    width: 75%;
+  box-sizing: border-box;
+  float: left;
+  width: 75%;
 }
+
 .app-content {
   padding: 20px;
-
 }
 
 .app-sidenav {
@@ -27,13 +27,13 @@
   padding: 0 14px 0 14px;
   color: white;
 }
+
 .fill-remaining-space {
   flex: 1 1 auto;
 }
 
-
 .app-icon-button {
-    color:white;
+  color: white;
   box-shadow: none;
   user-select: none;
   background: none;

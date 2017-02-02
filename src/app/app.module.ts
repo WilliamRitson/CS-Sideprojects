@@ -30,6 +30,7 @@ import { TreeViewComponent } from './tree-view/tree-view.component';
 import { StableMarriageComponent } from './stable-marriage/stable-marriage.component';
 import { OrdinalPipe } from './ordinal.pipe';
 import { ScatterPlotComponent } from './scatter-plot/scatter-plot.component';
+import { SetAlgebraComponent } from './set-algebra/set-algebra.component';
 
 
 @NgModule({
@@ -49,7 +50,8 @@ import { ScatterPlotComponent } from './scatter-plot/scatter-plot.component';
     TreeViewComponent,
     StableMarriageComponent,
     OrdinalPipe,
-    ScatterPlotComponent
+    ScatterPlotComponent,
+    SetAlgebraComponent,
   ],
   imports: [
     BrowserModule,
@@ -68,6 +70,9 @@ import { ScatterPlotComponent } from './scatter-plot/scatter-plot.component';
         data: {
           title: 'AI Games'
         }
+      },
+      {
+        path: 'set-algebra', component: SetAlgebraComponent,
       },
       {
         path: 'pipe',

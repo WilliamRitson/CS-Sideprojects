@@ -1,0 +1,42 @@
+<md-card class="big-card flex-stack-card">
+  <md-card-title>Input</md-card-title>
+  <md-card-content>
+    <md-input-container>
+      <textarea [(ngModel)]="source" md-input placeholder="Set Expression"></textarea>
+    </md-input-container>
+  </md-card-content>
+  <md-card-actions>
+    <button md-button color="primary" (click)="run()">Parse Set Expression</button>
+  </md-card-actions>
+</md-card>
+
+<md-card class="big-card flex-stack-card">
+  <md-card-title>
+    Set Membership Table
+  </md-card-title>
+  <md-card-content>
+    <table class="set-membership-table">
+      <thead>
+        <tr>
+          <th *ngFor="let varName of smt.header">{{varName}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of smt.data">
+          <td *ngFor="let value of row">{{value ? 1 : 0}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </md-card-content>
+</md-card>
+
+<md-card class="big-card flex-stack-card">
+  <md-card-title>
+    Technical
+  </md-card-title>
+  <md-card-content>
+    <p>{{parsedString}}</p>
+    <p>{{tokens | json}}</p>
+    <p>{{expr | json}}</p>
+  </md-card-content>
+</md-card>
