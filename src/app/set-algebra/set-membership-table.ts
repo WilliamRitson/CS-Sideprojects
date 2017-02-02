@@ -24,17 +24,23 @@ export class SetMembershipTable {
     }
 
     private getSubexpressions(expr: SetTreeExpr): Array<SetTreeExpr> {
-        let subs = [];
-
-        return subs;
+        return expr.getSubexpressions().reverse();
     }
 
-    public build(expr: SetTreeExpr, vars: Map<string, AlgebraicSet>) {
+    private buildHeader(exprs: SetTreeExpr[], vars: Map<string, AlgebraicSet>) {
         this.header = [];
         vars.forEach((val, id) => {
             this.header.push(id);
         });
-        this.header.push(expr.toString());
+        for (let expr of exprs) {
+            this.header.push(expr.toString());
+        }
+
+    }
+
+    public build(expr: SetTreeExpr, vars: Map<string, AlgebraicSet>) {
+        let exprs = this.getSubexpressions(expr);
+        this.buildHeader(exprs, vars);
 
         this.data = [];
         let combos = Math.pow(2, vars.size);
@@ -48,8 +54,9 @@ export class SetMembershipTable {
                 j++;
             })
 
-            let res = expr.evaluate(vars);
-            boolVals.push(expr.evaluate(vars).has(i));
+            for (let expr of exprs) {
+                boolVals.push(expr.evaluate(vars).has(i));
+            }
             this.data.push(boolVals);
         }
     }

@@ -2,16 +2,25 @@
     text-align: center;
     width: 100%;
     border-collapse: collapse;
-}
-
-.set-membership-table th {
-    border-bottom: 2px solid gray;
-    padding-right:2px;
-    padding-left:2px;
-}
-
-.set-membership-table td {
-    padding-top: 8px;
-    padding-bottom: 8px;
-    border-bottom: 0.5px solid lightgray;
+    th {
+        border-top: 1px solid lightgray;
+        border-bottom: 2px solid gray;
+        padding-right: 5px;
+        padding-left: 5px;
+    }
+    td {
+        padding-top: 8px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid lightgray;
+    }
+    tr:nth-child(even) td {
+        background: lightblue;
+        background: -webkit-gradient(linear, left top, left bottom, from(#f8f8f8), to(#f6f6f6));
+        background: -moz-linear-gradient(top, #f8f8f8, #f6f6f6);
+    }
+    th,
+    td {
+        border-right: 1px solid lightgray;
+        border-left: 1px solid lightgray;
+    }
 }

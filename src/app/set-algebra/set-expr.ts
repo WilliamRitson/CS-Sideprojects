@@ -11,6 +11,7 @@ export interface SetTreeExpr {
     evaluate(context: Context): AlgebraicSet;
     toString(): string;
     getVariables(): Array<Token>;
+    getSubexpressions(): Array<SetTreeExpr>;
 }
 
 export interface SetExprNewable {
@@ -31,6 +32,10 @@ export class ParenSetExpr implements SetTreeExpr {
     getVariables() {
         return this.grouped.getVariables();
     }
+
+    getSubexpressions(): Array<SetTreeExpr> {
+        return this.grouped.getSubexpressions();
+    }
 }
 
 export class UnionSetExpr implements SetTreeExpr {
@@ -46,6 +51,12 @@ export class UnionSetExpr implements SetTreeExpr {
 
     getVariables() {
         return this.op1.getVariables().concat(this.op2.getVariables());
+    }
+
+    getSubexpressions(): Array<SetTreeExpr> {
+        return [this as SetTreeExpr]
+            .concat(this.op1.getSubexpressions())
+            .concat(this.op2.getSubexpressions());
     }
 }
 
@@ -63,6 +74,12 @@ export class IntersectionSetExpr implements SetTreeExpr {
     getVariables() {
         return this.op1.getVariables().concat(this.op2.getVariables());
     }
+
+    getSubexpressions(): Array<SetTreeExpr> {
+        return [this as SetTreeExpr]
+            .concat(this.op1.getSubexpressions())
+            .concat(this.op2.getSubexpressions());
+    }
 }
 
 export class DifferenceSetExpr implements SetTreeExpr {
@@ -78,6 +95,12 @@ export class DifferenceSetExpr implements SetTreeExpr {
 
     getVariables() {
         return this.op1.getVariables().concat(this.op2.getVariables());
+    }
+
+    getSubexpressions(): Array<SetTreeExpr> {
+        return [this as SetTreeExpr]
+            .concat(this.op1.getSubexpressions())
+            .concat(this.op2.getSubexpressions());
     }
 }
 
@@ -95,6 +118,10 @@ export class VariableSetExpr implements SetTreeExpr {
     getVariables() {
         return [this.token];
     }
+
+    getSubexpressions(): Array<SetTreeExpr> {
+        return [];
+    }
 }
 
 export class ComplementSetExpr implements SetTreeExpr {
@@ -110,5 +137,9 @@ export class ComplementSetExpr implements SetTreeExpr {
 
     getVariables() {
         return this.op.getVariables();
+    }
+
+    getSubexpressions(): Array<SetTreeExpr> {
+        return [this as SetTreeExpr]
     }
 }
