@@ -2,17 +2,20 @@
   <md-card-title>Input</md-card-title>
   <md-card-content>
     <md-input-container>
-      <textarea [(ngModel)]="source" md-input placeholder="Set Expression"></textarea>
+      <textarea md-input [(ngModel)]="sources[0]" placeholder="Set Expression 1"></textarea>
+    </md-input-container>
+    <md-input-container>
+      <textarea md-input [(ngModel)]="sources[1]" placeholder="Set Expression 2"></textarea>
     </md-input-container>
   </md-card-content>
   <md-card-actions>
-    <button md-button color="primary" (click)="run()">Parse Set Expression</button>
+    <button md-raised-button color="primary" (click)="run()">Parse Set Expressions</button>
   </md-card-actions>
 </md-card>
 
-<md-card class="big-card flex-stack-card">
+<md-card class="big-card flex-stack-card" *ngFor="let smt of smts; let i = index">
   <md-card-title>
-    Set Membership Table
+    Set Membership Table {{ i + 1}}
   </md-card-title>
   <md-card-content>
     <table class="set-membership-table">
@@ -27,5 +30,18 @@
         </tr>
       </tbody>
     </table>
+  </md-card-content>
+</md-card>
+
+<md-card class="big-card flex-stack-card" >
+  <md-card-title>
+    Comparison
+  </md-card-title>
+  <md-card-content>
+    <p *ngIf="smts[0].isSame(smts[1])">The expressions are algebraically equivalent.'</p>
+    <p *ngIf="!smts[0].isSame(smts[1])">The expressions are not algebraically equivalent.
+
+      They differ on lines {{smts[0].compare(smts[1]).join(', ')}}.
+    </p>
   </md-card-content>
 </md-card>

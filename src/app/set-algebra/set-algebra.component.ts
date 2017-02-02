@@ -14,27 +14,26 @@ import { SetMembershipTable } from './set-membership-table';
 export class SetAlgebraComponent implements OnInit {
   scanner: Scanner;
   parser: Parser;
-  tokens: Array<Token>;
-  source: string;
-  expr: SetTreeExpr;
-  parsedString: string;
-  smt: SetMembershipTable;
+
+  sources: Array<string>;
+  exprs: Array<SetTreeExpr>;
+  smts: Array<SetMembershipTable>;
 
   constructor() {
-    this.source = '(B or K)! or M! ';
+    this.sources = ['(A union B)^C', 'A^C intersection B^C'];
+    this.smts = [new SetMembershipTable(), new SetMembershipTable()];
 
     this.scanner = new Scanner();
-    this.parser = new Parser();
-    this.smt = new SetMembershipTable();
+    this.parser = new Parser();    
   }
 
-
   run() {
-    this.tokens = this.scanner.tokenize(this.source);
-    console.log(this.tokens);
-    this.expr = this.parser.parse(this.source);
-    this.parsedString = this.expr.toString();
-    this.smt.build(this.expr,  this.smt.makeVarTable(this.expr));
+    for (let i = 0; i < this.sources.length; i++) {
+      let source = this.sources[i];
+      let tokens = this.scanner.tokenize(source);
+      let expr = this.parser.parse(source)
+      this.smts[i].build(expr, this.smts[i].makeVarTable(expr));
+    }
   }
 
   ngOnInit() {

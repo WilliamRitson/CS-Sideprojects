@@ -4,6 +4,7 @@ import { SetTreeExpr } from './set-expr';
 export class SetMembershipTable {
     public header: Array<string>
     public data: Array<Array<boolean>>;
+    private bitstring: string;
 
     private pad(n: string, width: number, padding: string = '0'): string {
         n = n + '';
@@ -27,10 +28,25 @@ export class SetMembershipTable {
         return expr.getSubexpressions().reverse();
     }
 
-    private buildHeader(exprs: SetTreeExpr[], vars: Map<string, AlgebraicSet>) {
+    public isSame(other: SetMembershipTable): boolean {
+        return this.bitstring === other.bitstring;
+    }
+
+    public compare(other: SetMembershipTable): Array<number> {
+        let diffs = [];
+        console.log('comp', this.bitstring, other.bitstring);
+        for (let i = 0; i < Math.min(this.bitstring.length, other.bitstring.length); i++) {
+            if (this.bitstring[i] != other.bitstring[i])
+                diffs.push(i + 1);
+        }
+        return diffs;
+    }
+
+    private buildHeader(exprs: SetTreeExpr[], lexical: Array<string>) {
         this.header = [];
-        vars.forEach((val, id) => {
-            this.header.push(id);
+
+        lexical.forEach((val) => {
+            this.header.push(val);
         });
         for (let expr of exprs) {
             this.header.push(expr.toString());
@@ -40,9 +56,13 @@ export class SetMembershipTable {
 
     public build(expr: SetTreeExpr, vars: Map<string, AlgebraicSet>) {
         let exprs = this.getSubexpressions(expr);
-        this.buildHeader(exprs, vars);
+        let lexical = Array.from(vars.keys()).sort();
+
+        this.buildHeader(exprs, lexical);
 
         let universalSet = new AlgebraicSet();
+
+        this.bitstring = '';
 
         this.data = [];
         let combos = Math.pow(2, vars.size);
@@ -51,15 +71,17 @@ export class SetMembershipTable {
             let j = 0;
 
             universalSet.add(i);
-            vars.forEach(val => {
+            lexical.forEach(id => {
                 if (boolVals[j])
-                    val.add(i);
+                    vars.get(id).add(i);
                 j++;
             })
 
             for (let expr of exprs) {
                 boolVals.push(expr.evaluate(vars, universalSet).has(i));
             }
+
+            this.bitstring += expr.evaluate(vars, universalSet).has(i) ? '1' : '0';
             this.data.push(boolVals);
         }
     }

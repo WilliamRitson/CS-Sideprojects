@@ -93,7 +93,7 @@ export class Parser {
         let left = tokens.slice(0, index);
         let right = tokens.slice(index + 1, tokens.length);
 
-        console.log("pt", index, TokenType[tokens[index].type]);
+       // console.log("pt", index, TokenType[tokens[index].type]);
 
         switch (settings.type) {
             case (TokenEvalType.infix):
