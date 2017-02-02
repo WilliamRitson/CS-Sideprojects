@@ -57,6 +57,7 @@ export class Scanner {
                 return new Token(TokenType.variable, sub);
             }
         }
+        this.pos += len;
         return new Token(TokenType.variable, this.source.substr(this.pos, len));
     }
 
