@@ -57,10 +57,10 @@ export class Parser {
                 parenLevel++;
 
             let priority = -parserSettings.get(tokens[i].type).priority;
-            console.log(parenLevel, TokenType[token.type], priority, parenLevel, parenLevel <= lowestIndex.parenLevel, priority <= lowestIndex.priority);
+            //console.log(parenLevel, TokenType[token.type], priority, parenLevel, parenLevel <= lowestIndex.parenLevel, priority <= lowestIndex.priority);
             if (parenLevel < lowestIndex.parenLevel || parenLevel == lowestIndex.parenLevel && priority <= lowestIndex.priority) {
                 lowestIndex = { index: i, priority: priority, parenLevel: parenLevel };
-                console.log('lin', lowestIndex);
+                //console.log('lin', lowestIndex);
             }
 
             if (token.type === TokenType.right_paren)
@@ -93,7 +93,7 @@ export class Parser {
         let left = tokens.slice(0, index);
         let right = tokens.slice(index + 1, tokens.length);
 
-        console.log("pt", index, TokenType[tokens[index].type]);
+       // console.log("pt", index, TokenType[tokens[index].type]);
 
         switch (settings.type) {
             case (TokenEvalType.infix):

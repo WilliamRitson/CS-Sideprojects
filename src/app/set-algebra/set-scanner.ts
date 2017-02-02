@@ -45,20 +45,24 @@ export class Scanner {
 
     private nextToken() {
         let len = 0;
+        let token = undefined;
         while (this.pos + len < this.source.length) {
             len++;
             let sub = this.source.substr(this.pos, len);
             if (this.keySymbols[sub]) {
-                this.pos += len;
-                return new Token(this.keySymbols[sub]);
+                token = new Token(this.keySymbols[sub]);
+                break;
             }
             else if (this.source.charAt(this.pos + len).match(/[^\w]/)) {
-                this.pos += len;
-                return new Token(TokenType.variable, sub);
+                token = new Token(TokenType.variable, sub);
+                break;
             }
         }
+        if (!token) {
+            token = new Token(TokenType.variable, this.source.substr(this.pos, len));
+        }
         this.pos += len;
-        return new Token(TokenType.variable, this.source.substr(this.pos, len));
+        return token
     }
 
     private nextChar() {
@@ -79,7 +83,7 @@ export class Scanner {
         this.pos = 0;
         this.source = source;
 
-        let iterMax = 100;
+        let iterMax = 1000;
         while (this.pos < this.source.length && iterMax > 0) {
             this.ignoreSpace();
             this.addNextToken();
