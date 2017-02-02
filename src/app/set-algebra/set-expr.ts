@@ -122,6 +122,48 @@ export class VariableSetExpr implements SetTreeExpr {
     }
 }
 
+export class UniversalSetExpr implements SetTreeExpr {
+    constructor(private token: Token, op1: SetTreeExpr, op2: SetTreeExpr) { }
+
+    evaluate(context: Context, universal:AlgebraicSet) {
+        return universal;
+    }
+
+    toString(): string {
+        return '𝕌';
+    }
+
+    getVariables() {
+        return [];
+    }
+
+    getSubexpressions(): Array<SetTreeExpr> {
+        return [];
+    }
+}
+
+
+const emptySet = new AlgebraicSet();
+export class EmptySetExpr implements SetTreeExpr {
+    constructor(private token: Token, op1: SetTreeExpr, op2: SetTreeExpr) { }
+
+    evaluate(context: Context, universal:AlgebraicSet) {
+        return emptySet
+    }
+
+    toString(): string {
+        return '∅';
+    }
+
+    getVariables() {
+        return [];
+    }
+
+    getSubexpressions(): Array<SetTreeExpr> {
+        return [];
+    }
+}
+
 export class ComplementSetExpr implements SetTreeExpr {
     constructor(token: Token, private op: SetTreeExpr, op2: SetTreeExpr) { }
 

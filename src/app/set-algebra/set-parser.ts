@@ -21,12 +21,14 @@ class TokenSetting {
 
 const parserSettings = new Map<TokenType, TokenSetting>([
     [TokenType.variable, new TokenSetting(TokenEvalType.value, 1, exprs.VariableSetExpr)],
+    [TokenType.universal, new TokenSetting(TokenEvalType.value, 1, exprs.UniversalSetExpr)],
+    [TokenType.empty, new TokenSetting(TokenEvalType.value, 1, exprs.EmptySetExpr)],
     [TokenType.left_paren, new TokenSetting(TokenEvalType.groupingLeft, 4, exprs.ParenSetExpr)],
     [TokenType.right_paren, new TokenSetting(TokenEvalType.groupingRight, 4, exprs.ParenSetExpr)],
     [TokenType.union, new TokenSetting(TokenEvalType.infix, 2, exprs.UnionSetExpr)],
     [TokenType.intersection, new TokenSetting(TokenEvalType.infix, 2, exprs.IntersectionSetExpr)],
     [TokenType.complement, new TokenSetting(TokenEvalType.rightUnary, 1, exprs.ComplementSetExpr)],
-    [TokenType.difference, new TokenSetting(TokenEvalType.infix, 2, exprs.DifferenceSetExpr)],
+    [TokenType.difference, new TokenSetting(TokenEvalType.infix, 2, exprs.DifferenceSetExpr)]
 ]);
 
 
@@ -93,7 +95,7 @@ export class Parser {
         let left = tokens.slice(0, index);
         let right = tokens.slice(index + 1, tokens.length);
 
-       // console.log("pt", index, TokenType[tokens[index].type]);
+        // console.log("pt", index, TokenType[tokens[index].type]);
 
         switch (settings.type) {
             case (TokenEvalType.infix):

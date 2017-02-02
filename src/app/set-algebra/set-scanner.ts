@@ -5,7 +5,9 @@ export enum TokenType {
     union,
     intersection,
     complement,
-    difference
+    difference,
+    universal,
+    empty
 }
 
 export class Token {
@@ -36,7 +38,11 @@ export class Scanner {
         '^C': TokenType.complement,
         '!': TokenType.complement,
         '^∁': TokenType.complement,
-        '∁': TokenType.complement
+        '∁': TokenType.complement,
+        'universal': TokenType.universal,
+        '𝕌': TokenType.universal,
+        'empty': TokenType.empty,
+        '∅': TokenType.empty
         
     }
 
