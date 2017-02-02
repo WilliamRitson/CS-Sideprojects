@@ -21,7 +21,7 @@ export class SetAlgebraComponent implements OnInit {
   smt: SetMembershipTable;
 
   constructor() {
-    this.source = '(B ∩ C) ∩ (B ∩ K) ';
+    this.source = '(B or K)! or M! ';
 
     this.scanner = new Scanner();
     this.parser = new Parser();
@@ -29,20 +29,12 @@ export class SetAlgebraComponent implements OnInit {
   }
 
 
-  makeVarTable(expr: SetTreeExpr) {
-    let vars = expr.getVariables();
-    let table = new Map<string, AlgebraicSet>();
-    vars.forEach((exprVar) => {
-      table.set(exprVar.identifier, new AlgebraicSet());
-    })
-    return table;
-  }
-
   run() {
     this.tokens = this.scanner.tokenize(this.source);
+    console.log(this.tokens);
     this.expr = this.parser.parse(this.source);
     this.parsedString = this.expr.toString();
-    this.smt.build(this.expr, this.makeVarTable(this.expr));
+    this.smt.build(this.expr,  this.smt.makeVarTable(this.expr));
   }
 
   ngOnInit() {

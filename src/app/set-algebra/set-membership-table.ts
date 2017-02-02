@@ -14,7 +14,7 @@ export class SetMembershipTable {
         return this.pad((curr).toString(2), len).split('').map(char => char == '1')
     }
 
-    private makeVarTable(expr: SetTreeExpr) {
+    public makeVarTable(expr: SetTreeExpr) {
         let vars = expr.getVariables();
         let table = new Map<string, AlgebraicSet>();
         vars.forEach((exprVar) => {
@@ -42,12 +42,15 @@ export class SetMembershipTable {
         let exprs = this.getSubexpressions(expr);
         this.buildHeader(exprs, vars);
 
+        let universalSet = new AlgebraicSet();
+
         this.data = [];
         let combos = Math.pow(2, vars.size);
         for (let i = 0; i < combos; i++) {
             let boolVals = this.genValues(i, vars.size);
             let j = 0;
 
+            universalSet.add(i);
             vars.forEach(val => {
                 if (boolVals[j])
                     val.add(i);
@@ -55,7 +58,7 @@ export class SetMembershipTable {
             })
 
             for (let expr of exprs) {
-                boolVals.push(expr.evaluate(vars).has(i));
+                boolVals.push(expr.evaluate(vars, universalSet).has(i));
             }
             this.data.push(boolVals);
         }

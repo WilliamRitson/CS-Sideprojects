@@ -25,7 +25,7 @@ const parserSettings = new Map<TokenType, TokenSetting>([
     [TokenType.right_paren, new TokenSetting(TokenEvalType.groupingRight, 4, exprs.ParenSetExpr)],
     [TokenType.union, new TokenSetting(TokenEvalType.infix, 2, exprs.UnionSetExpr)],
     [TokenType.intersection, new TokenSetting(TokenEvalType.infix, 2, exprs.IntersectionSetExpr)],
-    [TokenType.complement, new TokenSetting(TokenEvalType.infix, 2, exprs.ComplementSetExpr)],
+    [TokenType.complement, new TokenSetting(TokenEvalType.rightUnary, 1, exprs.ComplementSetExpr)],
     [TokenType.difference, new TokenSetting(TokenEvalType.infix, 2, exprs.DifferenceSetExpr)],
 ]);
 
@@ -93,7 +93,7 @@ export class Parser {
         let left = tokens.slice(0, index);
         let right = tokens.slice(index + 1, tokens.length);
 
-       // console.log("pt", index, TokenType[tokens[index].type]);
+        console.log("pt", index, TokenType[tokens[index].type]);
 
         switch (settings.type) {
             case (TokenEvalType.infix):
@@ -112,7 +112,7 @@ export class Parser {
             case (TokenEvalType.rightUnary):
                 return new settings.generator(
                     token,
-                    this.parseTokens(right),
+                    this.parseTokens(left),
                     null
                 );
             case (TokenEvalType.value):

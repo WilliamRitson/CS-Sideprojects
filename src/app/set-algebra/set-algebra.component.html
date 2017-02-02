@@ -18,7 +18,7 @@
     <table class="set-membership-table">
       <thead>
         <tr>
-          <th *ngFor="let varName of smt.header">{{varName}}</th>
+          <th *ngFor="let varName of smt.header" [innerHTML]="varName"></th>
         </tr>
       </thead>
       <tbody>

@@ -5,10 +5,8 @@ import { Token } from './set-scanner';
 
 type Context = Map<string, AlgebraicSet>;
 
-const universalSetId = 'Ω';
-
 export interface SetTreeExpr {
-    evaluate(context: Context): AlgebraicSet;
+    evaluate(context: Context, universal:AlgebraicSet): AlgebraicSet;
     toString(): string;
     getVariables(): Array<Token>;
     getSubexpressions(): Array<SetTreeExpr>;
@@ -21,8 +19,8 @@ export interface SetExprNewable {
 export class ParenSetExpr implements SetTreeExpr {
     constructor(token: Token, private grouped: SetTreeExpr, op2: SetTreeExpr) { }
 
-    evaluate(context: Context) {
-        return this.grouped.evaluate(context);
+    evaluate(context: Context, universal:AlgebraicSet) {
+        return this.grouped.evaluate(context, universal);
     }
 
     toString(): string {
@@ -41,8 +39,8 @@ export class ParenSetExpr implements SetTreeExpr {
 export class UnionSetExpr implements SetTreeExpr {
     constructor(token: Token, private op1: SetTreeExpr, private op2: SetTreeExpr) { }
 
-    evaluate(context: Context) {
-        return this.op1.evaluate(context).union(this.op2.evaluate(context));
+    evaluate(context: Context, universal:AlgebraicSet) {
+        return this.op1.evaluate(context, universal).union(this.op2.evaluate(context, universal));
     }
 
     toString(): string {
@@ -63,8 +61,8 @@ export class UnionSetExpr implements SetTreeExpr {
 export class IntersectionSetExpr implements SetTreeExpr {
     constructor(token: Token, private op1: SetTreeExpr, private op2: SetTreeExpr) { }
 
-    evaluate(context: Context) {
-        return this.op1.evaluate(context).intersection(this.op2.evaluate(context));
+    evaluate(context: Context, universal:AlgebraicSet) {
+        return this.op1.evaluate(context, universal).intersection(this.op2.evaluate(context, universal));
     }
 
     toString(): string {
@@ -85,8 +83,8 @@ export class IntersectionSetExpr implements SetTreeExpr {
 export class DifferenceSetExpr implements SetTreeExpr {
     constructor(token: Token, private op1: SetTreeExpr, private op2: SetTreeExpr) { }
 
-    evaluate(context: Context) {
-        return this.op1.evaluate(context).difference(this.op2.evaluate(context));
+    evaluate(context: Context, universal:AlgebraicSet) {
+        return this.op1.evaluate(context, universal).difference(this.op2.evaluate(context, universal));
     }
 
     toString(): string {
@@ -107,7 +105,7 @@ export class DifferenceSetExpr implements SetTreeExpr {
 export class VariableSetExpr implements SetTreeExpr {
     constructor(private token: Token, op1: SetTreeExpr, op2: SetTreeExpr) { }
 
-    evaluate(context: Context) {
+    evaluate(context: Context, universal:AlgebraicSet) {
         return context.get(this.token.identifier).copy();
     }
 
@@ -127,12 +125,12 @@ export class VariableSetExpr implements SetTreeExpr {
 export class ComplementSetExpr implements SetTreeExpr {
     constructor(token: Token, private op: SetTreeExpr, op2: SetTreeExpr) { }
 
-    evaluate(context: Context) {
-        return context.get(universalSetId).difference(this.op.evaluate(context));
+    evaluate(context: Context, universal:AlgebraicSet) {
+        return universal.difference(this.op.evaluate(context, universal));
     }
 
     toString(): string {
-        return `${this.op.toString()}^∁`;
+        return `${this.op.toString()}<sup>∁</sup>`;
     }
 
     getVariables() {
@@ -140,6 +138,6 @@ export class ComplementSetExpr implements SetTreeExpr {
     }
 
     getSubexpressions(): Array<SetTreeExpr> {
-        return [this as SetTreeExpr]
+        return [this as SetTreeExpr].concat(this.op.getSubexpressions());
     }
 }

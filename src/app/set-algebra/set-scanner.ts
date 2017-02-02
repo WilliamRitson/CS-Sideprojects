@@ -22,14 +22,22 @@ export class Scanner {
     keySymbols = {
         '(': TokenType.left_paren,
         ')': TokenType.right_paren,
+        '[': TokenType.left_paren,
+        ']': TokenType.right_paren,
         'or': TokenType.union,
         'union': TokenType.union,
         '∪': TokenType.union,
         'and': TokenType.intersection,
         'intersection': TokenType.intersection,
+        '&': TokenType.intersection,
         '∩': TokenType.intersection,
         '-': TokenType.difference,
-        '\\': TokenType.difference
+        '\\': TokenType.difference,
+        '^C': TokenType.complement,
+        '!': TokenType.complement,
+        '^∁': TokenType.complement,
+        '∁': TokenType.complement
+        
     }
 
     private tokens: Array<Token>;
