@@ -28,9 +28,14 @@ export class SetAlgebraComponent implements OnInit {
       route.snapshot.params['expr2'] || 'A^C intersection B^C'
     ];
     this.smts = [new SetMembershipTable(), new SetMembershipTable()];
-
     this.scanner = new Scanner();
     this.parser = new Parser();
+
+    route.params.subscribe(params => {
+      this.sources[0] = params['expr1'] || this.sources[0];
+      this.sources[1] = params['expr2'] || this.sources[1];
+      this.run();
+    })
   }
 
   run() {

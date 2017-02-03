@@ -33,17 +33,19 @@ export class Scanner {
         'intersection': TokenType.intersection,
         '&': TokenType.intersection,
         '∩': TokenType.intersection,
+        'difference': TokenType.difference,
         '-': TokenType.difference,
         '\\': TokenType.difference,
         '^C': TokenType.complement,
         '!': TokenType.complement,
         '^∁': TokenType.complement,
         '∁': TokenType.complement,
+        'complement': TokenType.complement,
         'universal': TokenType.universal,
         '𝕌': TokenType.universal,
+        'Ω': TokenType.universal,
         'empty': TokenType.empty,
         '∅': TokenType.empty
-        
     }
 
     private tokens: Array<Token>;

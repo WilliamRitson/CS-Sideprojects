@@ -7,7 +7,6 @@ export class SetMembershipTable {
     private bitstring: string;
 
     private pad(n: string, width: number, padding: string = '0'): string {
-        n = n + '';
         return n.length >= width ? n : new Array(width - n.length + 1).join(padding) + n;
     }
 
@@ -34,7 +33,6 @@ export class SetMembershipTable {
 
     public compare(other: SetMembershipTable): Array<number> {
         let diffs = [];
-        console.log('comp', this.bitstring, other.bitstring);
         for (let i = 0; i < Math.min(this.bitstring.length, other.bitstring.length); i++) {
             if (this.bitstring[i] != other.bitstring[i])
                 diffs.push(i + 1);
@@ -44,14 +42,12 @@ export class SetMembershipTable {
 
     private buildHeader(exprs: SetTreeExpr[], lexical: Array<string>) {
         this.header = [];
-
         lexical.forEach((val) => {
             this.header.push(val);
         });
         for (let expr of exprs) {
             this.header.push(expr.toString());
         }
-
     }
 
     public build(expr: SetTreeExpr, vars: Map<string, AlgebraicSet>) {
