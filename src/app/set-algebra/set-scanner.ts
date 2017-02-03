@@ -35,6 +35,7 @@ export class Scanner {
         '∩': TokenType.intersection,
         'difference': TokenType.difference,
         '-': TokenType.difference,
+        '−': TokenType.difference,
         '\\': TokenType.difference,
         '^C': TokenType.complement,
         '!': TokenType.complement,
