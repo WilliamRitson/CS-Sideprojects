@@ -39,7 +39,7 @@
   </md-card-title>
   <md-card-content>
     <p *ngIf="smts[0].isSame(smts[1])">The expressions are algebraically equivalent.</p>
-    <p *ngIf="!smts[0].isSame(smts[1])">The expressions are not algebraically equivalent.
+    <p *ngIf="!smts[0].isSame(smts[1])">The expressions may not be algebraically equivalent.
 
       They differ on lines {{smts[0].compare(smts[1]).join(', ')}}.
     </p>
