@@ -60,6 +60,9 @@ import { SetAlgebraComponent } from './set-algebra/set-algebra.component';
     MaterialModule.forRoot(),
     RouterModule.forRoot([
       {
+        path: 'tree', component: TreeViewComponent,
+      },
+      {
         path: 'cache', component: MemorySimulatorComponent,
         data: {
           title: 'Cache Simulator'

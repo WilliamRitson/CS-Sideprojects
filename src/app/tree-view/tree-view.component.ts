@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Graph } from '../graph'; 
-import { DrawTree } from '../draw-tree';
+import { Graph } from '../graph';
+import { DrawableTree, DrawTree, buchheim } from './draw-tree';
 import 'sigma';
 
 
@@ -16,9 +16,13 @@ export class TreeViewComponent implements OnInit {
   source: string;
 
   constructor() {
-    setTimeout(() => {
-
-    }, 1);
+    let dt = new DrawableTree("A", [
+      new DrawableTree("B"),
+      new DrawableTree("C"),
+    ]);
+    console.log(dt);
+    let layout = buchheim(new DrawTree(dt));
+    console.log(layout);
   }
 
   refresh() {
