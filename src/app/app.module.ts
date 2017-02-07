@@ -5,6 +5,8 @@ import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 
 import { MaterialModule } from '@angular/material';
+import { FlexLayoutModule } from '@angular/flex-layout';
+
 
 import {
   LocationStrategy,
@@ -58,6 +60,7 @@ import { SetAlgebraComponent } from './set-algebra/set-algebra.component';
     FormsModule,
     HttpModule,
     MaterialModule.forRoot(),
+    FlexLayoutModule.forRoot(),
     RouterModule.forRoot([
       {
         path: 'tree', component: TreeViewComponent,
