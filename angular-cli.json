@@ -1,7 +1,7 @@
 {
   "project": {
     "version": "1.0.0-beta.15",
-    "name": "cs110"
+    "name": "cs-projects"
   },
   "apps": [
     {
@@ -15,9 +15,14 @@
       "prefix": "app",
       "mobile": false,
       "styles": [
-        "styles.css"
+        "styles.css",
+        "../node_modules/treant-js/Treant.css"
       ],
-      "scripts": ["../node_modules/sigma/build/sigma.min.js"],
+      "scripts": [
+        "../node_modules/sigma/build/sigma.min.js",
+        "../node_modules/treant-js/vendor/raphael.js",
+        "../node_modules/treant-js/Treant.js"
+      ],
       "environments": {
         "source": "environments/environment.ts",
         "dev": "environments/environment.ts",

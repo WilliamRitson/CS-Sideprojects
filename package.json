@@ -27,6 +27,7 @@
     "lodash": "^4.17.0",
     "rxjs": "^5.0.3",
     "sigma": "^1.2.0",
+    "treant-js": "^1.0.1",
     "ts-helpers": "^1.1.1",
     "typescript-collections": "^1.2.3",
     "zone.js": "^0.7.2"
