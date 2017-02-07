@@ -1,4 +1,4 @@
 <md-input  [(ngModel)]="valueString" (ngModelChange)="updateValue(nv)"></md-input>
-<select [ngModel]="radix" (ngModelChange)="changeRadix($event)">
-  <option *ngFor="let r of radixes" [ngValue]="r.value">{{r.name}}</option>
-</select>
+<md-select [ngModel]="radix" (ngModelChange)="changeRadix($event)">
+  <md-option *ngFor="let r of radixes" [value]="r.value">{{r.name}}</md-option>
+</md-select>

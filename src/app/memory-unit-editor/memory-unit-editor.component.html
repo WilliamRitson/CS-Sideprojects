@@ -1,6 +1,6 @@
 <span>
   <md-input  [(ngModel)]="value.amount" type="number"></md-input>
-  <select [(ngModel)]="value.unit">
-    <option *ngFor="let unit of units" [ngValue]="parseInt(unit)">{{label(unit)}}</option>
-  </select>
+  <md-select [(ngModel)]="value.unit">
+    <md-option *ngFor="let unit of units" [value]="parseInt(unit)">{{label(unit)}}</md-option>
+  </md-select>
 </span>
