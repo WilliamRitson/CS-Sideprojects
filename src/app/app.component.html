@@ -4,9 +4,14 @@
 
   <span class="fill-remaining-space"></span>
 
-  <button md-icon-button *ngIf="help.helpUrl" (click)="gotoHelp()">
+  <button md-icon-button *ngIf="help.helpUrl" (click)="gotoHelp()" md-tooltip="Help">
       <md-icon>help</md-icon>
-    </button>
+  </button>
+
+  <button md-icon-button (click)="feedback()" md-tooltip="Feedback">
+      <md-icon>feedback</md-icon>
+  </button>
+
 </md-toolbar>
 
 <md-sidenav-layout>

@@ -14,6 +14,7 @@ export class HelpService {
     });
   }
 
+ 
   gotoHelpUrl() {
     window.open(this.helpUrl, '_blank');
   }

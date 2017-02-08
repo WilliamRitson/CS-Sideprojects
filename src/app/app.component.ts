@@ -7,9 +7,14 @@ import { HelpService } from './help.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  constructor(public help: HelpService) {}
+  constructor(public help: HelpService) { }
 
-  gotoHelp () {
+  gotoHelp() {
     this.help.gotoHelpUrl();
   }
+
+  feedback() {
+    window.open('mailto:william.ritson@gmail.com?subject=Website Feedback')
+  }
+
 }
