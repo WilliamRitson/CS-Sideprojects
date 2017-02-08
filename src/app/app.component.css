@@ -61,3 +61,8 @@
   text-align: left;
   text-decoration: none;
 }
+
+
+md-sidenav-layout {
+    min-height: 100vh;
+}

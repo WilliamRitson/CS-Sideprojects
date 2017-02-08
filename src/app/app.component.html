@@ -4,24 +4,9 @@
 
   <span class="fill-remaining-space"></span>
 
-
-  <!--
-    <button md-icon-button [md-menu-trigger-for]="menu">
-      <md-icon>more_vert</md-icon>
+  <button md-icon-button *ngIf="help.helpUrl" (click)="gotoHelp()">
+      <md-icon>help</md-icon>
     </button>
-
-    <md-menu x-position="before" #menu="mdMenu">
-      <button md-menu-item> 
-      <md-icon> save </md-icon>
-      <span> Save </span>
-      </button>
-      <button md-menu-item> 
-        <md-icon> storage </md-icon>
-        <span> Load </span>
-      </button>
-    </md-menu>
-    -->
-
 </md-toolbar>
 
 <md-sidenav-layout>
@@ -69,9 +54,9 @@
     </md-list>
   </md-sidenav>
 
-<div class="app-content">
-  <router-outlet></router-outlet>
-</div>
+  <div class="app-content">
+    <router-outlet></router-outlet>
+  </div>
 
 
 </md-sidenav-layout>

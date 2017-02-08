@@ -12,9 +12,10 @@ import {
   LocationStrategy,
   HashLocationStrategy
 } from '@angular/common';
-
+ 
 import { SaveService } from './save.service';
 import { MipsService } from './mips.service';
+import { HelpService } from './help.service';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -79,12 +80,16 @@ import { SetAlgebraComponent } from './set-algebra/set-algebra.component';
       },
       {
         path: 'set-algebra', component: SetAlgebraComponent,
+        data: {
+          helpUrl: 'https://www.williamritson.com/projects/2017/02/02/smt-generator'
+        }
       },
       {
         path: 'pipe',
         component: PipelineDiagramComponent,
         data: {
-          title: 'Pipeline Digram Generator'
+          title: 'Pipeline Digram Generator',
+          helpUrl: 'http://www.google.com'
         }
       },
       {
@@ -105,7 +110,7 @@ import { SetAlgebraComponent } from './set-algebra/set-algebra.component';
       { path: '**', component: HomeComponent }
     ])
   ],
-  providers: [SaveService, MipsService, { provide: LocationStrategy, useClass: HashLocationStrategy }],
+  providers: [SaveService, HelpService, MipsService, { provide: LocationStrategy, useClass: HashLocationStrategy }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

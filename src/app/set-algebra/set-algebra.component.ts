@@ -5,6 +5,8 @@ import { Parser } from './set-parser';
 import { SetTreeExpr } from './set-expr';
 import { SetMembershipTable } from './set-membership-table';
 
+import { HelpService } from '../help.service';
+
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
 
@@ -22,7 +24,7 @@ export class SetAlgebraComponent implements OnInit {
   exprs: Array<SetTreeExpr>;
   smts: Array<SetMembershipTable>;
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute, private help: HelpService) {
     this.sources = [
       route.snapshot.params['expr1'] || '(A union B)^C',
       route.snapshot.params['expr2'] || 'A^C intersection B^C'
@@ -31,6 +33,9 @@ export class SetAlgebraComponent implements OnInit {
     this.scanner = new Scanner();
     this.parser = new Parser();
 
+    route.data.subscribe(data => {
+      help.setHelpUrl(data['helpUrl']);
+    })
     route.params.subscribe(params => {
       this.sources[0] = params['expr1'] || this.sources[0];
       this.sources[1] = params['expr2'] || this.sources[1];
