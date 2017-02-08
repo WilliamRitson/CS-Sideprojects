@@ -1,46 +1,11 @@
-<md-sidenav-layout>
-  <md-sidenav #start mode="side" class="app-sidenav">
-    Navigation
-    <br>
-    <md-list>
-      <md-list-item>
-        <button md-button (click)="start.close()" routerLink="/" routerLinkActive="active">Home</button>
-      </md-list-item>
-      <md-list-item>
-        <button md-button (click)="start.close()" routerLink="/cache" routerLinkActive="active">Cache Simulator</button>
-      </md-list-item>
-      <md-list-item>
-        <button md-button (click)="start.close()" routerLink="/pipe" routerLinkActive="active">Pipeline Simulator</button>
-      </md-list-item>
-      <md-list-item>
-        <button md-button (click)="start.close()" routerLink="/graph" routerLinkActive="active">Graph Search</button>
-      </md-list-item>
-      <md-list-item>
-        <button md-button (click)="start.close()" routerLink="/ai-games" routerLinkActive="active">Minimax</button>
-      </md-list-item>
-      <md-list-item>
-        <button md-button (click)="start.close()" routerLink="/stable-marriage" routerLinkActive="active">Stable Marriage</button>
-      </md-list-item>
-      <md-list-item>
-        <button md-button (click)="start.close()" routerLink="/set-algebra" routerLinkActive="active">Set Membership Table</button>
-      </md-list-item>
-      <!--
-      <md-list-item> 
-        <button md-button #closeStartButton (click)="start.close()">Close</button>
-      </md-list-item>
-      -->
-    </md-list>
-  </md-sidenav>
+<md-toolbar color="primary">
+  <button class="app-icon-button" (click)="start.toggle()"><md-icon class="app-toolbar-menu">menu</md-icon></button>
+  <span>Will's C.S Sideprojects</span>
+
+  <span class="fill-remaining-space"></span>
 
 
-  <md-toolbar color="primary">
-    <button class="app-icon-button" (click)="start.toggle()"><md-icon class="app-toolbar-menu">menu</md-icon></button>
-    <span>Will's C.S Sideprojects</span>
-
-    <span class="fill-remaining-space"></span>
-
-    
-    <!--
+  <!--
     <button md-icon-button [md-menu-trigger-for]="menu">
       <md-icon>more_vert</md-icon>
     </button>
@@ -57,10 +22,56 @@
     </md-menu>
     -->
 
-  </md-toolbar>
-  <div class="app-content">
-    <router-outlet></router-outlet>
-  </div>
+</md-toolbar>
+
+<md-sidenav-layout>
+  <md-sidenav #start mode="side" class="app-sidenav">
+    <h2>Navigation</h2>
+    <br>
+    <md-list>
+      <md-list-item>
+        <button md-button (click)="start.close()" routerLink="/" routerLinkActive="active">
+          <md-icon>home</md-icon> Home
+        </button>
+      </md-list-item>
+      <md-list-item>
+        <button md-button (click)="start.close()" routerLink="/cache" routerLinkActive="active">
+        <md-icon>storage</md-icon> Cache Simulator
+        </button>
+      </md-list-item>
+      <md-list-item>
+        <button md-button (click)="start.close()" routerLink="/pipe" routerLinkActive="active">
+        <md-icon>clear_all</md-icon> Pipeline Simulator
+        </button>
+      </md-list-item>
+      <md-list-item>
+        <button md-button (click)="start.close()" routerLink="/graph" routerLinkActive="active">
+        <md-icon>search</md-icon> Graph Search</button>
+      </md-list-item>
+      <md-list-item>
+        <button md-button (click)="start.close()" routerLink="/ai-games" routerLinkActive="active">
+        <md-icon>games</md-icon> Minimax
+        </button>
+      </md-list-item>
+      <md-list-item>
+        <button md-button (click)="start.close()" routerLink="/stable-marriage" routerLinkActive="active">
+        <md-icon>group</md-icon> Stable Marriage</button>
+      </md-list-item>
+      <md-list-item>
+        <button md-button (click)="start.close()" routerLink="/set-algebra" routerLinkActive="active">
+        <md-icon>code</md-icon> Set Membership Table</button>
+      </md-list-item>
+      <!--
+      <md-list-item> 
+        <button md-button #closeStartButton (click)="start.close()">Close</button>
+      </md-list-item>
+      -->
+    </md-list>
+  </md-sidenav>
+
+<div class="app-content">
+  <router-outlet></router-outlet>
+</div>
 
 
 </md-sidenav-layout>
