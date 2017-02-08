@@ -1,10 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
+
 @import '~@angular/material/core/theming/prebuilt/deeppurple-amber.css';
-
-
-
 body {
-    margin:0px;
+    margin: 0px;
 }
 
 .big-card {
@@ -13,7 +11,7 @@ body {
 
 .flex-stack-card {
     max-width: 100%;
-    float:left;
+    float: left;
 }
 
 .row {
@@ -21,8 +19,9 @@ body {
     overflow: hidden;
 }
 
-
-
+.button-link {
+    color: black;
+}
 
 .horizontal-table {
     text-align: center;
@@ -32,8 +31,8 @@ body {
 
 .horizontal-table th {
     border-bottom: 2px solid gray;
-    padding-right:2px;
-    padding-left:2px;
+    padding-right: 2px;
+    padding-left: 2px;
 }
 
 .horizontal-table td {
@@ -41,6 +40,7 @@ body {
     padding-bottom: 8px;
     border: 0.5px solid lightgray;
 }
+
 .lr {
     border-left: gray;
     border-left-style: solid;

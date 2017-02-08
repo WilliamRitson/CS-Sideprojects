@@ -26,6 +26,7 @@
     "chance": "^1.0.4",
     "core-js": "^2.4.1",
     "lodash": "^4.17.0",
+    "material-design-icons": "^3.0.1",
     "rxjs": "^5.0.3",
     "sigma": "^1.2.0",
     "treant-js": "^1.0.1",

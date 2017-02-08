@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Cache, CacheBlock, MemoryQuantity, MemoryUnit, CacheConfiguraiton, MemoryAccess, SimulationResult } from '../cache';
 import { clone, maxBy, sumBy } from 'lodash';
 import { SaveService } from '../save.service';
+import { HelpService } from '../help.service';
 
 enum AccessType {
   read,
@@ -46,7 +47,7 @@ export class MemorySimulatorComponent implements OnInit {
     }
   }
 
-  constructor(public saver: SaveService) {
+  constructor(public saver: SaveService, private help:HelpService) {
     this.config = new CacheConfiguraiton();
     this.config.minimumAddressableUnit = new MemoryQuantity(1, MemoryUnit.byte);
     this.config.cacheSize = new MemoryQuantity(1, MemoryUnit.kibibyte);
@@ -56,6 +57,7 @@ export class MemorySimulatorComponent implements OnInit {
     this.config.lruPolicy = true;
 
     saver.load(this.unloadSaveData.bind(this), 'memory-sim');
+    help.setHelpUrl('https://www.williamritson.com/projects/2017/02/07/cache-simulator');
 
     this.cache = new Cache();
     this.results = [];

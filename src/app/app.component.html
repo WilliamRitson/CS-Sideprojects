@@ -18,38 +18,56 @@
   <md-sidenav #start mode="side" class="app-sidenav">
     <h2>Navigation</h2>
     <br>
-    <md-list>
+    <md-list class="nav-list">
+
       <md-list-item>
-        <button md-button (click)="start.close()" routerLink="/" routerLinkActive="active">
+        <a md-line routerLink="/" routerLinkActive="active">
+          <button md-button (click)="start.close()" routerLink="/" routerLinkActive="active">
           <md-icon>home</md-icon> Home
         </button>
+        </a>
       </md-list-item>
       <md-list-item>
-        <button md-button (click)="start.close()" routerLink="/cache" routerLinkActive="active">
-        <md-icon>storage</md-icon> Cache Simulator
-        </button>
+        <a md-line routerLink="/cache" routerLinkActive="active">
+          <button md-button (click)="start.close()">
+            <md-icon>storage</md-icon> Cache Simulator
+          </button>
+        </a>
       </md-list-item>
       <md-list-item>
-        <button md-button (click)="start.close()" routerLink="/pipe" routerLinkActive="active">
-        <md-icon>clear_all</md-icon> Pipeline Simulator
-        </button>
+        <a md-line routerLink="/pipe" routerLinkActive="active">
+          <button md-button (click)="start.close()">
+           <md-icon>clear_all</md-icon> Pipeline Simulator
+          </button>
+        </a>
       </md-list-item>
       <md-list-item>
-        <button md-button (click)="start.close()" routerLink="/graph" routerLinkActive="active">
-        <md-icon>search</md-icon> Graph Search</button>
+        <a md-line routerLink="/graph" routerLinkActive="active">
+          <button md-button (click)="start.close()">
+            <md-icon>search</md-icon> Graph Search
+          </button>
+        </a>
       </md-list-item>
       <md-list-item>
-        <button md-button (click)="start.close()" routerLink="/ai-games" routerLinkActive="active">
-        <md-icon>games</md-icon> Minimax
-        </button>
+        <a md-line routerLink="/ai-games" routerLinkActive="active">
+          <button md-button (click)="start.close()">
+            <md-icon>games</md-icon> Minimax
+          </button>
+        </a>
       </md-list-item>
       <md-list-item>
-        <button md-button (click)="start.close()" routerLink="/stable-marriage" routerLinkActive="active">
-        <md-icon>group</md-icon> Stable Marriage</button>
+        <a routerLink="/stable-marriage" routerLinkActive="active">
+          <button md-button (click)="start.close()">
+            <md-icon>group</md-icon> Stable Marriage
+          </button>
+        </a>
       </md-list-item>
       <md-list-item>
-        <button md-button (click)="start.close()" routerLink="/set-algebra" routerLinkActive="active">
-        <md-icon>code</md-icon> Set Membership Table</button>
+        <a md-line routerLink="/set-algebra" routerLinkActive="active">
+          <button md-button (click)="start.close()">
+            <md-icon>code</md-icon> Set Membership Table
+          </button>
+        </a>
       </md-list-item>
       <!--
       <md-list-item> 

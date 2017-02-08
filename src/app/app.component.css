@@ -4,6 +4,10 @@
   width: 25%;
 }
 
+.nav-list a {
+  color: black;
+}
+
 .text-editor {
   width: 100%;
 }
