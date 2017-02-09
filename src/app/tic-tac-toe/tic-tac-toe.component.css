@@ -1,17 +1,22 @@
+.game-container{
+    float:left;   
+}
+
 .tic-tac-toe-board {
-    width: 600px;
-    height: 600px;
+    min-height: 60vh;
+    height: 90%;
 }
 
 .tic-tac-toe-row {
+    box-sizing: border-box;
     width: 100%;
-    height: 33%;
+    height: calc(20vh - 2px);
     padding: 0px;
     margin: 0px;
 }
 
 .tic-tac-toe-cell {
-    width: 33%;
+    width: 20vw;
     height: 100%;
     padding: 0px;
     margin: 0px;
