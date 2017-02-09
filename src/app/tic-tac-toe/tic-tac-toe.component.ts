@@ -15,7 +15,10 @@ export class TicTacToeComponent implements OnInit {
   @Input() ai2: GameAI;
   automove: boolean;
   winner: number;
+  size: number;
+
   constructor() {
+    this.size = 300;
     this.reset();
     this.automove = true;
   }
@@ -27,18 +30,22 @@ export class TicTacToeComponent implements OnInit {
     this.winner = this.game.getWinner();
     return this.winner != 0;
   }
+
+  getCord(index: number): number {
+    return (index) * (1 / 3) * this.size;
+  }
   makeMove(row: number, col: number) {
     if (this.isOver())
       return;
     this.game.executeMove(new TicTacToeMove(row, col));
     this.isOver();
 
-    
+
     if (!this.automove || this.isOver())
       return;
     let aiMove = <TicTacToeMove>this.ai2.getNextMove(this.game);
     this.game.executeMove(aiMove);
-    
+
   }
   runAiMove() {
     if (this.isOver())
@@ -68,6 +75,10 @@ export class TicTacToeComponent implements OnInit {
     }
     runAiGameStep();
 
+  }
+
+  getWinAngle() {
+    return this.game.getWinningAngle();
   }
 
   winString() {

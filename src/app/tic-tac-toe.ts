@@ -1,4 +1,4 @@
-import {GameMove, SearchableGame} from './searchable-game';
+import { GameMove, SearchableGame } from './searchable-game';
 
 export enum TicTacToeMark {
     B = 0,
@@ -12,8 +12,8 @@ export class TicTacToeMove implements GameMove {
 
 export class TicTacToe implements SearchableGame {
     public state: Array<Array<TicTacToeMark>>;
-    public scores: Array<number>; 
-    
+    public scores: Array<number>;
+
     private moveCount: number;
     private currPlayer: number;
     private static maxPlayers: number = 2;
@@ -25,20 +25,20 @@ export class TicTacToe implements SearchableGame {
             [0, 0, 0]
         ];
         //[row1, row2, row3, col1, col2, col3, diag1, diag2].
-        this.scores =  [0, 0, 0, 0, 0, 0, 0, 0];
+        this.scores = [0, 0, 0, 0, 0, 0, 0, 0];
         this.moveCount = 0;
         this.currPlayer = 1;
     }
     getCurrentPlayer() {
         return this.currPlayer;
     }
-    getHeuristicValue(player:number) {
+    getHeuristicValue(player: number) {
         let sum = this.scores.reduce((a, b) => a + b);
         if (player == 1) {
             return sum;
         }
         return -sum;
-        
+
     }
     getMoves() {
         let moves = [];
@@ -67,7 +67,7 @@ export class TicTacToe implements SearchableGame {
     executeMove(move: TicTacToeMove) {
         let player = this.currPlayer;
         this.state[move.row][move.col] = player;
-        
+
         this.moveCount++;
         let score = this.scores;
         let point = player == 1 ? 1 : -1;
@@ -75,12 +75,30 @@ export class TicTacToe implements SearchableGame {
         score[move.row] += point;
         score[TicTacToe.boardSize + move.col] += point;
         if (move.row == move.col)
-             score[2*TicTacToe.boardSize] += point;
-        if (TicTacToe.boardSize - 1 - move.col == move.row) 
-            score[2*TicTacToe.boardSize + 1] += point;
+            score[2 * TicTacToe.boardSize] += point;
+        if (TicTacToe.boardSize - 1 - move.col == move.row)
+            score[2 * TicTacToe.boardSize + 1] += point;
 
         this.currPlayer = (TicTacToe.maxPlayers + 1) - player;
     }
+    
+    private static angles = [
+        {from:{r:0.5, c:0}, to:{r:0.5, c:3}}, // row1
+        {from:{r:1.5, c:0}, to:{r:1.5, c:3}}, // row2
+        {from:{r:2.5, c:0}, to:{r:2.5, c:3}}, // row3
+
+        {from:{r:0, c:0.5}, to:{r:3, c:0.5}}, // col1 
+        {from:{r:0, c:1.5}, to:{r:3, c:1.5}}, // col2
+        {from:{r:0, c:2.5}, to:{r:3, c:2.5}}, // col3
+
+        {from:{r:0, c:0}, to:{r:3, c:3}}, // diag1
+        {from:{r:0, c:3}, to:{r:3, c:0}}, // diag2
+    ];
+    getWinningAngle() {
+        let winning = this.scores.findIndex(score => Math.abs(score) == TicTacToe.boardSize);
+        return TicTacToe.angles[winning];
+    }
+
     getWinner() {
         for (let i = 0; i < this.scores.length; i++) {
             if (this.scores[i] == TicTacToe.boardSize) {
@@ -94,10 +112,10 @@ export class TicTacToe implements SearchableGame {
         }
         return 0;
     }
-    toString () {
-        return this.state.map(row => row.map(cell =>{
-                return TicTacToeMark[cell];
-            }).join('|')
+    toString() {
+        return this.state.map(row => row.map(cell => {
+            return TicTacToeMark[cell];
+        }).join('|')
         ).join('\n-+-+-\n')
     }
 }

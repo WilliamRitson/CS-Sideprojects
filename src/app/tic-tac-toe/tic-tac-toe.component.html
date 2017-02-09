@@ -1,15 +1,37 @@
 <md-card class="big-card game-container">
   <md-card-title>Tic Tac Toe</md-card-title>
   <md-card-content>
-    <div class="tic-tac-toe-board">
-      <div class="tic-tac-toe-row" *ngFor="let row of game.state; let r = index;">
-        <div class="tic-tac-toe-cell" *ngFor="let col of row; let c = index;" (click)="makeMove(r, c)">
-          <img *ngIf="col == 1" class="ttt-icon" src="assets/X-icon.svg" alt="X">
-          <img *ngIf="col == 2" class="ttt-icon" src="assets/O-icon.svg" alt="O">
-        </div>
-      </div>
-    </div>
-    {{winString()}}
+
+
+    <svg [attr.width]="size" [attr.height]="size">
+      <g *ngFor="let row of game.state; let r = index;">
+
+        <g *ngFor="let col of row; let c = index;" 
+          attr.transform="translate({{(1/3) * c * size}}, {{(1/3) * r * size}})">
+          <rect (click)="makeMove(r, c)" [attr.width]="(1/3) * size " [attr.height]="(1/3) * size" fill-opacity="0" />
+          <image *ngIf="col == 1" [attr.width]="(1/3) * size " [attr.height]="(1/3) * size" xlink:href="assets/X-icon.svg" alt="X"/>
+          <image *ngIf="col == 2" [attr.width]="(1/3) * size " [attr.height]="(1/3) * size" xlink:href="assets/O-icon.svg" alt="O"/>          
+        </g>
+       
+        <!-- X Axis -->
+        <line  *ngIf="r != 0"
+        [attr.x1]="0"       [attr.y1]="(1/3) * r * size" 
+        [attr.x2]="size"    [attr.y2]="(1/3) * r * size"
+        stroke-width="2" stroke="black"/>
+
+          <!-- Y  Axis Label -->
+        <line  *ngIf="r != 0"
+        [attr.x1]="(1/3) * r * size" [attr.y1]="size" 
+        [attr.x2]="(1/3) * r * size" [attr.y2]="0" 
+        stroke-width="2" stroke="black"/>
+      </g>
+
+        <!-- Win STroke -->
+        <line  *ngIf="isOver() && getWinAngle()"
+        [attr.x1]="getCord(getWinAngle().from.c)" [attr.y1]="getCord(getWinAngle().from.r)" 
+        [attr.x2]="getCord(getWinAngle().to.c)"   [attr.y2]="getCord(getWinAngle().to.r )" 
+        stroke-width="3" stroke="red"/>
+    </svg>    
   </md-card-content>
   <md-card-actions>
     <button md-raised-button color="primary" (click)="reset()">Reset</button>

@@ -34,6 +34,7 @@ import { StableMarriageComponent } from './stable-marriage/stable-marriage.compo
 import { OrdinalPipe } from './ordinal.pipe';
 import { ScatterPlotComponent } from './scatter-plot/scatter-plot.component';
 import { SetAlgebraComponent } from './set-algebra/set-algebra.component';
+import { UltimateTicTacToeComponent } from './ultimate-tic-tac-toe/ultimate-tic-tac-toe.component';
 
 
 @NgModule({
@@ -55,6 +56,7 @@ import { SetAlgebraComponent } from './set-algebra/set-algebra.component';
     OrdinalPipe,
     ScatterPlotComponent,
     SetAlgebraComponent,
+    UltimateTicTacToeComponent,
   ],
   imports: [
     BrowserModule,

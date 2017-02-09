@@ -2,11 +2,6 @@
     float:left;   
 }
 
-.tic-tac-toe-board {
-    min-height: 60vh;
-    height: 90%;
-}
-
 .tic-tac-toe-row {
     box-sizing: border-box;
     width: 100%;
