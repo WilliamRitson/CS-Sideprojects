@@ -10,15 +10,18 @@ import { GameAI } from '../game-ai';
 export class TicTacToeComponent implements OnInit {
   @Input() game: TicTacToe;
   @Input() size: number;
+  @Input() active: boolean = true;
+  @Input() delegate: boolean = false;
 
   @Output() onMove: EventEmitter<TicTacToe> = new EventEmitter<TicTacToe>();
+  @Output() onDelegatedMove: EventEmitter<TicTacToeMove> = new EventEmitter<TicTacToeMove>();
   @Output() onEnd: EventEmitter<number> = new EventEmitter<number>();
   winner: number;
 
   constructor() {
     this.size = 300;
   }
-  
+
   isOver() {
     this.winner = this.game.getWinner();
     return this.winner != 0;
@@ -29,8 +32,12 @@ export class TicTacToeComponent implements OnInit {
   }
 
   makeMove(row: number, col: number) {
-    if (this.isOver())
+    if (!this.active || this.isOver())
       return;
+    if (this.delegate) {
+      this.onDelegatedMove.emit(new TicTacToeMove(row, col));
+      return;
+    }
     this.game.executeMove(new TicTacToeMove(row, col));
     this.onMove.emit(this.game);
   }

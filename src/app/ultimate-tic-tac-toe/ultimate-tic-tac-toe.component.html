@@ -1,3 +1,38 @@
-<p>
-  ultimate-tic-tac-toe works!
-</p>
+  <div class="board-container">
+
+  <svg [attr.width]="size" [attr.height]="size" class="overlay" >
+    
+    <g *ngFor="let row of game.state; let r = index;">
+      <!-- X Axis -->
+      <line  *ngIf="r != 0"
+      [attr.x1]="0"       [attr.y1]="(1/3) * r * size" 
+      [attr.x2]="size"    [attr.y2]="(1/3) * r * size"
+      stroke-width="2" stroke="black"/>
+
+        <!-- Y Label -->
+      <line  *ngIf="r != 0"
+      [attr.x1]="(1/3) * r * size" [attr.y1]="size" 
+      [attr.x2]="(1/3) * r * size" [attr.y2]="0" 
+      stroke-width="2" stroke="black"/>
+    </g>
+
+      <!-- Win Stroke -->
+      <line  *ngIf="isOver() && getWinAngle()"
+      [attr.x1]="getCord(getWinAngle().from.c)" [attr.y1]="getCord(getWinAngle().from.r)" 
+      [attr.x2]="getCord(getWinAngle().to.c)"   [attr.y2]="getCord(getWinAngle().to.r )" 
+      stroke-width="3" stroke="red"/>
+  </svg>    
+
+  <div class="board">
+    <div  *ngFor="let row of game.state; let r = index;" class="row">
+      <div  *ngFor="let col of row; let c = index;" [class.inactive]="inactive(r, c)" class="cell" [style.padding]="padding" (mouseover)='setTarget(r, c)' >
+              <tic-tac-toe [size]="size * (1/3) - padding"
+              [game]="game.state[r][c]"  (onDelegatedMove)="makeMove($event)"
+              delegate="true" [active]="game.boardActive[r][c]"></tic-tac-toe>
+      </div>
+    </div>
+  </div>
+
+  p: {{game.getCurrentPlayer()}} s: {{game.scores}}
+
+</div>

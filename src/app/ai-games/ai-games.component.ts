@@ -4,6 +4,7 @@ import { MCTS } from '../mcts';
 import { SearchableGame } from '../searchable-game'
 import { GameAI } from '../game-ai';
 import { TicTacToe } from '../tic-tac-toe';
+import { UltimateTicTacToe } from '../ultimate-tic-tac-toe';
 
 class Player {
   constructor(public isHuman: boolean, public ai: GameAI, public aiIndex: number) { }
@@ -20,10 +21,10 @@ export class AiGamesComponent implements OnInit {
   aiNames: Array<string>;
   game: SearchableGame;
   winner: number;
-  automove: boolean = true;
+  automove: boolean = false;
 
   constructor() {
-    this.game = new TicTacToe();
+    this.game = new UltimateTicTacToe();
     this.aiChoices = [new Minimax(), new MCTS()];
     this.aiNames = ['minimax', 'mcts'];
     this.players = [
@@ -43,7 +44,7 @@ export class AiGamesComponent implements OnInit {
   }
 
   reset() {
-    this.game = new TicTacToe();
+    this.game = new UltimateTicTacToe();
     this.winner = 0;
   }
 

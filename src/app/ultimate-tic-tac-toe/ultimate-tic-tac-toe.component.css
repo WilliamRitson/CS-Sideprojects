@@ -1,0 +1,27 @@
+.board {
+    margin-top: -100%;
+}
+
+.board-container {
+    position: relative;
+    width: 600px;
+    height: 600px;
+}
+
+.row {
+    height: 33%;
+    float: left;
+}
+
+.overlay {
+    pointer-events: none;
+}
+
+.cell {
+    padding: 10px;
+    float: left;
+}
+
+.inactive {
+    background-color: lightgrey;
+}
