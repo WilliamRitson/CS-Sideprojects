@@ -12,7 +12,7 @@ import {
   LocationStrategy,
   HashLocationStrategy
 } from '@angular/common';
- 
+
 import { SaveService } from './save.service';
 import { MipsService } from './mips.service';
 import { HelpService } from './help.service';
@@ -56,8 +56,7 @@ import { UltimateTicTacToeComponent } from './ultimate-tic-tac-toe/ultimate-tic-
     OrdinalPipe,
     ScatterPlotComponent,
     SetAlgebraComponent,
-    UltimateTicTacToeComponent,
-  ],
+    UltimateTicTacToeComponent],
   imports: [
     BrowserModule,
     FormsModule,
