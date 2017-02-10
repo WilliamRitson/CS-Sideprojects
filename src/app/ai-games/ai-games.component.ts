@@ -10,42 +10,53 @@ class Player {
   constructor(public isHuman: boolean, public ai: GameAI, public aiIndex: number) { }
 }
 
+interface SearchableGameClass {
+  new (): SearchableGame;
+}
+
+interface AiClass {
+  new (): GameAI;
+}
+
 @Component({
   selector: 'app-ai-games',
   templateUrl: './ai-games.component.html',
   styleUrls: ['./ai-games.component.css']
 })
 export class AiGamesComponent implements OnInit {
-  aiChoices: Array<GameAI>;
+
   players: Array<Player>;
-  aiNames: Array<string>;
+
   game: SearchableGame;
   winner: number;
   automove: boolean = false;
+  aiClass: Array<AiClass> = [Minimax, MCTS];
+  aiNames: Array<string> = ['minimax', 'mcts'];
+  games: Array<SearchableGameClass> = [TicTacToe, UltimateTicTacToe];
+  gameNames: Array<string> = ["Tic Tac Toe", "Ultimate TTT"];
+  gameIndex: number = 0;
 
   constructor() {
-    this.game = new UltimateTicTacToe();
-    this.aiChoices = [new Minimax(), new MCTS()];
-    this.aiNames = ['minimax', 'mcts'];
+    this.reset();
     this.players = [
-      new Player(true, this.aiChoices[0], 0),
-      new Player(false, this.aiChoices[0], 1),
+      new Player(true, new Minimax(), 0),
+      new Player(false, new Minimax(), 1),
     ]
   }
 
+  reset() {
+    this.game = new this.games[this.gameIndex]();
+    this.winner = 0;
+  }
+
   setAI(player: Player) {
-    player.ai = this.aiChoices[player.aiIndex];
+    player.ai = new this.aiClass[player.aiIndex]();
   }
 
   respond(state: SearchableGame) {
-    if (!this.automove || state.getWinner() != 0)
+    if (!this.automove)
       return;
-    state.executeMove(this.aiChoices[0].getNextMove(state));
-  }
-
-  reset() {
-    this.game = new UltimateTicTacToe();
-    this.winner = 0;
+    this.runAiMove(state);
   }
 
   isOver() {
@@ -53,16 +64,20 @@ export class AiGamesComponent implements OnInit {
     return this.winner != 0;
   }
 
-  runAiMove() {
+  currPlayer():Player {
+    return this.players[this.game.getCurrentPlayer() - 1];
+  }
+
+  runAiMove(state = this.game) {
     if (this.isOver())
       return;
-     this.game.executeMove(this.aiChoices[0].getNextMove(this.game));
+    state.executeMove(this.currPlayer().ai.getNextMove(state));
   }
 
   runAiGame() {
     if (this.isOver())
       this.reset();
-    let ais = [this.aiChoices[0], this.aiChoices[0]];
+    let ais = this.players.map(player => player.ai);
     let currentAi = 0;
 
     let runAiGameStep = () => {

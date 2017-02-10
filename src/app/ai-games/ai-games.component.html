@@ -1,7 +1,34 @@
+<md-card-title>Game Config</md-card-title>
+<md-card-content></md-card-content>
+
+<md-card class="big-card flex-stack-card">
+  <md-card-title>Game Config</md-card-title>
+  <md-card-content>
+    <md-select [(ngModel)]="gameIndex" (ngModelChange)="reset()">
+      <md-option *ngFor="let name of gameNames; let i = index" [value]="i">{{name}}</md-option>
+    </md-select>
+  </md-card-content>
+</md-card>
+
+<md-card class="big-card flex-stack-card" *ngFor="let player of players; let pn = index;">
+  <md-card-title>AI {{pn + 1}} Config</md-card-title>
+  <md-card-content>
+    <!--
+    <md-select [(ngModel)]="player.aiIndex" (ngModelChange)="setAI(player)">
+      <md-option *ngFor="let name of aiNames; let i = index" [value]="i">{{name}}</md-option>
+    </md-select>
+    -->
+    <md-input-container>
+      <input type="number" md-input [(ngModel)]="player.ai.depthLimit" placeholder="Search Depth">
+    </md-input-container>
+  </md-card-content>
+</md-card>
+
 <md-card class="big-card flex-stack-card">
   <md-card-title>Game</md-card-title>
   <md-card-content>
-    <ultimate-tic-tac-toe [game]="game" (onMove)="respond($event)"></ultimate-tic-tac-toe>
+    <tic-tac-toe  *ngIf="gameIndex == 0"  [game]="game" (onMove)="respond($event)"></tic-tac-toe>
+    <ultimate-tic-tac-toe *ngIf="gameIndex == 1" [game]="game" (onMove)="respond($event)"></ultimate-tic-tac-toe>
   </md-card-content>
   <md-card-actions>
     <button md-raised-button color="primary" (click)="reset()">Reset</button>
@@ -10,4 +37,3 @@
     <md-checkbox [(ngModel)]="automove">Automove</md-checkbox>
   </md-card-actions>
 </md-card>
-

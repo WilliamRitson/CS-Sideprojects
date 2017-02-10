@@ -69,7 +69,6 @@ export class TicTacToe implements SearchableGame {
     }
     executeMove(move: TicTacToeMove) {
         let player = this.currPlayer;
-        console.log(this.state, move);
         this.state[move.row][move.col] = player;
 
         this.moveCount++;

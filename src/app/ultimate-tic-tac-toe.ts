@@ -36,18 +36,24 @@ export class UltimateTicTacToe implements SearchableGame {
         return this.currPlayer;
     }
     getHeuristicValue(player: number) {
-        let sum = this.scores.reduce((a, b) => a + b);
+        let sum = this.scores.reduce((a, b) => a + b) * 27;
+
+        for (let i = 0; i < this.state.length; i++) {
+            for (let j = 0; j < this.state[i].length; j++) {
+                sum += this.state[i][j].getHeuristicValue(player);
+            }
+        }
+
         if (player == 1) {
             return sum;
         }
         return -sum;
-
     }
     getMoves() {
         let moves = [];
         for (let i = 0; i < this.state.length; i++) {
             for (let j = 0; j < this.state[i].length; j++) {
-                if (this.boardActive[i][j])
+                if (this.boardActive[i][j] && this.state[i][j].getWinner() == GameWinner.inProgress)
                     this.state[i][j].getMoves().forEach(move => {
                         moves.push(new UltimateTicTacToeMove(i, j, move));
                     })
