@@ -86,7 +86,7 @@ export class UltimateTicTacToe implements SearchableGame {
         subgame.executeMove(move.submove);
 
         this.moveCount++;
-        console.log(subgame.getWinner(), GameWinner.inProgress)
+        //console.log(subgame.getWinner(), GameWinner.inProgress)
         if (subgame.getWinner() > GameWinner.inProgress) {
             let score = this.scores;
             let point = player == 1 ? 1 : -1;

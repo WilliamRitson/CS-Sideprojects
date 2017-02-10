@@ -29,12 +29,13 @@ export class AiGamesComponent implements OnInit {
 
   game: SearchableGame;
   winner: number;
-  automove: boolean = false;
+  automove: boolean = true;
   aiClass: Array<AiClass> = [Minimax, MCTS];
   aiNames: Array<string> = ['minimax', 'mcts'];
   games: Array<SearchableGameClass> = [TicTacToe, UltimateTicTacToe];
   gameNames: Array<string> = ["Tic Tac Toe", "Ultimate TTT"];
   gameIndex: number = 0;
+  aiMoving: boolean = false;
 
   constructor() {
     this.reset();
@@ -56,6 +57,7 @@ export class AiGamesComponent implements OnInit {
   respond(state: SearchableGame) {
     if (!this.automove)
       return;
+
     this.runAiMove(state);
   }
 
@@ -64,19 +66,25 @@ export class AiGamesComponent implements OnInit {
     return this.winner != 0;
   }
 
-  currPlayer():Player {
+  currPlayer(): Player {
     return this.players[this.game.getCurrentPlayer() - 1];
   }
 
   runAiMove(state = this.game) {
     if (this.isOver())
       return;
-    state.executeMove(this.currPlayer().ai.getNextMove(state));
+    this.aiMoving = true;
+    setTimeout(() => {
+      state.executeMove(this.currPlayer().ai.getNextMove(state));
+      this.aiMoving = false;
+    }, 0);
   }
 
   runAiGame() {
     if (this.isOver())
       this.reset();
+
+    this.aiMoving = true;
     let ais = this.players.map(player => player.ai);
     let currentAi = 0;
 
@@ -89,6 +97,8 @@ export class AiGamesComponent implements OnInit {
       currentAi = 1 - currentAi;
       if (!this.isOver()) {
         setTimeout(runAiGameStep, Math.max(0, 500 - timeUsed));
+      } else {
+        this.aiMoving = false;
       }
     }
     runAiGameStep();

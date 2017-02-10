@@ -4,7 +4,7 @@ import { GameAI } from './game-ai';
 export class Minimax implements GameAI {
     private depthLimit: number;
     private originalPlayer: number;
-    constructor(depthLimit: number = 4) {
+    constructor(depthLimit: number = 5) {
         this.depthLimit = depthLimit;
     }
     getNextMove(gameState: SearchableGame) {
