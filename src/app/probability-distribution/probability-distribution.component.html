@@ -1,0 +1,17 @@
+<md-card class="big-card flex-stack-card">
+  <md-card-title>Distribution Config</md-card-title>
+  <md-card-content>
+    <md-input-container *ngFor="let parameter of distr.parameters">
+      <input md-input [(ngModel)]="distr[parameter.val]" [placeholder]="parameter.title" [max]="parameter.max" [min]="parameter.min" type="number">
+    </md-input-container>
+  </md-card-content>
+</md-card>
+
+<md-card class="big-card flex-stack-card">
+  <md-card-title>Results</md-card-title>
+  <md-card-content>
+    <p>Probability Mass: {{distr.probabilityMassFunction() | number}}</p>
+    <p>Cumulative Distribution: {{distr.cumulativeDistributionFunction() | number}}</p>
+    <p>Variance: {{distr.variance() | number}}</p>
+  </md-card-content>
+</md-card>

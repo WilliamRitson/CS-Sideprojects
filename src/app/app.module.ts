@@ -35,6 +35,7 @@ import { OrdinalPipe } from './ordinal.pipe';
 import { ScatterPlotComponent } from './scatter-plot/scatter-plot.component';
 import { SetAlgebraComponent } from './set-algebra/set-algebra.component';
 import { UltimateTicTacToeComponent } from './ultimate-tic-tac-toe/ultimate-tic-tac-toe.component';
+import { ProbabilityDistributionComponent } from './probability-distribution/probability-distribution.component';
 
 
 @NgModule({
@@ -56,7 +57,8 @@ import { UltimateTicTacToeComponent } from './ultimate-tic-tac-toe/ultimate-tic-
     OrdinalPipe,
     ScatterPlotComponent,
     SetAlgebraComponent,
-    UltimateTicTacToeComponent],
+    UltimateTicTacToeComponent,
+    ProbabilityDistributionComponent],
   imports: [
     BrowserModule,
     FormsModule,
@@ -71,6 +73,12 @@ import { UltimateTicTacToeComponent } from './ultimate-tic-tac-toe/ultimate-tic-
         path: 'cache', component: MemorySimulatorComponent,
         data: {
           title: 'Cache Simulator'
+        }
+      },
+      {
+        path: 'probability-dist', component: ProbabilityDistributionComponent,
+        data: {
+          title: 'Probability Distribution'
         }
       },
       {
