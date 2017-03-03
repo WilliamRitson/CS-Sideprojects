@@ -1,0 +1,18 @@
+<md-card class="big-card flex-stack-card">
+  <md-card-title>Input</md-card-title>
+  <md-card-content>
+    
+  </md-card-content>
+  <md-card-actions>
+    <button md-raised-button color="primary" (click)="run()">Parse Set Expressions</button>
+  </md-card-actions>
+</md-card>
+
+<md-card class="big-card flex-stack-card">
+  <md-card-title>
+    Graph
+  </md-card-title>
+  <md-card-content>
+    <app-scatter-plot [size]="graphSize" [data]="points" [lines]="lines" [maxValX]="max" [maxValY]="max" ></app-scatter-plot>
+  </md-card-content>
+</md-card>

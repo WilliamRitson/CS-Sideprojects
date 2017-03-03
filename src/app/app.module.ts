@@ -36,6 +36,7 @@ import { ScatterPlotComponent } from './scatter-plot/scatter-plot.component';
 import { SetAlgebraComponent } from './set-algebra/set-algebra.component';
 import { UltimateTicTacToeComponent } from './ultimate-tic-tac-toe/ultimate-tic-tac-toe.component';
 import { ProbabilityDistributionComponent } from './probability-distribution/probability-distribution.component';
+import { SegmentedLeastSquaresComponent } from './segmented-least-squares/segmented-least-squares.component';
 
 
 @NgModule({
@@ -58,7 +59,8 @@ import { ProbabilityDistributionComponent } from './probability-distribution/pro
     ScatterPlotComponent,
     SetAlgebraComponent,
     UltimateTicTacToeComponent,
-    ProbabilityDistributionComponent],
+    ProbabilityDistributionComponent,
+    SegmentedLeastSquaresComponent],
   imports: [
     BrowserModule,
     FormsModule,
@@ -77,6 +79,12 @@ import { ProbabilityDistributionComponent } from './probability-distribution/pro
       },
       {
         path: 'probability-dist', component: ProbabilityDistributionComponent,
+        data: {
+          title: 'Probability Distribution'
+        }
+      },
+      {
+        path: 'segmented-least-squares', component: SegmentedLeastSquaresComponent,
         data: {
           title: 'Probability Distribution'
         }

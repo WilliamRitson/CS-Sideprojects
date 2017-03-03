@@ -1,4 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Line, Point } from '../line';
+
 
 @Component({
   selector: 'app-scatter-plot',
@@ -9,7 +11,8 @@ export class ScatterPlotComponent implements OnInit {
 
   @Input() size: number;
   pointRadius: number;
-  @Input() data: Array<[number, number]>;
+  @Input() data: Array<Point>;
+  @Input() lines: Array<Line>;
   @Input() maxValX: number;
   @Input() maxValY: number;
   @Input() xAxisLabel: string;
@@ -24,6 +27,7 @@ export class ScatterPlotComponent implements OnInit {
     this.maxValX = 10;
     this.maxValY = 10;
     this.data = [];
+    this.lines = [];
   }
 
   getX(point: [number, number]) {
