@@ -1,10 +1,30 @@
 <md-card class="big-card flex-stack-card">
-  <md-card-title>Input</md-card-title>
+  <md-card-title>Data Generation</md-card-title>
   <md-card-content>
-    
+    <md-input-container>
+      <input md-input [(ngModel)]="pointCount" placeholder="Point Count" type="number">
+    </md-input-container>
+    <md-input-container>
+      <input md-input [(ngModel)]="lineCount" placeholder="Line Count" type="number">
+    </md-input-container>
+    <md-input-container>
+      <input md-input [(ngModel)]="noise" placeholder="Noise" type="number">
+    </md-input-container>
   </md-card-content>
   <md-card-actions>
-    <button md-raised-button color="primary" (click)="run()">Parse Set Expressions</button>
+    <button md-raised-button color="primary" (click)="generate()">Generate Points</button>
+  </md-card-actions>
+</md-card>
+
+<md-card class="big-card flex-stack-card">
+  <md-card-title>Algorithm</md-card-title>
+  <md-card-content>
+    <md-input-container>
+      <input md-input [(ngModel)]="lineCost" placeholder="Line Cost" type="number">
+    </md-input-container>
+  </md-card-content>
+  <md-card-actions>
+    <button md-raised-button color="primary" (click)="fit()">Fit Lines</button>
   </md-card-actions>
 </md-card>
 

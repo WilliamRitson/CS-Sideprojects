@@ -28,14 +28,14 @@ const S_POP = {
 
 class InstrucitonConfig {
   functionalUnit: FunctionalUnit;
-  instruciton: string;
+  instruction: string;
   hasMemory: boolean;
   pointOfConsumption: string;
   pointOfCompletion: string;
 
   // TODO: Make POC rest to default after fu change
   constructor(instr: string, unit: FunctionalUnit, hasMemory = false) {
-    this.instruciton = instr;
+    this.instruction = instr;
     this.hasMemory = hasMemory;
     this.functionalUnit = unit;
     this.pointOfConsumption = S_POC[instr] || this.getExecuteName(1);
@@ -231,7 +231,7 @@ export class Pipeline {
     });
     this.configLookup = {};
     this.instructionConfigurations.forEach(c => {
-      this.configLookup[c.instruciton] = c;
+      this.configLookup[c.instruction] = c;
     });
   }
 

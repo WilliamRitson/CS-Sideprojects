@@ -1,7 +1,7 @@
 <md-card class="big-card flex-stack-card">
   <md-card-title>MIPS Program</md-card-title>
   <md-card-content>
-	  <textarea [(ngModel)]="program" rows="30" cols="60" class="text-editor"></textarea>
+	  <textarea [(ngModel)]="program" rows="10" cols="20" class="text-editor"></textarea>
   </md-card-content>
 </md-card>	
 	  
@@ -20,8 +20,8 @@
 			</thead>
 			<tbody>
 				<tr *ngFor="let functionalUnit of pipeline.functionalUnits">
-					<td><md-input type="text" [(ngModel)]="functionalUnit.name"></md-input></td>
-					<td><md-checkbox [(ngModel)]="functionalUnit.isPipelined"></md-checkbox></td>
+					<td><md-input type="text"   [(ngModel)]="functionalUnit.name"></md-input></td>
+					<td><md-checkbox            [(ngModel)]="functionalUnit.isPipelined"></md-checkbox></td>
 					<td><md-input type="number" [(ngModel)]="functionalUnit.executeLength"></md-input></td>
 					<td><md-input type="number" [(ngModel)]="functionalUnit.units"></md-input></td>
 					<td><md-input type="number" [(ngModel)]="functionalUnit.stations"></md-input></td>
@@ -96,22 +96,22 @@
 		</thead>
 		<tbody>
 			<tr *ngFor="let config of pipeline.instructionConfigurations">
-				<td>{{config.instruciton}}</td>
+				<td>{{config.instruction}}</td>
 				<td><md-checkbox [(ngModel)]="config.hasMemory"></md-checkbox></td>
 				<td>
-					<select [(ngModel)]="config.functionalUnit">
-						<option *ngFor="let funcUnit of pipeline.functionalUnits" [ngValue]="funcUnit">{{funcUnit.name}}</option>
-					</select>
+					<md-select [(ngModel)]="config.functionalUnit">
+						<md-option *ngFor="let funcUnit of pipeline.functionalUnits" [value]="funcUnit">{{funcUnit.name}}</md-option>
+					</md-select>
 				</td>
 				<td>
-					<select [(ngModel)]="config.pointOfCompletion">
-						<option *ngFor="let stage of config.resolve()">{{stage}}</option>
-					</select>
+					<md-select [(ngModel)]="config.pointOfCompletion">
+						<md-option *ngFor="let stage of config.resolve()" [value]="stage">{{stage}}</md-option>
+					</md-select>
 				</td>
 				<td>
-					<select [(ngModel)]="config.pointOfConsumption">
-						<option *ngFor="let stage of config.resolve()">{{stage}}</option>
-					</select>
+					<md-select [(ngModel)]="config.pointOfConsumption">
+						<md-option *ngFor="let stage of config.resolve()" [value]="stage">{{stage}}</md-option>
+					</md-select>
 				</td>
 				<td>{{config.resolve()}}</td>
 			</tr>
