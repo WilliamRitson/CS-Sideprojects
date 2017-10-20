@@ -67,6 +67,6 @@
 }
 
 
-md-sidenav-layout {
+mat-sidenav-container {
     min-height: 100vh;
 }

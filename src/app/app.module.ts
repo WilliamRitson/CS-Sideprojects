@@ -2,9 +2,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router'; 
 
-import { MaterialModule } from '@angular/material';
+import { MatButtonModule, MatRadioModule, MatIconModule,
+  MatTooltipModule, MatSnackBarModule, MatToolbarModule,
+  MatProgressSpinnerModule, MatDialogModule, MatListModule,
+  MatCardModule, MatSliderModule, MatCheckboxModule, MatPaginatorModule, MatOptionModule,
+  MatTabsModule} from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 
@@ -65,8 +69,12 @@ import { SegmentedLeastSquaresComponent } from './segmented-least-squares/segmen
     BrowserModule,
     FormsModule,
     HttpModule,
-    MaterialModule.forRoot(),
-    FlexLayoutModule.forRoot(),
+    MatButtonModule, MatRadioModule, MatIconModule,MatOptionModule,
+    MatTooltipModule, MatSnackBarModule, MatToolbarModule,
+    MatProgressSpinnerModule, MatDialogModule, MatListModule, 
+    MatCardModule, MatSliderModule, MatCheckboxModule, MatPaginatorModule,
+    MatTabsModule,
+    FlexLayoutModule,
     RouterModule.forRoot([
       {
         path: 'tree', component: TreeViewComponent,

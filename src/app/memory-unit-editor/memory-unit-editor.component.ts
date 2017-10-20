@@ -8,7 +8,7 @@ import { MemoryQuantity, MemoryUnit } from '../cache';
 })
 export class MemoryUnitEditorComponent implements OnInit {
   units: Array<string>;
-  @Input() value: MemoryUnit
+  @Input() value: MemoryQuantity
   constructor() {
     this.units = [];
     for (let unit in MemoryUnit) {

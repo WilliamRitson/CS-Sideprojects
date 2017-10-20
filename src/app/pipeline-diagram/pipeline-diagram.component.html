@@ -1,121 +1,141 @@
-<md-card class="big-card flex-stack-card">
-  <md-card-title>MIPS Program</md-card-title>
-  <md-card-content>
-	  <textarea [(ngModel)]="program" rows="10" cols="20" class="text-editor"></textarea>
-  </md-card-content>
-</md-card>	
-	  
-<md-card class="big-card flex-stack-card">
-	<md-card-title>Funcitonal Units</md-card-title>
-	<md-card-content>
-		<table>
-			<thead>
-				<tr>
-					<th>Functional Unit </th>
-					<th>Pipelined </th>
-					<th>Execute Time </th>
-					<th>Execution Units </th>
-					<th>Reservation Stations</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr *ngFor="let functionalUnit of pipeline.functionalUnits">
-					<td><md-input type="text"   [(ngModel)]="functionalUnit.name"></md-input></td>
-					<td><md-checkbox            [(ngModel)]="functionalUnit.isPipelined"></md-checkbox></td>
-					<td><md-input type="number" [(ngModel)]="functionalUnit.executeLength"></md-input></td>
-					<td><md-input type="number" [(ngModel)]="functionalUnit.units"></md-input></td>
-					<td><md-input type="number" [(ngModel)]="functionalUnit.stations"></md-input></td>
-				</tr>
-			</tbody>
-		</table>
-	</md-card-content>
-	<md-card-actions>
-		<button md-button color="primary" (click)="addFU()">Add Funcitonal Unit</button>
-	</md-card-actions>
-</md-card>
+<mat-card class="big-card flex-stack-card">
+  <mat-card-title>MIPS Program</mat-card-title>
+  <mat-card-content>
+    <textarea [(ngModel)]="program" rows="10" cols="20" class="text-editor"></textarea>
+  </mat-card-content>
+</mat-card>
 
-<md-card class="big-card flex-stack-card">
-	<md-card-title>Basic Config</md-card-title>
-	<md-card-content>
-		<md-list>
-			<md-list-item>
-				<md-checkbox [(ngModel)]="pipeline.forwarding">Use forwarding</md-checkbox>
-			</md-list-item>
-			<md-list-item>
-				<label> Algorithm:
-				<app-enum-editor (onValueChange)="setAlgorithm($event)" [enum]="algorithms" [value]="pipeline.algorithm"></app-enum-editor>
-				</label>
-			</md-list-item>
-		</md-list>
-	</md-card-content>
-</md-card>
+<mat-card class="big-card flex-stack-card">
+  <mat-card-title>Funcitonal Units</mat-card-title>
+  <mat-card-content>
+    <table>
+      <thead>
+        <tr>
+          <th>Functional Unit </th>
+          <th>Pipelined </th>
+          <th>Execute Time </th>
+          <th>Execution Units </th>
+          <th>Reservation Stations</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let functionalUnit of pipeline.functionalUnits">
+          <td>
+            <mat-form-field>
+              <input mdInput type="text" [(ngModel)]="functionalUnit.name">
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-checkbox [(ngModel)]="functionalUnit.isPipelined"></mat-checkbox>
+          </td>
+          <td>
+            <mat-form-field>
+              <input mdInput type="number" [(ngModel)]="functionalUnit.executeLength">
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field>
+              <input mdInput type="number" [(ngModel)]="functionalUnit.units">
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field>
+              <input mdInput type="number" [(ngModel)]="functionalUnit.stations">
+            </mat-form-field>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button color="primary" (click)="addFU()">Add Funcitonal Unit</button>
+  </mat-card-actions>
+</mat-card>
 
-<md-card class="big-card flex-stack-card">
-  <md-card-title>Pipeline Diagram</md-card-title>
-  <md-card-content>
-	  <table>
-		<thead>
-			<tr>
-				<td>#</td>
-				<td>Code</td>
-				<td>Deps</td>
-				<td *ngFor="let stage of getStages(); let i=index">
-					{{i + 1}}
-				</td>
-			</tr>
-		</thead>
-		<tbody>
-			<tr *ngFor="let line of lines">
-				<td>{{line.lineNumber}}</td>
-				<td>{{line.id}}</td>
-				<td>{{line.dependencyString()}}</td>
-				<td *ngFor="let stage of line.stages; let i = index" [class.forwarded]="line.forwards[i]">{{stage}}</td>
-			</tr>
-		</tbody>
-	</table>
-  </md-card-content>
-  <md-card-actions>
-	  <button md-button color="primary" (click)="runCycle()">Run Cycle</button>
-	  <button md-button color="primary" (click)="recompile()">Run All</button>
-  </md-card-actions>
-</md-card>
+<mat-card class="big-card flex-stack-card">
+  <mat-card-title>Basic Config</mat-card-title>
+  <mat-card-content>
+    <mat-list>
+      <mat-list-item>
+        <mat-checkbox [(ngModel)]="pipeline.forwarding">Use forwarding</mat-checkbox>
+      </mat-list-item>
+      <mat-list-item>
+        <label> Algorithm:
+          <app-enum-editor (onValueChange)="setAlgorithm($event)" [enum]="algorithms" [value]="pipeline.algorithm"></app-enum-editor>
+        </label>
+      </mat-list-item>
+    </mat-list>
+  </mat-card-content>
+</mat-card>
 
-<md-card class="big-card flex-stack-card">
-  <md-card-title>Instruciton Configuration</md-card-title>
-  <md-card-content>
-	  <table>
-		<thead>
-			<tr>
-				<th>Instruciton</th>
-				<th>Uses Memory Stage</th>
-				<th>Functional Unit</th>
-				<th>Point of Produciton</th>
-				<th>Point of Consumption</th>
-				<th>Stages</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr *ngFor="let config of pipeline.instructionConfigurations">
-				<td>{{config.instruction}}</td>
-				<td><md-checkbox [(ngModel)]="config.hasMemory"></md-checkbox></td>
-				<td>
-					<md-select [(ngModel)]="config.functionalUnit">
-						<md-option *ngFor="let funcUnit of pipeline.functionalUnits" [value]="funcUnit">{{funcUnit.name}}</md-option>
-					</md-select>
-				</td>
-				<td>
-					<md-select [(ngModel)]="config.pointOfCompletion">
-						<md-option *ngFor="let stage of config.resolve()" [value]="stage">{{stage}}</md-option>
-					</md-select>
-				</td>
-				<td>
-					<md-select [(ngModel)]="config.pointOfConsumption">
-						<md-option *ngFor="let stage of config.resolve()" [value]="stage">{{stage}}</md-option>
-					</md-select>
-				</td>
-				<td>{{config.resolve()}}</td>
-			</tr>
-		</tbody>
-	</table>
-  </md-card-content>
-</md-card>
+<mat-card class="big-card flex-stack-card">
+  <mat-card-title>Pipeline Diagram</mat-card-title>
+  <mat-card-content>
+    <table>
+      <thead>
+        <tr>
+          <td>#</td>
+          <td>Code</td>
+          <td>Deps</td>
+          <td *ngFor="let stage of getStages(); let i=index">
+            {{i + 1}}
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let line of lines">
+          <td>{{line.lineNumber}}</td>
+          <td>{{line.id}}</td>
+          <td>{{line.dependencyString()}}</td>
+          <td *ngFor="let stage of line.stages; let i = index" [class.forwarded]="line.forwards[i]">{{stage}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button color="primary" (click)="runCycle()">Run Cycle</button>
+    <button mat-button color="primary" (click)="recompile()">Run All</button>
+  </mat-card-actions>
+</mat-card>
+
+<mat-card class="big-card flex-stack-card">
+  <mat-card-title>Instruciton Configuration</mat-card-title>
+  <mat-card-content>
+    <table>
+      <thead>
+        <tr>
+          <th>Instruciton</th>
+          <th>Uses Memory Stage</th>
+          <th>Functional Unit</th>
+          <th>Point of Produciton</th>
+          <th>Point of Consumption</th>
+          <th>Stages</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let config of pipeline.instructionConfigurations">
+          <td>{{config.instruction}}</td>
+          <td>
+            <mat-checkbox [(ngModel)]="config.hasMemory"></mat-checkbox>
+          </td>
+          <td>
+            <mat-select [(ngModel)]="config.functionalUnit">
+              <mat-option *ngFor="let funcUnit of pipeline.functionalUnits" [value]="funcUnit">{{funcUnit.name}}</mat-option>
+            </mat-select>
+          </td>
+          <td>
+            <mat-select [(ngModel)]="config.pointOfCompletion">
+              <mat-option *ngFor="let stage of config.resolve()" [value]="stage">{{stage}}</mat-option>
+            </mat-select>
+          </td>
+          <td>
+            <mat-select [(ngModel)]="config.pointOfConsumption">
+              <mat-option *ngFor="let stage of config.resolve()" [value]="stage">{{stage}}</mat-option>
+            </mat-select>
+          </td>
+          <td>{{config.resolve()}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </mat-card-content>
+</mat-card>

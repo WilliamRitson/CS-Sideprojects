@@ -1,8 +1,8 @@
-<md-card class="big-card flex-stack-card">
-  <md-card-title>Preferences </md-card-title>
-  <md-card-content>
-    <md-tab-group>
-      <md-tab label="Men">
+<mat-card class="big-card flex-stack-card">
+  <mat-card-title>Preferences </mat-card-title>
+  <mat-card-content>
+    <mat-tab-group>
+      <mat-tab label="Men">
         <table>
           <thead>
             <tr>
@@ -17,8 +17,8 @@
             </tr>
           </tbody>
         </table>
-      </md-tab>
-      <md-tab label="Women">
+      </mat-tab>
+      <mat-tab label="Women">
         <table>
           <thead>
             <tr>
@@ -33,32 +33,34 @@
             </tr>
           </tbody>
         </table>
-      </md-tab>
-    </md-tab-group>
-  </md-card-content>
-  <md-card-actions>
-    <button md-raised-button color="primary" (click)="makeRandomPairs()">Generate</button>
-    <md-input placeholder="number" [(ngModel)]="randomPairCount"></md-input> Random pairs
-    <!--<md-input placeholder="Correlation" ></md-input>-->
-    <md-slider [(ngModel)]="correlationFactor" maxLabel="Corl" max="1000" min="0">Correlation-</md-slider>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="makeRandomPairs()">Generate</button>
+    <mat-form-field>
+      <input mdInput placeholder="number" [(ngModel)]="randomPairCount">
+    </mat-form-field>Random pairs
+    <!--<mat-form-field><input mdInput placeholder="Correlation" ></mat-form-field>-->
+    <mat-slider [(ngModel)]="correlationFactor" maxLabel="Corl" max="1000" min="0">Correlation-</mat-slider>
     {{correlationFactor / 10}} % Correlation
-  </md-card-actions>
-</md-card>
+  </mat-card-actions>
+</mat-card>
 
-<md-card class="big-card flex-stack-card">
-  <md-card-title>Algorithm</md-card-title>
-  <md-card-content>
-    <md-checkbox [(ngModel)]="womenPropose">Women Propose</md-checkbox>
-  </md-card-content>
-  <md-card-actions>
-    <button md-raised-button color="primary" (click)="runGaleShapley()">Run Gale-Shapley</button>
-  </md-card-actions>
-</md-card>
+<mat-card class="big-card flex-stack-card">
+  <mat-card-title>Algorithm</mat-card-title>
+  <mat-card-content>
+    <mat-checkbox [(ngModel)]="womenPropose">Women Propose</mat-checkbox>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="runGaleShapley()">Run Gale-Shapley</button>
+  </mat-card-actions>
+</mat-card>
 
 
-<md-card class="big-card flex-stack-card">
-  <md-card-title>Trends</md-card-title>
-  <md-card-content>
+<mat-card class="big-card flex-stack-card">
+  <mat-card-title>Trends</mat-card-title>
+  <mat-card-content>
     <table class="table">
       <thead>
         <tr>
@@ -76,19 +78,19 @@
       </tbody>
     </table>
     <app-scatter-plot [data]="resultsCords" [maxValX]="worstRes" [maxValY]="worstRes" xAxisLabel="Women's Results" yAxisLabel="Men's Results"></app-scatter-plot>
-  </md-card-content>
-</md-card>
+  </mat-card-content>
+</mat-card>
 
 
-<md-card class="big-card flex-stack-card">
-  <md-card-title>Pairings</md-card-title>
-  <md-card-content>
-    <md-list>
-      <md-list-item *ngFor="let man of pairings; let woman = index;">
+<mat-card class="big-card flex-stack-card">
+  <mat-card-title>Pairings</mat-card-title>
+  <mat-card-content>
+    <mat-list>
+      <mat-list-item *ngFor="let man of pairings; let woman = index;">
         <span>{{womensNames[woman]}} ({{mensNames[man]}}'s {{mensPairingValues[man] | ordinal }} choice) </span>
         <span> &nbsp; and &nbsp; </span>
         <span>{{mensNames[man]}} ({{womensNames[woman]}}'s {{womensPairingValues[woman] | ordinal }} choice)</span>
-      </md-list-item>
-    </md-list>
-  </md-card-content>
-</md-card>
+      </mat-list-item>
+    </mat-list>
+  </mat-card-content>
+</mat-card>

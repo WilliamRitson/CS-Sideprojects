@@ -1,4 +1,4 @@
-<md-input  [(ngModel)]="valueString" (ngModelChange)="updateValue(nv)"></md-input>
-<md-select [ngModel]="radix" (ngModelChange)="changeRadix($event)">
-  <md-option *ngFor="let r of radixes" [value]="r.value">{{r.name}}</md-option>
-</md-select>
+<mat-form-field><input mdInput  [(ngModel)]="valueString" (ngModelChange)="updateValue($event)"></mat-form-field>
+<mat-select [ngModel]="radix" (ngModelChange)="changeRadix($event)">
+  <mat-option *ngFor="let r of radixes" [value]="r.value">{{r.name}}</mat-option>
+</mat-select>

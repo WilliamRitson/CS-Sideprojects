@@ -1,5 +1,4 @@
 import { tokenize } from '@angular/compiler/src/ml_parser/lexer';
-import { GroupedObservable } from 'angular2-google-chart/node_modules/rxjs/operator/groupBy';
 import { AlgebraicSet } from './set';
 import { Token } from './set-scanner';
 

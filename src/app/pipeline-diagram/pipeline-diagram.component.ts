@@ -99,6 +99,10 @@ bne r0, r1, -8`; */
     return [];
   }
 
+  addFU() {
+    
+  }
+
   executeCycle(lines: Array<DiagramLine>) {
     for (let i = 0; i < lines.length; i += 1) {
       if (lines[i].instr.executionPhase == 'done') {

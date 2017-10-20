@@ -1,85 +1,85 @@
-<md-toolbar color="primary">
-  <button class="app-icon-button" (click)="start.toggle()"><md-icon class="app-toolbar-menu">menu</md-icon></button>
+<mat-toolbar color="primary">
+  <button class="app-icon-button" (click)="start.toggle()"><mat-icon class="app-toolbar-menu">menu</mat-icon></button>
   <span>Will's C.S Sideprojects</span>
 
   <span class="fill-remaining-space"></span>
 
-  <button md-icon-button *ngIf="help.helpUrl" (click)="gotoHelp()" md-tooltip="Help">
-      <md-icon>help</md-icon>
+  <button mat-icon-button *ngIf="help.helpUrl" (click)="gotoHelp()" matTooltip="Help">
+      <mat-icon>help</mat-icon>
   </button>
 
-  <button md-icon-button (click)="feedback()" md-tooltip="Feedback">
-      <md-icon>feedback</md-icon>
+  <button mat-icon-button (click)="feedback()" matTooltip="Feedback">
+      <mat-icon>feedback</mat-icon>
   </button>
 
-</md-toolbar>
+</mat-toolbar>
 
-<md-sidenav-layout>
-  <md-sidenav #start mode="side" class="app-sidenav">
+<mat-sidenav-container>
+  <mat-sidenav #start mode="side" class="app-sidenav">
     <h2>Navigation</h2>
     <br>
-    <md-list class="nav-list">
+    <mat-list class="nav-list">
 
-      <md-list-item>
-        <a md-line routerLink="/" routerLinkActive="active">
-          <button md-button (click)="start.close()" routerLink="/" routerLinkActive="active">
-          <md-icon>home</md-icon> Home
+      <mat-list-item>
+        <a mat-line routerLink="/" routerLinkActive="active">
+          <button mat-button (click)="start.close()" routerLink="/" routerLinkActive="active">
+          <mat-icon>home</mat-icon> Home
         </button>
         </a>
-      </md-list-item>
-      <md-list-item>
-        <a md-line routerLink="/cache" routerLinkActive="active">
-          <button md-button (click)="start.close()">
-            <md-icon>storage</md-icon> Cache Simulator
+      </mat-list-item>
+      <mat-list-item>
+        <a mat-line routerLink="/cache" routerLinkActive="active">
+          <button mat-button (click)="start.close()">
+            <mat-icon>storage</mat-icon> Cache Simulator
           </button>
         </a>
-      </md-list-item>
-      <md-list-item>
-        <a md-line routerLink="/pipe" routerLinkActive="active">
-          <button md-button (click)="start.close()">
-           <md-icon>clear_all</md-icon> Pipeline Simulator
+      </mat-list-item>
+      <mat-list-item>
+        <a mat-line routerLink="/pipe" routerLinkActive="active">
+          <button mat-button (click)="start.close()">
+           <mat-icon>clear_all</mat-icon> Pipeline Simulator
           </button>
         </a>
-      </md-list-item>
-      <md-list-item>
-        <a md-line routerLink="/graph" routerLinkActive="active">
-          <button md-button (click)="start.close()">
-            <md-icon>search</md-icon> Graph Search
+      </mat-list-item>
+      <mat-list-item>
+        <a mat-line routerLink="/graph" routerLinkActive="active">
+          <button mat-button (click)="start.close()">
+            <mat-icon>search</mat-icon> Graph Search
           </button>
         </a>
-      </md-list-item>
-      <md-list-item>
-        <a md-line routerLink="/ai-games" routerLinkActive="active">
-          <button md-button (click)="start.close()">
-            <md-icon>games</md-icon> Minimax
+      </mat-list-item>
+      <mat-list-item>
+        <a mat-line routerLink="/ai-games" routerLinkActive="active">
+          <button mat-button (click)="start.close()">
+            <mat-icon>games</mat-icon> Minimax
           </button>
         </a>
-      </md-list-item>
-      <md-list-item>
+      </mat-list-item>
+      <mat-list-item>
         <a routerLink="/stable-marriage" routerLinkActive="active">
-          <button md-button (click)="start.close()">
-            <md-icon>group</md-icon> Stable Marriage
+          <button mat-button (click)="start.close()">
+            <mat-icon>group</mat-icon> Stable Marriage
           </button>
         </a>
-      </md-list-item>
-      <md-list-item>
-        <a md-line routerLink="/set-algebra" routerLinkActive="active">
-          <button md-button (click)="start.close()">
-            <md-icon>code</md-icon> Set Membership Table
+      </mat-list-item>
+      <mat-list-item>
+        <a mat-line routerLink="/set-algebra" routerLinkActive="active">
+          <button mat-button (click)="start.close()">
+            <mat-icon>code</mat-icon> Set Membership Table
           </button>
         </a>
-      </md-list-item>
+      </mat-list-item>
       <!--
-      <md-list-item> 
-        <button md-button #closeStartButton (click)="start.close()">Close</button>
-      </md-list-item>
+      <mat-list-item> 
+        <button mat-button #closeStartButton (click)="start.close()">Close</button>
+      </mat-list-item>
       -->
-    </md-list>
-  </md-sidenav>
+    </mat-list>
+  </mat-sidenav>
 
   <div class="app-content">
     <router-outlet></router-outlet>
   </div>
 
 
-</md-sidenav-layout>
+</mat-sidenav-container>

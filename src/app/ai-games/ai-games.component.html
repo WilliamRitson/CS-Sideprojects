@@ -1,42 +1,42 @@
-<md-card-title>Game Config</md-card-title>
-<md-card-content></md-card-content>
+<mat-card-title>Game Config</mat-card-title>
+<mat-card-content></mat-card-content>
 
-<md-card class="big-card flex-stack-card">
-  <md-card-title>Game Config</md-card-title>
-  <md-card-content>
-    <md-select [(ngModel)]="gameIndex" (ngModelChange)="reset()">
-      <md-option *ngFor="let name of gameNames; let i = index" [value]="i">{{name}}</md-option>
-    </md-select>
-  </md-card-content>
-</md-card>
+<mat-card class="big-card flex-stack-card">
+  <mat-card-title>Game Config</mat-card-title>
+  <mat-card-content>
+    <mat-select [(ngModel)]="gameIndex" (ngModelChange)="reset()">
+      <mat-option *ngFor="let name of gameNames; let i = index" [value]="i">{{name}}</mat-option>
+    </mat-select>
+  </mat-card-content>
+</mat-card>
 
-<md-card class="big-card flex-stack-card" *ngFor="let player of players; let pn = index;">
-  <md-card-title>AI {{pn + 1}} Config</md-card-title>
-  <md-card-content>
+<mat-card class="big-card flex-stack-card" *ngFor="let player of players; let pn = index;">
+  <mat-card-title>AI {{pn + 1}} Config</mat-card-title>
+  <mat-card-content>
     <!--
-    <md-select [(ngModel)]="player.aiIndex" (ngModelChange)="setAI(player)">
-      <md-option *ngFor="let name of aiNames; let i = index" [value]="i">{{name}}</md-option>
-    </md-select>
+    <mat-select [(ngModel)]="player.aiIndex" (ngModelChange)="setAI(player)">
+      <mat-option *ngFor="let name of aiNames; let i = index" [value]="i">{{name}}</mat-option>
+    </mat-select>
     -->
-    <md-input-container>
-      <input type="number" md-input [(ngModel)]="player.ai.depthLimit" placeholder="Search Depth">
-    </md-input-container>
+    <mat-form-field>
+      <input type="number"  [(ngModel)]="player.ai.depthLimit" placeholder="Search Depth">
+    </mat-form-field>
     <span *ngIf="gameIndex==1 && player.ai.depthLimit > 6">
       Warning! May run very slow
     </span>
-  </md-card-content>
-</md-card>
+  </mat-card-content>
+</mat-card>
 
-<md-card class="big-card flex-stack-card">
-  <md-card-title>Game</md-card-title>
-  <md-card-content>
+<mat-card class="big-card flex-stack-card">
+  <mat-card-title>Game</mat-card-title>
+  <mat-card-content>
     <tic-tac-toe          *ngIf="gameIndex == 0" [game]="game" (onMove)="respond($event)"></tic-tac-toe>
     <ultimate-tic-tac-toe *ngIf="gameIndex == 1" [active]="!aiMoving"  [game]="game" (onMove)="respond($event)"></ultimate-tic-tac-toe>
-  </md-card-content>
-  <md-card-actions>
-    <button [disabled]="aiMoving" md-raised-button color="primary" (click)="reset()">Reset</button>
-    <button [disabled]="aiMoving" md-raised-button color="primary" (click)="runAiMove()">Run AI Move</button>
-    <button [disabled]="aiMoving" md-raised-button color="primary" (click)="runAiGame()">Run AI Game</button>
-    <md-checkbox [(ngModel)]="automove">Automove</md-checkbox>
-  </md-card-actions>
-</md-card>
+  </mat-card-content>
+  <mat-card-actions>
+    <button [disabled]="aiMoving" mat-raised-button color="primary" (click)="reset()">Reset</button>
+    <button [disabled]="aiMoving" mat-raised-button color="primary" (click)="runAiMove()">Run AI Move</button>
+    <button [disabled]="aiMoving" mat-raised-button color="primary" (click)="runAiGame()">Run AI Game</button>
+    <mat-checkbox [(ngModel)]="automove">Automove</mat-checkbox>
+  </mat-card-actions>
+</mat-card>

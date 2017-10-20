@@ -26,13 +26,13 @@
   [attr.cx]="getX(point)" 
   [attr.cy]="getY(point)" 
   [attr.r]="pointRadius" 
-  mdTooltip="({{point[0]}}, {{point[1]}})"
+  matTooltip="({{point[0]}}, {{point[1]}})"
   fill="black" />
 
   <!-- Lines --> 
   <line *ngFor="let line of lines;"
   [attr.x1]="getX(line.p1)" [attr.y1]="getY(line.p1)" 
   [attr.x2]="getX(line.p2)" [attr.y2]="getY(line.p2)"
-  mdTooltip="y = {{line.slope | number}}x + {{line.offset | number}}"
+  matTooltip="y = {{line.slope | number}}x + {{line.offset | number}}"
   stroke-width="3" stroke="red"/>
 </svg>

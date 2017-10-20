@@ -1,23 +1,23 @@
-<md-card class="big-card flex-stack-card">
-  <md-card-title>Input</md-card-title>
-  <md-card-content>
-    <md-input-container>
-      <textarea md-input [(ngModel)]="sources[0]" placeholder="Set Expression 1"></textarea>
-    </md-input-container>
-    <md-input-container>
-      <textarea md-input [(ngModel)]="sources[1]" placeholder="Set Expression 2"></textarea>
-    </md-input-container>
-  </md-card-content>
-  <md-card-actions>
-    <button md-raised-button color="primary" (click)="run()">Parse Set Expressions</button>
-  </md-card-actions>
-</md-card>
+<mat-card class="big-card flex-stack-card">
+  <mat-card-title>Input</mat-card-title>
+  <mat-card-content>
+    <mat-form-field>
+      <textarea  [(ngModel)]="sources[0]" placeholder="Set Expression 1"></textarea>
+    </mat-form-field>
+    <mat-form-field>
+      <textarea  [(ngModel)]="sources[1]" placeholder="Set Expression 2"></textarea>
+    </mat-form-field>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="run()">Parse Set Expressions</button>
+  </mat-card-actions>
+</mat-card>
 
-<md-card class="big-card flex-stack-card" *ngFor="let smt of smts; let i = index">
-  <md-card-title>
+<mat-card class="big-card flex-stack-card" *ngFor="let smt of smts; let i = index">
+  <mat-card-title>
     Set Membership Table {{ i + 1}}
-  </md-card-title>
-  <md-card-content>
+  </mat-card-title>
+  <mat-card-content>
     <table class="set-membership-table">
       <thead>
         <tr>
@@ -30,18 +30,18 @@
         </tr>
       </tbody>
     </table>
-  </md-card-content>
-</md-card>
+  </mat-card-content>
+</mat-card>
 
-<md-card class="big-card flex-stack-card" >
-  <md-card-title>
+<mat-card class="big-card flex-stack-card" >
+  <mat-card-title>
     Comparison
-  </md-card-title>
-  <md-card-content>
+  </mat-card-title>
+  <mat-card-content>
     <p *ngIf="smts[0].isSame(smts[1])">The expressions are algebraically equivalent.</p>
     <p *ngIf="!smts[0].isSame(smts[1])">The expressions may not be algebraically equivalent.
 
       They differ on lines {{smts[0].compare(smts[1]).join(', ')}}.
     </p>
-  </md-card-content>
-</md-card>
+  </mat-card-content>
+</mat-card>
