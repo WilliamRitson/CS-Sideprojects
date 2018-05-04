@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Cache, CacheBlock, MemoryQuantity, MemoryUnit, CacheConfiguraiton, MemoryAccess, SimulationResult } from '../cache';
 import { clone, maxBy, sumBy } from 'lodash';
 import { SaveService } from '../save.service';
-import { HelpService } from '../help.service';
+import { HelpService } from '../../help.service';
 
 enum AccessType {
   read,

@@ -1,11 +1,11 @@
-import { AlgebraicSet } from './set';
+import { AlgebraicSet } from '../set';
 import { Component, OnInit } from '@angular/core';
-import { Scanner, Token } from './set-scanner';
-import { Parser } from './set-parser';
-import { SetTreeExpr } from './set-expr';
-import { SetMembershipTable } from './set-membership-table';
+import { Scanner, Token } from '../set-scanner';
+import { Parser } from '../set-parser';
+import { SetTreeExpr } from '../set-expr';
+import { SetMembershipTable } from '../set-membership-table';
 
-import { HelpService } from '../help.service';
+import { HelpService } from '../../help.service';
 
 import { Router, ActivatedRoute, Params } from '@angular/router';
 

@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Line, Point } from '../line';
 
-
 @Component({
   selector: 'app-scatter-plot',
   templateUrl: './scatter-plot.component.html',

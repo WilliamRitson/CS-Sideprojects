@@ -1,62 +1,34 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router'; 
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-
-
-import {
-  LocationStrategy,
-  HashLocationStrategy
-} from '@angular/common';
-
-import { SaveService } from './save.service';
-import { MipsService } from './mips.service';
-import { HelpService } from './help.service';
-
-import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
-import { GraphSearchComponent } from './graph-search/graph-search.component';
-import { ProgramEditorComponent } from './program-editor/program-editor.component';
-import { PipelineDiagramComponent } from './pipeline-diagram/pipeline-diagram.component';
-import { MemorySimulatorComponent } from './memory-simulator/memory-simulator.component';
-import { MemoryUnitEditorComponent } from './memory-unit-editor/memory-unit-editor.component';
-import { RadixedValueEditorComponent } from './radixed-value-editor/radixed-value-editor.component';
-import { RadixPipe, AllRadixPipe } from './radix.pipe';
-import { EnumEditorComponent } from './enum-editor/enum-editor.component';
-import { TreeViewComponent } from './tree-view/tree-view.component';
-import { StableMarriageComponent } from './stable-marriage/stable-marriage.component';
-import { OrdinalPipe } from './ordinal.pipe';
-import { ScatterPlotComponent } from './scatter-plot/scatter-plot.component';
-import { SetAlgebraComponent } from './set-algebra/set-algebra.component';
-import { ProbabilityDistributionComponent } from './probability-distribution/probability-distribution.component';
-import { SegmentedLeastSquaresComponent } from './segmented-least-squares/segmented-least-squares.component';
-import { HttpClientModule } from '@angular/common/http';
-import { MaterialModule } from './material.module';
+import { RouterModule } from '@angular/router';
 import { AiGamesComponent } from './ai/ai-games/ai-games.component';
 import { AiModule } from './ai/ai.module';
-
+import { AppComponent } from './app.component';
+import { GraphSearchComponent } from './graph-theory/graph-search/graph-search.component';
+import { GraphTheoryModule } from './graph-theory/graph-theory.module';
+import { GroupMatchingModule } from './group-matching/group-matching.module';
+import { StableMarriageComponent } from './group-matching/stable-marriage/stable-marriage.component';
+import { HelpService } from './help.service';
+import { HomeComponent } from './home/home.component';
+import { MaterialModule } from './material.module';
+import { MemorySimulatorComponent } from './memory/memory-simulator/memory-simulator.component';
+import { MemoryModule } from './memory/memory.module';
+import { SaveService } from './memory/save.service';
+import { MipsModule } from './mips/mips.module';
+import { MipsService } from './mips/mips.service';
+import { PipelineDiagramComponent } from './mips/pipeline-diagram/pipeline-diagram.component';
+import { SetAlgebraComponent } from './set-theory/set-algebra/set-algebra.component';
+import { SetTheoryModule } from './set-theory/set-theory.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
-    GraphSearchComponent,
-    ProgramEditorComponent,
-    PipelineDiagramComponent,
-    MemorySimulatorComponent,
-    MemoryUnitEditorComponent,
-    RadixedValueEditorComponent,
-    RadixPipe, AllRadixPipe,
-    EnumEditorComponent,
-    TreeViewComponent,
-    StableMarriageComponent,
-    OrdinalPipe,
-    ScatterPlotComponent,
-    SetAlgebraComponent,
-    ProbabilityDistributionComponent,
-    SegmentedLeastSquaresComponent],
+    HomeComponent
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -64,26 +36,17 @@ import { AiModule } from './ai/ai.module';
     HttpClientModule,
     MaterialModule,
     AiModule,
+    MipsModule,
+    MemoryModule,
+    GraphTheoryModule,
+    GroupMatchingModule,
+    SetTheoryModule,
     RouterModule.forRoot([
-      {
-        path: 'tree', component: TreeViewComponent,
-      },
+ 
       {
         path: 'cache', component: MemorySimulatorComponent,
         data: {
           title: 'Cache Simulator'
-        }
-      },
-      {
-        path: 'probability-dist', component: ProbabilityDistributionComponent,
-        data: {
-          title: 'Probability Distribution'
-        }
-      },
-      {
-        path: 'segmented-least-squares', component: SegmentedLeastSquaresComponent,
-        data: {
-          title: 'Probability Distribution'
         }
       },
       {
