@@ -146,11 +146,11 @@
       <thead>
         <tr>
           <th>Set Index</th>
-          <template ngFor let-block [ngForOf]="sparseCacheLongestSet">
+          <ng-template ngFor let-block [ngForOf]="sparseCacheLongestSet">
             <th class="lr">V</th>
             <th>M</th>
             <th>Tag</th>
-          </template>
+          </ng-template>
         </tr>
       </thead>
       <tbody>
@@ -158,11 +158,11 @@
           <td>
             <span matTooltip="{{sparseCacheIndexes[i] | allRadix}}">{{sparseCacheIndexes[i] | radix : 16}}</span>
           </td>
-          <template ngFor let-block [ngForOf]="getIntrestingBlocks(set)">
+          <ng-template ngFor let-block [ngForOf]="getIntrestingBlocks(set)">
             <td class="lr">{{block.valid ? 1 :0}}</td>
             <td>{{block.modified ? 1 : 0}}</td>
             <td><span matTooltip="{{block.tag | allRadix}}">{{block.tag | radix : 16}}</span></td>
-          </template>
+          </ng-template>
         </tr>
       </tbody>
     </table>

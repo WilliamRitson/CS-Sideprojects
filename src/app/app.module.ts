@@ -3,12 +3,14 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router'; 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 import { MatButtonModule, MatRadioModule, MatIconModule,
   MatTooltipModule, MatSnackBarModule, MatToolbarModule,
   MatProgressSpinnerModule, MatDialogModule, MatListModule,
   MatCardModule, MatSliderModule, MatCheckboxModule, MatPaginatorModule, MatOptionModule,
-  MatTabsModule} from '@angular/material';
+  MatTabsModule, MatSidenavModule} from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 
@@ -67,12 +69,14 @@ import { SegmentedLeastSquaresComponent } from './segmented-least-squares/segmen
     SegmentedLeastSquaresComponent],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     HttpModule,
     MatButtonModule, MatRadioModule, MatIconModule,MatOptionModule,
     MatTooltipModule, MatSnackBarModule, MatToolbarModule,
     MatProgressSpinnerModule, MatDialogModule, MatListModule, 
     MatCardModule, MatSliderModule, MatCheckboxModule, MatPaginatorModule,
+    MatSidenavModule,
     MatTabsModule,
     FlexLayoutModule,
     RouterModule.forRoot([

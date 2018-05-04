@@ -1,77 +1,79 @@
 <mat-toolbar color="primary">
-  <button class="app-icon-button" (click)="start.toggle()"><mat-icon class="app-toolbar-menu">menu</mat-icon></button>
+  <button class="app-icon-button" (click)="sidenav.toggle()">
+    <mat-icon class="app-toolbar-menu">menu</mat-icon>
+  </button>
   <span>Will's C.S Sideprojects</span>
 
   <span class="fill-remaining-space"></span>
 
   <button mat-icon-button *ngIf="help.helpUrl" (click)="gotoHelp()" matTooltip="Help">
-      <mat-icon>help</mat-icon>
+    <mat-icon>help</mat-icon>
   </button>
 
   <button mat-icon-button (click)="feedback()" matTooltip="Feedback">
-      <mat-icon>feedback</mat-icon>
+    <mat-icon>feedback</mat-icon>
   </button>
 
 </mat-toolbar>
 
+
 <mat-sidenav-container>
-  <mat-sidenav #start mode="side" class="app-sidenav">
+  <mat-sidenav #sidenav mode="side" class="app-sidenav">
     <h2>Navigation</h2>
     <br>
     <mat-list class="nav-list">
-
       <mat-list-item>
         <a mat-line routerLink="/" routerLinkActive="active">
-          <button mat-button (click)="start.close()" routerLink="/" routerLinkActive="active">
-          <mat-icon>home</mat-icon> Home
-        </button>
+          <button mat-button (click)="sidenav.close()" routerLink="/" routerLinkActive="active">
+            <mat-icon>home</mat-icon> Home
+          </button>
         </a>
       </mat-list-item>
       <mat-list-item>
         <a mat-line routerLink="/cache" routerLinkActive="active">
-          <button mat-button (click)="start.close()">
+          <button mat-button (click)="sidenav.close()">
             <mat-icon>storage</mat-icon> Cache Simulator
           </button>
         </a>
       </mat-list-item>
       <mat-list-item>
         <a mat-line routerLink="/pipe" routerLinkActive="active">
-          <button mat-button (click)="start.close()">
-           <mat-icon>clear_all</mat-icon> Pipeline Simulator
+          <button mat-button (click)="sidenav.close()">
+            <mat-icon>clear_all</mat-icon> Pipeline Simulator
           </button>
         </a>
       </mat-list-item>
       <mat-list-item>
         <a mat-line routerLink="/graph" routerLinkActive="active">
-          <button mat-button (click)="start.close()">
+          <button mat-button (click)="sidenav.close()">
             <mat-icon>search</mat-icon> Graph Search
           </button>
         </a>
       </mat-list-item>
       <mat-list-item>
         <a mat-line routerLink="/ai-games" routerLinkActive="active">
-          <button mat-button (click)="start.close()">
+          <button mat-button (click)="sidenav.close()">
             <mat-icon>games</mat-icon> Minimax
           </button>
         </a>
       </mat-list-item>
       <mat-list-item>
         <a routerLink="/stable-marriage" routerLinkActive="active">
-          <button mat-button (click)="start.close()">
+          <button mat-button (click)="sidenav.close()">
             <mat-icon>group</mat-icon> Stable Marriage
           </button>
         </a>
       </mat-list-item>
       <mat-list-item>
         <a mat-line routerLink="/set-algebra" routerLinkActive="active">
-          <button mat-button (click)="start.close()">
+          <button mat-button (click)="sidenav.close()">
             <mat-icon>code</mat-icon> Set Membership Table
           </button>
         </a>
       </mat-list-item>
       <!--
       <mat-list-item> 
-        <button mat-button #closeStartButton (click)="start.close()">Close</button>
+        <button mat-button #closesidenavButton (click)="sidenav.close()">Close</button>
       </mat-list-item>
       -->
     </mat-list>
@@ -80,6 +82,5 @@
   <div class="app-content">
     <router-outlet></router-outlet>
   </div>
-
 
 </mat-sidenav-container>

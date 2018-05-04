@@ -7,6 +7,9 @@ import { HelpService } from './help.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+
+  opened = false;
+  
   constructor(public help: HelpService) { }
 
   gotoHelp() {
