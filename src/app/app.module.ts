@@ -17,7 +17,6 @@ import { HomeComponent } from './home/home.component';
 import { MaterialModule } from './material.module';
 import { MemorySimulatorComponent } from './memory/memory-simulator/memory-simulator.component';
 import { MemoryModule } from './memory/memory.module';
-import { SaveService } from './memory/save.service';
 import { MipsModule } from './mips/mips.module';
 import { MipsService } from './mips/mips.service';
 import { PipelineDiagramComponent } from './mips/pipeline-diagram/pipeline-diagram.component';
@@ -87,7 +86,7 @@ import { SetTheoryModule } from './set-theory/set-theory.module';
       { path: '**', component: HomeComponent }
     ])
   ],
-  providers: [SaveService, HelpService, MipsService, { provide: LocationStrategy, useClass: HashLocationStrategy }],
+  providers: [HelpService, MipsService, { provide: LocationStrategy, useClass: HashLocationStrategy }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

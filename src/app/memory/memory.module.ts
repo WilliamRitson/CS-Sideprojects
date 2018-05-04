@@ -7,6 +7,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { MaterialModule } from '../material.module';
 import { FormsModule } from '@angular/forms';
 import { RadixPipe, AllRadixPipe } from './radix.pipe';
+import { SaveService } from './save.service';
 
 @NgModule({
   imports: [
@@ -22,7 +23,7 @@ import { RadixPipe, AllRadixPipe } from './radix.pipe';
     AllRadixPipe,
     RadixPipe
   ],
-  providers: [],
+  providers: [SaveService],
   exports: [MemorySimulatorComponent]
 })
 export class MemoryModule { }
