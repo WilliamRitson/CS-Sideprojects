@@ -1,5 +1,5 @@
 <span>
-  <mat-form-field><input mdInput  [(ngModel)]="value.amount" type="number"></mat-form-field>
+  <mat-form-field><input matInput  [(ngModel)]="value.amount" type="number"></mat-form-field>
   <mat-select [(ngModel)]="value.unit">
     <mat-option *ngFor="let unit of units" [value]="parseInt(unit)">{{label(unit)}}</mat-option>
   </mat-select>

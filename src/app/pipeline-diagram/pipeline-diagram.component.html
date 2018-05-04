@@ -22,7 +22,7 @@
         <tr *ngFor="let functionalUnit of pipeline.functionalUnits">
           <td>
             <mat-form-field>
-              <input mdInput type="text" [(ngModel)]="functionalUnit.name">
+              <input matInput type="text" [(ngModel)]="functionalUnit.name">
             </mat-form-field>
           </td>
           <td>
@@ -30,17 +30,17 @@
           </td>
           <td>
             <mat-form-field>
-              <input mdInput type="number" [(ngModel)]="functionalUnit.executeLength">
+              <input matInput type="number" [(ngModel)]="functionalUnit.executeLength">
             </mat-form-field>
           </td>
           <td>
             <mat-form-field>
-              <input mdInput type="number" [(ngModel)]="functionalUnit.units">
+              <input matInput type="number" [(ngModel)]="functionalUnit.units">
             </mat-form-field>
           </td>
           <td>
             <mat-form-field>
-              <input mdInput type="number" [(ngModel)]="functionalUnit.stations">
+              <input matInput type="number" [(ngModel)]="functionalUnit.stations">
             </mat-form-field>
           </td>
         </tr>

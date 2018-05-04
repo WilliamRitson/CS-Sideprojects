@@ -2,10 +2,10 @@
   <mat-card-title>Input</mat-card-title>
   <mat-card-content>
     <mat-form-field>
-      <textarea  [(ngModel)]="sources[0]" placeholder="Set Expression 1"></textarea>
+      <textarea matInput [(ngModel)]="sources[0]" placeholder="Set Expression 1"></textarea>
     </mat-form-field>
     <mat-form-field>
-      <textarea  [(ngModel)]="sources[1]" placeholder="Set Expression 2"></textarea>
+      <textarea matInput [(ngModel)]="sources[1]" placeholder="Set Expression 2"></textarea>
     </mat-form-field>
   </mat-card-content>
   <mat-card-actions>
@@ -33,15 +33,13 @@
   </mat-card-content>
 </mat-card>
 
-<mat-card class="big-card flex-stack-card" >
+<mat-card class="big-card flex-stack-card">
   <mat-card-title>
     Comparison
   </mat-card-title>
   <mat-card-content>
     <p *ngIf="smts[0].isSame(smts[1])">The expressions are algebraically equivalent.</p>
-    <p *ngIf="!smts[0].isSame(smts[1])">The expressions may not be algebraically equivalent.
-
-      They differ on lines {{smts[0].compare(smts[1]).join(', ')}}.
+    <p *ngIf="!smts[0].isSame(smts[1])">The expressions may not be algebraically equivalent. They differ on lines {{smts[0].compare(smts[1]).join(', ')}}.
     </p>
   </mat-card-content>
 </mat-card>

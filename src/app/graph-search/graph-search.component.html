@@ -12,13 +12,13 @@
       <tbody>
         <tr *ngFor="let link of links">
           <th>
-            <mat-form-field><input mdInput placeholder="from" [(ngModel)]="link.from"></mat-form-field>
+            <mat-form-field><input matInput placeholder="from" [(ngModel)]="link.from"></mat-form-field>
           </th>
           <th>
-            <mat-form-field><input mdInput placeholder="to" [(ngModel)]="link.to"></mat-form-field>
+            <mat-form-field><input matInput placeholder="to" [(ngModel)]="link.to"></mat-form-field>
           </th>
           <th>
-            <mat-form-field><input mdInput placeholder="weight" [(ngModel)]="link.weight" type="number"></mat-form-field>
+            <mat-form-field><input matInput placeholder="weight" [(ngModel)]="link.weight" type="number"></mat-form-field>
           </th>
           <th>
             <mat-checkbox [(ngModel)]="link.directed"></mat-checkbox>

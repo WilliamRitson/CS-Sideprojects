@@ -1,17 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router'; 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-
-import { MatButtonModule, MatRadioModule, MatIconModule,
-  MatTooltipModule, MatSnackBarModule, MatToolbarModule,
-  MatProgressSpinnerModule, MatDialogModule, MatListModule,
-  MatCardModule, MatSliderModule, MatCheckboxModule, MatPaginatorModule, MatOptionModule,
-  MatTabsModule, MatSidenavModule} from '@angular/material';
-import { FlexLayoutModule } from '@angular/flex-layout';
 
 
 import {
@@ -43,6 +35,8 @@ import { SetAlgebraComponent } from './set-algebra/set-algebra.component';
 import { UltimateTicTacToeComponent } from './ultimate-tic-tac-toe/ultimate-tic-tac-toe.component';
 import { ProbabilityDistributionComponent } from './probability-distribution/probability-distribution.component';
 import { SegmentedLeastSquaresComponent } from './segmented-least-squares/segmented-least-squares.component';
+import { HttpClientModule } from '@angular/common/http';
+import { MaterialModule } from './material.module';
 
 
 @NgModule({
@@ -71,14 +65,8 @@ import { SegmentedLeastSquaresComponent } from './segmented-least-squares/segmen
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
-    HttpModule,
-    MatButtonModule, MatRadioModule, MatIconModule,MatOptionModule,
-    MatTooltipModule, MatSnackBarModule, MatToolbarModule,
-    MatProgressSpinnerModule, MatDialogModule, MatListModule, 
-    MatCardModule, MatSliderModule, MatCheckboxModule, MatPaginatorModule,
-    MatSidenavModule,
-    MatTabsModule,
-    FlexLayoutModule,
+    HttpClientModule,
+    MaterialModule,
     RouterModule.forRoot([
       {
         path: 'tree', component: TreeViewComponent,
