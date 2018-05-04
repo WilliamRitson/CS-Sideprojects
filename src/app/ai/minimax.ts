@@ -1,4 +1,4 @@
-import { SearchableGame, GameMove ,GameWinner } from './searchable-game';
+import { SearchableGame, GameMove, GameWinner } from './searchable-game';
 import { GameAI } from './game-ai';
 
 export class Minimax implements GameAI {
@@ -28,7 +28,7 @@ export class Minimax implements GameAI {
             return 0;
         }
         // We won
-        if (winner ==  this.originalPlayer) {
+        if (winner == this.originalPlayer) {
             return Infinity;
         }
         // Somone else won

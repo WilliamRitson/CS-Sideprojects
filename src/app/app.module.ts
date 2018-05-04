@@ -25,18 +25,17 @@ import { MemoryUnitEditorComponent } from './memory-unit-editor/memory-unit-edit
 import { RadixedValueEditorComponent } from './radixed-value-editor/radixed-value-editor.component';
 import { RadixPipe, AllRadixPipe } from './radix.pipe';
 import { EnumEditorComponent } from './enum-editor/enum-editor.component';
-import { AiGamesComponent } from './ai-games/ai-games.component';
-import { TicTacToeComponent } from './tic-tac-toe/tic-tac-toe.component';
 import { TreeViewComponent } from './tree-view/tree-view.component';
 import { StableMarriageComponent } from './stable-marriage/stable-marriage.component';
 import { OrdinalPipe } from './ordinal.pipe';
 import { ScatterPlotComponent } from './scatter-plot/scatter-plot.component';
 import { SetAlgebraComponent } from './set-algebra/set-algebra.component';
-import { UltimateTicTacToeComponent } from './ultimate-tic-tac-toe/ultimate-tic-tac-toe.component';
 import { ProbabilityDistributionComponent } from './probability-distribution/probability-distribution.component';
 import { SegmentedLeastSquaresComponent } from './segmented-least-squares/segmented-least-squares.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from './material.module';
+import { AiGamesComponent } from './ai/ai-games/ai-games.component';
+import { AiModule } from './ai/ai.module';
 
 
 @NgModule({
@@ -51,14 +50,11 @@ import { MaterialModule } from './material.module';
     RadixedValueEditorComponent,
     RadixPipe, AllRadixPipe,
     EnumEditorComponent,
-    AiGamesComponent,
-    TicTacToeComponent,
     TreeViewComponent,
     StableMarriageComponent,
     OrdinalPipe,
     ScatterPlotComponent,
     SetAlgebraComponent,
-    UltimateTicTacToeComponent,
     ProbabilityDistributionComponent,
     SegmentedLeastSquaresComponent],
   imports: [
@@ -67,6 +63,7 @@ import { MaterialModule } from './material.module';
     FormsModule,
     HttpClientModule,
     MaterialModule,
+    AiModule,
     RouterModule.forRoot([
       {
         path: 'tree', component: TreeViewComponent,
