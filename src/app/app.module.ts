@@ -22,6 +22,7 @@ import { MipsService } from './mips/mips.service';
 import { PipelineDiagramComponent } from './mips/pipeline-diagram/pipeline-diagram.component';
 import { SetAlgebraComponent } from './set-theory/set-algebra/set-algebra.component';
 import { SetTheoryModule } from './set-theory/set-theory.module';
+import { FlexLayoutModule, BREAKPOINT } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { SetTheoryModule } from './set-theory/set-theory.module';
     FormsModule,
     HttpClientModule,
     MaterialModule,
+    FlexLayoutModule,
     AiModule,
     MipsModule,
     MemoryModule,
@@ -41,7 +43,6 @@ import { SetTheoryModule } from './set-theory/set-theory.module';
     GroupMatchingModule,
     SetTheoryModule,
     RouterModule.forRoot([
- 
       {
         path: 'cache', component: MemorySimulatorComponent,
         data: {

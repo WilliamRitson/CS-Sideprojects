@@ -1,5 +1,5 @@
-import {SearchableGame, GameMove} from './searchable-game'
+import { SearchableGame, GameMove } from './searchable-game'
 
 export interface GameAI {
-    getNextMove(SearchableGame):GameMove;
+    getNextMove(SearchableGame): GameMove;
 }

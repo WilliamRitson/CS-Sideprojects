@@ -2,41 +2,41 @@ import { GameAI } from './game-ai';
 import { SearchableGame, GameMove, GameWinner } from './searchable-game'
 import { sample, maxBy, minBy } from 'lodash';
 
-
-let counts = {win:0, loss: 0, tie:0} 
+let counts = { win: 0, loss: 0, tie: 0 }
 const UCT_C = Math.sqrt(2);
 
 export class MCTS implements GameAI {
     private root: Node;
     private rootState: SearchableGame;
     private currentState: SearchableGame;
-    private iterationLimit: number;
     private controlledPlayer: number
 
-    constructor(iterationLimit: number = 100) {
-        this.iterationLimit = iterationLimit;
+    constructor(private iterationLimit: number = 100) {
     }
-    getNextMove(gameState: SearchableGame): GameMove {
+
+    public getNextMove(gameState: SearchableGame): GameMove {
         this.controlledPlayer = gameState.getCurrentPlayer();
         this.rootState = gameState;
         this.root = new Node(null, null);
-        counts = {win:0, loss: 0, tie:0};
+        counts = { win: 0, loss: 0, tie: 0 };
         for (let i = 0; i < this.iterationLimit; i++) {
             //console.log(i, ' ----------------------');
             this.currentState = this.rootState.clone();
-           // console.log('r', this.root);
+            // console.log('r', this.root);
             let node = this.select(this.root);
             this.expand(node);
         }
         return maxBy(this.root.children, this.UCT).action;
     }
-    UCT(node: Node) {
+
+    private UCT(node: Node) {
         if (node.vists === 0) {
             return Infinity;
         }
-        return node.reward / node.vists + UCT_C * Math.sqrt(2 * Math.log(node.parent.vists) / node.vists);
+        return node.reward / node.vists + Math.sqrt(2 * Math.log(node.parent.vists) / node.vists);
     }
-    select(node: Node): Node {
+
+    private select(node: Node): Node {
         if (node.winner !== GameWinner.inProgress || node.children.length === 0) {
             return node;
         }
@@ -44,15 +44,15 @@ export class MCTS implements GameAI {
         let best;
         if (this.currentState.getCurrentPlayer() == this.controlledPlayer)
             best = maxBy(node.children, this.UCT);
-        else 
+        else
             best = minBy(node.children, this.UCT);
         let nextState = this.select(best);
-        
+
         this.currentState.executeMove(nextState.action);
         return nextState;
     }
-    evalWinner(winner) {
 
+    private evalWinner(winner) {
         switch (winner) {
             case GameWinner.tie:
                 counts.tie++;
@@ -65,15 +65,15 @@ export class MCTS implements GameAI {
                 return -1;
         }
     }
-    expand(node: Node) {
+
+    private expand(node: Node) {
         node.winner = this.currentState.getWinner()
         if (node.winner !== GameWinner.inProgress) {
             this.backpropagate(node, this.evalWinner(node.winner));
             return;
-        }  
-            
-        
-        node.board    = this.currentState.clone();
+        }
+
+        node.board = this.currentState.clone();
         node.children = this.currentState.getMoves().map(move => new Node(node, move));
 
         let child = sample(node.children);
@@ -81,15 +81,16 @@ export class MCTS implements GameAI {
 
         this.backpropagate(child, this.simulate(this.currentState));
     }
-    simulate(gameState: SearchableGame):number {
+
+    private simulate(gameState: SearchableGame): number {
         while (gameState.getWinner() == GameWinner.inProgress) {
             let move = sample(gameState.getMoves());
             gameState.executeMove(move);
         }
         return this.evalWinner(gameState.getWinner());
-
     }
-    backpropagate(node: Node, reward: number) {
+
+    private backpropagate(node: Node, reward: number) {
         node.vists++;
         node.reward += reward;
         if (node.parent) {
@@ -107,9 +108,9 @@ class Node {
     winner: GameWinner;
     board: SearchableGame;
 
-    constructor(parent: Node, aciton: GameMove) {
+    constructor(parent: Node, action: GameMove) {
         this.parent = parent;
-        this.action = aciton;
+        this.action = action;
         this.children = [];
         this.reward = 0;
         this.vists = 0;

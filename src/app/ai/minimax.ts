@@ -4,16 +4,18 @@ import { GameAI } from './game-ai';
 export class Minimax implements GameAI {
     private depthLimit: number;
     private originalPlayer: number;
+
     constructor(depthLimit: number = 5) {
         this.depthLimit = depthLimit;
     }
-    getNextMove(gameState: SearchableGame) {
-        var choices = gameState.getMoves(),
+
+    public getNextMove(gameState: SearchableGame) {
+        let choices = gameState.getMoves(),
             value,
             bestChoice = choices[0],
             bestChoiceValue = -Infinity;
         this.originalPlayer = gameState.getCurrentPlayer();
-        for (var i = 0; i < choices.length; i += 1) {
+        for (let i = 0; i < choices.length; i += 1) {
             value = this.alphaBeta(gameState, choices[i], 1, -Infinity, Infinity);
             if (value > bestChoiceValue) {
                 bestChoiceValue = value;
@@ -22,6 +24,7 @@ export class Minimax implements GameAI {
         }
         return bestChoice;
     }
+
     private evaluate(gameState: SearchableGame, winner: number): number {
         // Tie Game
         if (winner == GameWinner.tie) {
@@ -31,7 +34,7 @@ export class Minimax implements GameAI {
         if (winner == this.originalPlayer) {
             return Infinity;
         }
-        // Somone else won
+        // Someone else won
         if (winner != GameWinner.inProgress) {
             return -Infinity;
         }
