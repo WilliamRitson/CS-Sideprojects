@@ -1,4 +1,13 @@
 {
-    "typescript.check.workspaceVersion": true,
-    "vsicons.presets.angular": true
+    "vsicons.presets.angular": true,
+    "cSpell.words": [
+        "Scoreboarding",
+        "Subphase",
+        "Writeback",
+        "addi",
+        "addiu",
+        "addu",
+        "mult",
+        "multu"
+    ]
 }

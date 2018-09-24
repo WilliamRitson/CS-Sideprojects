@@ -23,15 +23,7 @@ export class PipelineDiagramComponent implements OnInit {
   lines: Array<DiagramLine>;
 
   constructor(public mipsService: MipsService, public pipeline: Pipeline) {
-    this.program = otherProg; /*
-     `lw r3, r2
-mult r4, r3, r3
-mult r3, r3, r1
-addiu r0, r0, 1
-div r3, r4, r3
-sw r3, r2
-addiu r2, r2, 4
-bne r0, r1, -8`; */
+    this.program = otherProg; 
     this.lines = [];
     this.pipeline.algorithm = PipeAlgorithm.Tomasulo;
     this.algorithms = PipeAlgorithm;
@@ -68,7 +60,7 @@ bne r0, r1, -8`; */
     this.lines = this.mips.map((inst, n) => new DiagramLine(inst, n + 1));
     this.findDependencies(this.lines);
     if (this.pipeline.algorithm == PipeAlgorithm.Scoreboarding)
-      this.pipeline.analyzeScorboardDeps(this.lines);
+      this.pipeline.analyzeScoreboardDeps(this.lines);
   }
 
   recompile() {
@@ -117,11 +109,11 @@ bne r0, r1, -8`; */
   }
 
   executeCode(lines: Array<DiagramLine>): Array<DiagramLine> {
-    let unfinshed: boolean = true;
+    let unfinished: boolean = true;
     let limit = this.lines.length * 20;;
-    while (unfinshed && limit > 0) {
+    while (unfinished && limit > 0) {
       limit--;
-      unfinshed = false;
+      unfinished = false;
       for (let i = 0; i < lines.length; i += 1) {
         if (lines[i].instr.executionPhase == 'done') {
           lines[i].stages.push('')
@@ -132,7 +124,7 @@ bne r0, r1, -8`; */
           lines[i].stages.push(code);
         else lines[i].stages.push('');
         if (code != 'done')
-          unfinshed = true;
+          unfinished = true;
       }
     }
     return lines;

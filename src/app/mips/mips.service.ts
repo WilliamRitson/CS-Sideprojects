@@ -38,12 +38,12 @@ const registerOrImmediate = /\$?[0-9]+/g;
 export class MipsService {
 
   constructor() {
-    this.instrucitons = I_TYPE.concat(J_TYPE.concat(R_TYPE));
+    this.instructions = I_TYPE.concat(J_TYPE.concat(R_TYPE));
    }
 
   currentProgram: string;
 
-  instrucitons: Array<string>;
+  instructions: Array<string>;
 
   private parseLine(line:string) {
 

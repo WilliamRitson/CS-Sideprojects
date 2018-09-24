@@ -26,7 +26,7 @@ const S_POP = {
 }
 
 
-class InstrucitonConfig {
+class InstructionConfig {
   functionalUnit: FunctionalUnit;
   instruction: string;
   hasMemory: boolean;
@@ -182,7 +182,7 @@ interface InstructionHash {
 }
 
 interface ConfigHash {
-  [key: string]: InstrucitonConfig;
+  [key: string]: InstructionConfig;
 }
 
 function isExe(stage: string) {
@@ -204,7 +204,7 @@ export class Pipeline {
   stages: InstructionHash;
   algorithm: PipeAlgorithm;
   functionalUnits: Array<FunctionalUnit>;
-  instructionConfigurations: Array<InstrucitonConfig>
+  instructionConfigurations: Array<InstructionConfig>
   configLookup: ConfigHash;
   remainingTime: Array<number>;
   doneWriteback: Array<boolean>;
@@ -221,13 +221,13 @@ export class Pipeline {
       new FunctionalUnit('add', 2, 5, 3, false),
       new FunctionalUnit('mult', 5, 5, 3, false)
     ];
-    this.instructionConfigurations = mipsService.instrucitons.map((instr) => {
+    this.instructionConfigurations = mipsService.instructions.map((instr) => {
       let unit = this.functionalUnits[0];
       if (instr.indexOf('add') != -1)
         unit = this.functionalUnits[1];
       if (instr.indexOf('mult') != -1)
         unit = this.functionalUnits[2];
-      return new InstrucitonConfig(instr, unit, MEM_INSTRUCITONS[instr] || false);
+      return new InstructionConfig(instr, unit, MEM_INSTRUCITONS[instr] || false);
     });
     this.configLookup = {};
     this.instructionConfigurations.forEach(c => {
@@ -235,24 +235,24 @@ export class Pipeline {
     });
   }
 
-  analyzeScorboardDeps(lines: Array<DiagramLine>) {
+  analyzeScoreboardDeps(lines: Array<DiagramLine>) {
     for (let i = 0; i < lines.length - 1; i++) {
       for (let j = i + 1; j < lines.length; j++) {
-        let lineAfer = lines[j];
+        let lineAfter = lines[j];
         let lineBefore = lines[i]
         let before = lineBefore.instr;
-        let after = lineAfer.instr;
+        let after = lineAfter.instr;
         //WAW
         if (before.returnRegister == after.returnRegister) {
-          lineAfer.scoreboardDeps.push(new ScoreboardDep(lineBefore, DependencyType.WriteAfterWrite));
+          lineAfter.scoreboardDeps.push(new ScoreboardDep(lineBefore, DependencyType.WriteAfterWrite));
         }
         //WAR
         if (before.register1 == after.returnRegister || before.register2 == after.returnRegister) {
-          lineAfer.scoreboardDeps.push(new ScoreboardDep(lineBefore, DependencyType.WriteAfterRead));
+          lineAfter.scoreboardDeps.push(new ScoreboardDep(lineBefore, DependencyType.WriteAfterRead));
         }
         //RAW
         if (before.returnRegister == after.register1 || before.returnRegister == after.register2) {
-          lineAfer.scoreboardDeps.push(new ScoreboardDep(lineBefore, DependencyType.ReadAfterWrite));
+          lineAfter.scoreboardDeps.push(new ScoreboardDep(lineBefore, DependencyType.ReadAfterWrite));
         }
       }
     }
@@ -288,7 +288,7 @@ export class Pipeline {
     return this.configLookup[instr.instruction];
   }
 
-  private instrConfig: InstrucitonConfig;
+  private instrConfig: InstructionConfig;
   private instrStages: Array<string>;
   execute(line: DiagramLine): string {
     let fu =  this.getConfig(line.instr).functionalUnit;
@@ -353,7 +353,7 @@ export class Pipeline {
 
   forwarding: boolean;
   private hasDataHazard(nextStage: string, line: DiagramLine): boolean {
-    // check if we are at the stage where we need our soure registers to be avalible
+    // check if we are at the stage where we need our source registers to be available
     if (!this.instrConfig.needsData(line.instr, this.getNextPhase(line.instr)))
       return true;
     let potentialForwards = [];
@@ -435,7 +435,7 @@ export class Pipeline {
     if (this.algorithm == PipeAlgorithm.Scoreboarding) {
       let type = this.stallForScoreboard(nextStage, line);
       if (type != DependencyType.None)
-        return `stall-${depTypeShort(type)} (${line.instr.executionPhase})`; // Stall for scorebord WAW, WAR or RAW
+        return `stall-${depTypeShort(type)} (${line.instr.executionPhase})`; // Stall for scoreboard WAW, WAR or RAW
     }
     
     if (!this.hasDataHazard(nextStage, line))
